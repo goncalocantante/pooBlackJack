@@ -1,13 +1,11 @@
 package com.Casino.gamelogic.interfaces;
 
-import java.util.List;
-
 public interface Player {
 
     /**
      * Bet the requested chips
      */
-    public void bet();
+    public void bet(double amount);
 
     /**
      * Request another card from the dealer
