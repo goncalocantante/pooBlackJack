@@ -13,6 +13,4 @@ public abstract class PlayerClass implements Player {
         this.name = name;
         this.balance = balance;
     }
-    cona;
-
 }
