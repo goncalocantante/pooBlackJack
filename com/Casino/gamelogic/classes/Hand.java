@@ -50,4 +50,14 @@ public class Hand {
         } else {return false;}
     }
 
+    /**
+     * Checks if the hand can be split
+     * @return canSplitTrue: true if the hand can be split
+     */
+    public boolean canSplit() {
+        if(this.getHandSize() == 2 && this.getCard(0).getRank().equals(this.getCard(1).getRank()) ){
+            return true;
+        } else { return false;}
+    }
+
 }
