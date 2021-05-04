@@ -12,27 +12,29 @@ public class Card {
         this.suit = suit;
     }
 
-    /**
-     * idk
-     * @return: não sei
-     */
     public String toString() {
         return this.suit.toString() + "-" + this.rank.toString();
     }
 
     /**
      * Gets the rank of the card
-     * @return rank:  rank of the card
+     * 
+     * @return rank: rank of the card
      */
-    public Rank getRank() { return this.rank;}
+    public Rank getRank() {
+        return this.rank;
+    }
 
     /**
      * Gets the suit of the card
-     * @return suit:  suit of the card
+     * 
+     * @return suit: suit of the card
      */
     public Suit getSuit() {
         return this.suit;
     }
 
-    public boolean isCardFaceUp() {return isCardUp;}
+    public boolean isCardFaceUp() {
+        return isCardUp;
+    }
 }
