@@ -11,11 +11,25 @@ public class Card {
         this.suit = suit;
     }
 
+    /**
+     * idk
+     * @return: não sei
+     */
     public String toString() {
         return this.suit.toString() + "-" + this.rank.toString();
     }
 
-    public Rank getValue() {
-        return this.rank;
+    /**
+     * Gets the rank of the card
+     * @return rank:  rank of the card
+     */
+    public Rank getRank() { return this.rank;}
+
+    /**
+     * Gets the suit of the card
+     * @return suit:  suit of the card
+     */
+    public Suit getSuit() {
+        return this.suit;
     }
 }

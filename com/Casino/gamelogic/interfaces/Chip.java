@@ -10,12 +10,12 @@ public interface Chip {
      * 
      * @return Value: value of the chip
      */
-    public int getValue();
+    int getValue();
 
     /**
      * Get the color of the chip
      * 
      * @return Color: String containing the color of the chip
      */
-    public String getColor();
+    String getColor();
 }

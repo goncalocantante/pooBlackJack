@@ -87,10 +87,8 @@ public class ChipClass implements Chip {
      *         containing the white, red, green and black chips respectively
      */
     public static List<ChipClass>[] convertToChips(int amount) {
-        List<ChipClass>[] buff = new List[4];
-        for (List<ChipClass> i : buff) {
-            i = null;
-        }
+        List<ChipClass>[] buff = new ArrayList[4];
+
         if (amount < 15) {
             buff[0] = ChipClass.createChips("WHITE", amount);
             return buff;
@@ -112,25 +110,4 @@ public class ChipClass implements Chip {
         }
     }
 
-    /**
-     * Só mm para testar a função do convertToChips
-     * 
-     * @param args
-     */
-    public static void main(String[] args) {
-        List<ChipClass>[] buff = new List[4];
-        int a = 0;
-        int b = 0;
-
-        buff = ChipClass.convertToChips(273);
-
-        for (List<ChipClass> i : buff) {
-            for (ChipClass j : buff[a]) {
-                b++;
-            }
-            System.out.println(b);
-            a++;
-            b = 0;
-        }
-    }
 }
