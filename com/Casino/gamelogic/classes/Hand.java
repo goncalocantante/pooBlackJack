@@ -44,9 +44,10 @@ public class Hand {
      * Indicates if the hand has bust
      * @return isBustTrue: is true if the hand has busted
      */
+
     public boolean isBust() {
         if(this.handValue() >21) {
-            return true;
+            return true;4
         } else {return false;}
     }
 
