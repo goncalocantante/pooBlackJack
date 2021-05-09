@@ -26,6 +26,7 @@ public interface Player {
      * Surrender this hand
      */
     void surrender();
+
     /**
      * Insure this hand
      */

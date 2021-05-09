@@ -2,10 +2,6 @@ package com.Casino.gamelogic.classes;
 
 import com.Casino.gamelogic.enumerations.*;
 
-
-// asdasd
-
-
 public class Card {
     private Suit suit;
     private Rank rank;
