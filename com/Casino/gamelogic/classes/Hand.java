@@ -15,9 +15,9 @@ public class Hand {
     /**
      * Gets the card in position i of the cards array
      * @param ncard: index of cards ArrayList to get the card from
-     * @return: requested card
+     * @return Card: requested card
      */
-    public Card getCard(int ncard) { return cards.get(i);}
+    public Card getCard(int ncard) { return cards.get(ncard);}
 
 
     public void drawCard() {}
@@ -32,7 +32,7 @@ public class Hand {
      * Indicates the total hand value
      * @return value: value of the hand
      */
-    public int handValue() { }
+    public int handValue() { return 0;}
 
     /**
      * Indicates the number of cards in the hand
@@ -45,11 +45,7 @@ public class Hand {
      * @return isBustTrue: is true if the hand has busted
      */
 
-    public boolean isBust() {
-        if(this.handValue() >21) {
-            return true;4
-        } else {return false;}
-    }
+    public boolean isBust() { return this.handValue() > 21;}
 
     /**
      * Checks if the hand can be split
