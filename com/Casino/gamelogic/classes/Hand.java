@@ -10,12 +10,17 @@ import java.util.ArrayList;
 public class Hand {
 
     //List containing the cards in the hand
-    ArrayList<Card> cards;
+    private ArrayList<Card> cards;
+    //True if the hand is finished playing
+    private boolean handClosed;
 
     /**
      * Constructor to initialize hand
      */
-    public Hand() { this.cards = new ArrayList<Card>(); }
+    public Hand() {
+        this.cards = new ArrayList<Card>();
+        this.handClosed = false;
+    }
 
     /**
      * Gets the card in position i of the cards array
@@ -37,6 +42,30 @@ public class Hand {
     public void removeCard(int ncard) { this.cards.remove(ncard);}
 
     /**
+     * Draws card from hand
+     * @return card: card drawn
+     */
+    public Card drawCard() {
+        Card buff;
+
+        buff = this.getCard(0);
+        this.removeCard(0);
+        return buff;
+    }
+
+    /**
+     * Empties the hand
+     * @return buff: cards emptied from the hand
+     */
+    public ArrayList<Card> emptyHand() {
+        ArrayList<Card> buff = new ArrayList<Card>();
+
+        buff.addAll(this.cards);
+        this.cards.clear();
+        return buff;
+    }
+
+    /**
      * Indicates the total hand value
      * @return value: value of the hand
      */
@@ -47,6 +76,12 @@ public class Hand {
      * @return ncards: number of cards in the hand
      */
     public int getHandSize() {return this.cards.size();}
+
+    /**
+     * Checks if the hand is closed
+     * @return handClosed: true if the hand is closed
+     */
+    public boolean isHandClosed() { return handClosed;}
 
     /**
      * Indicates if the hand has bust
@@ -60,9 +95,7 @@ public class Hand {
      * @return canSplitTrue: true if the hand can be split
      */
     public boolean canSplit() {
-        if(this.getHandSize() == 2 && this.getCard(0).getRank().equals(this.getCard(1).getRank()) ){
-            return true;
-        } else { return false;}
+        return this.getHandSize() == 2 && this.getCard(0).getRank().equals(this.getCard(1).getRank());
     }
 
 }

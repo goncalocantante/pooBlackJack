@@ -46,14 +46,13 @@ public class ShoeClass implements Shoe{
 
     /**
      * Adds a card to the shoe
-     * @param card: card that will be added to the shoe
+     * @param cards: card that will be added to the shoe
      */
     @Override
     public void addCards(ArrayList<Card> cards) { this.cards.addAll(cards); }
 
     /**
      * Removes a card from the shoe
-     * @param card: card that will be removed from the shoe
      */
     @Override
     public void removeCard() {this.cards.remove(0);}
@@ -76,7 +75,6 @@ public class ShoeClass implements Shoe{
 
     /**
      * Gets the size of the shoe
-     * @param shoe: Shoe to get the size of
      */
     @Override
     public int getShoeSize() {return this.cards.size();}

@@ -39,25 +39,57 @@ public class Player {
     /**
      * Adds a card to the specified hand
      * @param card: card to be added
-     * @param i: index of hand to which to add the card
+     * @param nHand: index of hand to which to add the card
      */
-    public void addCard(Card card, int i) {
+    public void addCard(Card card, int nHand) {
         card.setCardFaceUp();
-        this.hands.get(i).cards.add(card);
+        this.hands.get(nHand).receiveCard(card);
     }
+
+    /**
+     * Bet the requested amount, subtracting it from the player's balance
+     * @param amount: amount to be bet
+     */
+    public void bet(int amount) { }
+
+    /**
+     * Hits, drawing a card from the shoe and adding it to one of the player´s hands
+     * @param nHand: index of hand to be split
+     */
+    public void hit(int nHand) { this.addCard(this.game.getShoe().drawCard(), nHand); }
+
+    public void stand() {}
+
+    /**
+     * Splits, if possible to
+     * @param nHand
+     */
+    public void split(int nHand, int bet){
+        //O if para ver se dá para fazer split fica aqui ou na cena para obter o input
+            //Creates new hand
+            this.hands.add(new Hand());
+            //Draws card from hand to be split and adds it to a new hand at the end of hands' list
+            this.hands.get(this.hands.size()-1).receiveCard(this.hands.get(nHand).drawCard());
+
+            //-------------------------BET-------------------------------------------
+        }
+
+    public void insure() {}
+
+    public void surrender() {}
+
+    public void doubleBet() {}
 
     /**
      * Returns the player's cards to the discard pile and sets the number of his hands to 1
      */
     public void returnCards() {
 
-        game.getDiscardPile().addAll(hands.get(0).cards);
-        hands.get(0).cards.clear();
+        game.getDiscardPile().addAll(hands.get(0).emptyHand());
 
         if(hands.size() > 1) {
             while (hands.size() != 1){
-                game.getDiscardPile().addAll(hands.get(1).cards);
-                hands.remove(1);
+                game.getDiscardPile().addAll(hands.get(1).emptyHand());
             }
         }
 

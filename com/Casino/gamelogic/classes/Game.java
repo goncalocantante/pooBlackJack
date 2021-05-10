@@ -92,10 +92,26 @@ public class Game {
     public void dealCards(){
 
         this.player.addCard(this.shoe.drawCard(), 0);
-        this.dealer.cards.add(this.shoe.drawCard());
-        this.dealer.cards.get(0).setCardFaceUp();
+        this.dealer.receiveCard(this.shoe.drawCard());
+        this.dealer.getCard(0).setCardFaceUp();
         this.player.addCard(this.shoe.drawCard(), 0);
-        this.dealer.cards.add(this.shoe.drawCard());
+        this.dealer.receiveCard(this.shoe.drawCard());
+    }
+
+    public void play() {
+        char input = '0';
+        for()
+            switch (input) {
+                case 'h':
+
+                    break;
+                case 's':
+
+                    break;
+                default:
+                    System.out.println("Invalid Command");
+            }
+        }
     }
 
 }
