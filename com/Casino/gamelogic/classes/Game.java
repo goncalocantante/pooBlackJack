@@ -8,24 +8,26 @@ import java.util.ArrayList;
 public class Game {
 
     private Shoe shoe;
-    private int balance = 0;
-    private ArrayList<Hand> hands;
+    private Player player;
+    private Hand dealer;
 
     private GameState currentState;
-    private GameStartState gameStartState;
-    private ArrayList<PlayerTurnState> playerTurnState;
-    private RoundEndState roundEndState;
-    private GameEndState gameEndState;
+    private GameState gameStartState;
+    private ArrayList<GameState> playerTurnState;
+    private GameState dealerTurnState;
+    private GameState roundEndState;
+    private GameState gameEndState;
 
     public Game(){
         this.gameStartState = new GameStartState(this);
-        this.playerTurnState = new ArrayList<PlayerTurnState>();
+        this.playerTurnState = new ArrayList<GameState>();
         this.playerTurnState.add(new PlayerTurnState(this));
+        this.dealerTurnState = new DealerTurnState(this);
         this.roundEndState = new RoundEndState(this);
         this.gameEndState = new GameEndState(this);
         this.currentState = this.gameStartState;
 
-        this.hands = new ArrayList<Hand>();
+        this.player = new Player(this);
     }
 
     /**
@@ -38,7 +40,7 @@ public class Game {
      * Gets the current state
      * @return currentState: Current state
      */
-    public GameState getCurrentState() {return this.currentState;}
+    public GameState getCurrentState() { return this.currentState;}
 
     /**
      * Gets the game's start state
@@ -53,6 +55,12 @@ public class Game {
     public GameState getPlayerTurnState(int i) {return this.playerTurnState.get(i);}
 
     /**
+     * Gets the dealer's turn state
+     * @return dealerTurnState: Dealer's turn state
+     */
+    public GameState getDealerTurnState() { return this.dealerTurnState;}
+
+    /**
      * Gets the round's end state
      * @return roundEndState: Round's end state
      */
@@ -64,15 +72,22 @@ public class Game {
      */
     public GameState getGameEndState() {return this.gameEndState;}
 
-    public static void main(String[] args) {
+    /**
+     * Gets shoe
+     * @return shoe: game's shoe
+     */
+    public Shoe getShoe() { return this.shoe;}
 
-        Game test = new Game();
+    /**
+     * Deals the cards at the beginning of a round
+     */
+    public void dealCards(){
 
-        while(!test.currentState.equals(test.gameEndState)) {
-            test.currentState.startState();
-            test.currentState.resolveState();
-            test.currentState.endState();
-        }
-
+        this.player.addCard(this.shoe.drawCard(), 0);
+        this.dealer.cards.add(this.shoe.drawCard());
+        this.dealer.cards.get(0).setCardFaceUp();
+        this.player.addCard(this.shoe.drawCard(), 0);
+        this.dealer.cards.add(this.shoe.drawCard());
     }
+
 }

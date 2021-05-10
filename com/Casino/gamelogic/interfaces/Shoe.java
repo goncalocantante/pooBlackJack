@@ -2,6 +2,8 @@ package com.Casino.gamelogic.interfaces;
 
 import com.Casino.gamelogic.classes.Card;
 
+import java.util.ArrayList;
+
 
 /**
  * Interface for the shoe that will be used to play
@@ -21,14 +23,13 @@ public interface Shoe {
     void shuffle();
 
     /**
-     * Adds a card to the shoe
-     * @param card: card that will be added to the shoe
+     * Adds cards to the shoe
+     * @param cards: cards that will be added to the shoe
      */
-    void addCard(Card card);
+    void addCards(ArrayList<Card> cards);
 
     /**
-     * Removes a card from the shoe
-     * @param card: card that will be removed from the shoe
+     * Removes a card from the top of the shoe
      */
     void removeCard();
 

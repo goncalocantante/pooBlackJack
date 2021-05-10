@@ -10,7 +10,12 @@ import java.util.ArrayList;
 public class Hand {
 
     //List containing the cards in the hand
-    ArrayList<Card> cards = new ArrayList<Card>();
+    ArrayList<Card> cards;
+
+    /**
+     * Constructor to initialize hand
+     */
+    public Hand() { this.cards = new ArrayList<Card>(); }
 
     /**
      * Gets the card in position i of the cards array

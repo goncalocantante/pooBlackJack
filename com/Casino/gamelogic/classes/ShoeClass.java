@@ -36,12 +36,6 @@ public class ShoeClass implements Shoe{
         }
     }
 
-    public static void main(String[] args) {
-        ShoeClass shoe = new ShoeClass(5);
-        shoe.shuffle();
-        System.out.println(shoe.getShoeSize());
-    }
-
     /**
      * Shuffles the cards in the shoe
      */
@@ -55,7 +49,7 @@ public class ShoeClass implements Shoe{
      * @param card: card that will be added to the shoe
      */
     @Override
-    public void addCard(Card card) { this.cards.add(card); }
+    public void addCards(ArrayList<Card> cards) { this.cards.addAll(cards); }
 
     /**
      * Removes a card from the shoe

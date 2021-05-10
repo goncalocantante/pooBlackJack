@@ -20,5 +20,5 @@ public class PlayerTurnState implements GameState {
     public void resolveState() { System.out.println("Player plays...");}
 
     @Override
-    public void endState() { game.setCurrentState(game.getRoundEndState());}
+    public void endState() { game.setCurrentState(game.getDealerTurnState());}
 }
