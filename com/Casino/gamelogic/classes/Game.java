@@ -10,6 +10,7 @@ public class Game {
     private Shoe shoe;
     private Player player;
     private Hand dealer;
+    private ArrayList<Card> discardPile;
 
     private GameState currentState;
     private GameState gameStartState;
@@ -28,6 +29,8 @@ public class Game {
         this.currentState = this.gameStartState;
 
         this.player = new Player(this);
+        this.dealer = new Hand();
+        this.discardPile = new ArrayList<Card>();
     }
 
     /**
@@ -77,6 +80,11 @@ public class Game {
      * @return shoe: game's shoe
      */
     public Shoe getShoe() { return this.shoe;}
+
+    /**
+     * Gets the discard pile
+     */
+    public ArrayList<Card> getDiscardPile() { return discardPile;}
 
     /**
      * Deals the cards at the beginning of a round

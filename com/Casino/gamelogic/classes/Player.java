@@ -47,16 +47,16 @@ public class Player {
     }
 
     /**
-     * Returns the player's cards to the shoe and sets the number of his hands to 1
+     * Returns the player's cards to the discard pile and sets the number of his hands to 1
      */
     public void returnCards() {
 
-        game.getShoe().addCards(hands.get(0).cards);
+        game.getDiscardPile().addAll(hands.get(0).cards);
         hands.get(0).cards.clear();
 
         if(hands.size() > 1) {
             while (hands.size() != 1){
-                game.getShoe().addCards(hands.get(1).cards);
+                game.getDiscardPile().addAll(hands.get(1).cards);
                 hands.remove(1);
             }
         }
