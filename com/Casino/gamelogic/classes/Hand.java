@@ -19,8 +19,11 @@ public class Hand {
      */
     public Card getCard(int ncard) { return cards.get(ncard);}
 
-
-    public void drawCard() {}
+    /**
+     * Receives and adds card to the hand
+     * @param card: card to receive
+     */
+    public void receiveCard(Card card) { cards.add(card);}
 
     /**
      * Removes the card in position i of the cards array

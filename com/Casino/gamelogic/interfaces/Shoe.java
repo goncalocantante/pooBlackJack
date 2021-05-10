@@ -36,7 +36,13 @@ public interface Shoe {
      * Gets the card from the shoe without removing it
      * @param card: ----------
      */
-    void getCard();
+    Card getCard();
+
+    /**
+     * Draws card from the shoe
+     * @return card: card drawn
+     */
+    Card drawCard();
 
     /**
      * Gets the size of the shoe

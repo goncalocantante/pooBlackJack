@@ -2,6 +2,7 @@ package com.Casino.gamelogic.classes;
 
 import com.Casino.gamelogic.interfaces.Shoe;
 import com.Casino.gamelogic.classes.Deck;
+import  com.Casino.gamelogic.classes.Card;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,10 +66,19 @@ public class ShoeClass implements Shoe{
 
     /**
      * Gets the card from the shoe without removing it
-     * @param card: ----------
      */
     @Override
-    public void getCard() {this.cards.get(0);}
+    public Card getCard() {return this.cards.get(0);}
+
+    /**
+     * Draws card from the shoe
+     * @return card: card drawn
+     */
+    public Card drawCard() {
+        Card buff = cards.get(0);
+        removeCard();
+        return buff;
+    }
 
     /**
      * Gets the size of the shoe
@@ -81,5 +91,5 @@ public class ShoeClass implements Shoe{
      * ------------
      */
     @Override
-    public void moveAllToShoe() {return;}
+    public void moveAllToShoe() { return;}
 }

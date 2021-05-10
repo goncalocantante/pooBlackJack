@@ -34,5 +34,14 @@ public class Card {
         return this.suit;
     }
 
+    /**
+     * Checks if card is face up
+     * @return isFaceUp: True if the card is face up
+     */
     public boolean isCardFaceUp() {return isCardUp;}
+
+    /**
+     * Sets card face up
+     */
+    public void setCardFaceUp() { this.isCardUp = true;}
 }

@@ -9,6 +9,7 @@ public class Game {
 
     private Shoe shoe;
     private int balance = 0;
+    private ArrayList<Hand> hands;
 
     private GameState currentState;
     private GameStartState gameStartState;
@@ -23,6 +24,8 @@ public class Game {
         this.roundEndState = new RoundEndState(this);
         this.gameEndState = new GameEndState(this);
         this.currentState = this.gameStartState;
+
+        this.hands = new ArrayList<Hand>();
     }
 
     /**
