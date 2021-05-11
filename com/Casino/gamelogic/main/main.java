@@ -14,7 +14,8 @@ public class main {
 
         game.getShoe().shuffle();
         game.getPlayerTurnState().startState();
-        game.getPlayerTurnState().resolveState();
+        // game.getPlayerTurnState().resolveState();
+        // o luis chupa pila
 
     }
 }
