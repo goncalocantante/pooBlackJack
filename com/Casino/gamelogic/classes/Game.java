@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Game {
 
-    private Shoe shoe;
+    private ShoeClass shoe;
     private Player player;
     private Hand dealer;
     private ArrayList<Card> discardPile;
@@ -29,6 +29,7 @@ public class Game {
         this.player = new Player(this);
         this.dealer = new Hand();
         this.discardPile = new ArrayList<Card>();
+        this.shoe = new ShoeClass(2);
 
         this.gameState = this.gameStartState;
 

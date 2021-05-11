@@ -32,20 +32,6 @@ public class PlayerTurnState implements GameState {
      * this.game.getPlayer().getHands().get(0).getCard(j)); }
      * System.out.println("Pile: " + this.game.getPiles());
      * System.out.println("Balance: " + this.game.getPlayer().getBalance()); } / }
-     * 
-     * @Override public void resolveState() { char input = '0'; int nHand = 0;
-     * Scanner scanner = new Scanner(System.in);
-     * 
-     * for (Hand hand : this.game.getPlayer().getHands()) { while
-     * (!hand.isHandClosed()) { for (int j = 0; j < hand.getHandSize(); j++) {
-     * System.out.println(hand.getCard(j)); } input = scanner.next().charAt(0);
-     * switch (input) { case 'h': this.game.getPlayer().hit(nHand); break; case 's':
-     * this.game.getPlayer().stand(nHand); break; default:
-     * System.out.println("Invalid Command"); } if (hand.isBust()) {
-     * hand.closeHand(); } } nHand++; } }
-     * 
-     * @Override public void endState() {
-     * game.setGameState(game.getDealerTurnState()); }
      */
 
     @Override
@@ -55,10 +41,40 @@ public class PlayerTurnState implements GameState {
 
     @Override
     public void playerTurn() {
+        Scanner scanner = new Scanner(System.in);
+
+        char input = '0';
+        int nHand = 0;
+
         // loop de side rules
+        // TODO
         // loop do player
         System.out.println("Player is playing.");
+        // loops through all hands of the player
+        for (Hand hand : this.game.getPlayer().getHands()) {
+            while (!hand.isHandClosed()) {
+
+                System.out.print(hand);
+                System.out.println("h - HIT;   s - Stand");
+                input = scanner.next().charAt(0);
+                switch (input) {
+                    case 'h':
+                        this.game.getPlayer().hit(nHand);
+                        break;
+                    case 's':
+                        this.game.getPlayer().stand(nHand);
+                        break;
+                    default:
+                        System.out.println("Invalid Command");
+                }
+                if (hand.isBust()) {
+                    hand.closeHand();
+                }
+            }
+            nHand++;
+        }
         game.setGameState(game.getDealerTurnState());
+        scanner.close();
     }
 
     @Override

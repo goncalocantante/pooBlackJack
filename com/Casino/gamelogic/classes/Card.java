@@ -12,11 +12,6 @@ public class Card {
         this.suit = suit;
     }
 
-    /**
-     * idk
-     * 
-     * @return: não sei
-     */
     public String toString() {
         return this.suit.toString() + "-" + this.rank.toString();
     }

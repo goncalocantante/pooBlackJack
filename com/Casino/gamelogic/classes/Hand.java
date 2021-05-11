@@ -12,9 +12,9 @@ import java.util.Collections;
  */
 public class Hand {
 
-    //List containing the cards in the hand
+    // List containing the cards in the hand
     private ArrayList<Card> cards;
-    //True if the hand is finished playing
+    // True if the hand is finished playing
     private boolean handClosed;
 
     /**
@@ -23,6 +23,14 @@ public class Hand {
     public Hand() {
         this.cards = new ArrayList<Card>();
         this.handClosed = false;
+    }
+
+    public String toString() {
+        String cardListOutput = "";
+        for (Card aCard : this.cards) {
+            cardListOutput += aCard.toString() + "\n";
+        }
+        return cardListOutput;
     }
 
     /**
@@ -184,5 +192,3 @@ public class Hand {
         return this.getHandSize() == 2 && this.getCard(0).getRank().equals(this.getCard(1).getRank());
     }
 }
-
-
