@@ -20,5 +20,5 @@ public class GameStartState implements GameState {
     public void resolveState() { System.out.println("Game is started.");}
 
     @Override
-    public void endState() { game.setCurrentState(game.getPlayerTurnState(0));}
+    public void endState() { game.setCurrentState(game.getPlayerTurnState());}
 }

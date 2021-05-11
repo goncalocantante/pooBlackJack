@@ -10,19 +10,21 @@ public class Game {
     private Shoe shoe;
     private Player player;
     private Hand dealer;
+    //Pile where the discarded cards go to
     private ArrayList<Card> discardPile;
+    //1 pile per hand where the bet amount goes
+    private ArrayList<Integer> piles;
 
     private GameState currentState;
     private GameState gameStartState;
-    private ArrayList<GameState> playerTurnState;
+    private GameState playerTurnState;
     private GameState dealerTurnState;
     private GameState roundEndState;
     private GameState gameEndState;
 
     public Game(){
         this.gameStartState = new GameStartState(this);
-        this.playerTurnState = new ArrayList<GameState>();
-        this.playerTurnState.add(new PlayerTurnState(this));
+        this.playerTurnState = new PlayerTurnState(this);
         this.dealerTurnState = new DealerTurnState(this);
         this.roundEndState = new RoundEndState(this);
         this.gameEndState = new GameEndState(this);
@@ -31,6 +33,10 @@ public class Game {
         this.player = new Player(this);
         this.dealer = new Hand();
         this.discardPile = new ArrayList<Card>();
+        this.piles = new ArrayList<Integer>();
+
+        this.piles.add(new Integer(0));
+        this.shoe = new ShoeClass(1);
     }
 
     /**
@@ -55,7 +61,7 @@ public class Game {
      * Gets the player's turn state
      * @return playerTurnState: Player's turn state
      */
-    public GameState getPlayerTurnState(int i) {return this.playerTurnState.get(i);}
+    public GameState getPlayerTurnState() {return this.playerTurnState;}
 
     /**
      * Gets the dealer's turn state
@@ -82,6 +88,27 @@ public class Game {
     public Shoe getShoe() { return this.shoe;}
 
     /**
+     * Gets the player
+     * @return player: game's player
+     */
+    public Player getPlayer() { return this.player;}
+
+    /**
+     * Gets the list of piles
+     * @return piles: piles relative to each hand
+     */
+    public ArrayList<Integer> getPiles() { return this.piles;}
+    /**
+     * Adds money to the pile
+     * @param amount: amount to add to the pile
+     */
+    public void addToPile(int amount, int nHand) {
+        Integer buff = this.piles.get(nHand) + amount;
+
+        this.piles.set(nHand, buff);
+    }
+
+    /**
      * Gets the discard pile
      */
     public ArrayList<Card> getDiscardPile() { return discardPile;}
@@ -96,22 +123,6 @@ public class Game {
         this.dealer.getCard(0).setCardFaceUp();
         this.player.addCard(this.shoe.drawCard(), 0);
         this.dealer.receiveCard(this.shoe.drawCard());
-    }
-
-    public void play() {
-        char input = '0';
-        for()
-            switch (input) {
-                case 'h':
-
-                    break;
-                case 's':
-
-                    break;
-                default:
-                    System.out.println("Invalid Command");
-            }
-        }
     }
 
 }

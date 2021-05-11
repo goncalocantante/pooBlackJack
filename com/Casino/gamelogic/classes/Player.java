@@ -15,6 +15,7 @@ public class Player {
      * Contructor to initialize the player with 0 balance
      */
     public Player(Game game){
+        this.game = game;
         this.balance=0;
         this.hands = new ArrayList<Hand>();
 
@@ -25,9 +26,12 @@ public class Player {
      * Constructor to initialize the player with desired balance
      * @param amount: initial balance of the player
      */
-    public Player(int amount){
-        this.balance = amount;
+    public Player(Game game, int amount){
+        this.game = game;
+        this.balance=amount;
         this.hands = new ArrayList<Hand>();
+
+        this.hands.add(new Hand());
     }
 
     /**
@@ -35,6 +39,12 @@ public class Player {
      * @return balance: player's balance
      */
     public int getBalance() { return this.balance;}
+
+    /**
+     * Gets the player's hands
+     * @return hands: player's hands
+     */
+    public ArrayList<Hand> getHands() { return hands; }
 
     /**
      * Adds a card to the specified hand
@@ -50,7 +60,10 @@ public class Player {
      * Bet the requested amount, subtracting it from the player's balance
      * @param amount: amount to be bet
      */
-    public void bet(int amount) { }
+    public void bet(int amount, int nHand) {
+        this.balance -= amount;
+        this.game.addToPile(amount, nHand);
+    }
 
     /**
      * Hits, drawing a card from the shoe and adding it to one of the player´s hands
@@ -58,7 +71,11 @@ public class Player {
      */
     public void hit(int nHand) { this.addCard(this.game.getShoe().drawCard(), nHand); }
 
-    public void stand() {}
+    /**
+     * Stands, closing the hand to further plays
+     * @param nHand: index of hand to close
+     */
+    public void stand(int nHand) { this.hands.get(nHand).closeHand();}
 
     /**
      * Splits, if possible to
@@ -85,10 +102,8 @@ public class Player {
      */
     public void returnCards() {
 
-        game.getDiscardPile().addAll(hands.get(0).emptyHand());
-
         if(hands.size() > 1) {
-            while (hands.size() != 1){
+            while (hands.size() != 0){
                 game.getDiscardPile().addAll(hands.get(1).emptyHand());
             }
         }

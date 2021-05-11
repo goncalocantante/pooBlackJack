@@ -12,11 +12,9 @@ public class main {
     public static void main(String[] args) {
         Game game = new Game();
 
-        while (!game.getCurrentState().equals(game.getRoundEndState())) {
-            game.getCurrentState().startState();
-            game.getCurrentState().resolveState();
-            game.getCurrentState().endState();
+        game.getShoe().shuffle();
+        game.getPlayerTurnState().startState();
+        game.getPlayerTurnState().resolveState();
 
-        }
     }
 }
