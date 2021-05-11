@@ -14,6 +14,7 @@ public class Card {
 
     /**
      * idk
+     * 
      * @return: não sei
      */
     public String toString() {
@@ -22,13 +23,17 @@ public class Card {
 
     /**
      * Gets the rank of the card
-     * @return rank:  rank of the card
+     * 
+     * @return rank: rank of the card
      */
-    public Rank getRank() { return this.rank;}
+    public Rank getRank() {
+        return this.rank;
+    }
 
     /**
      * Gets the suit of the card
-     * @return suit:  suit of the card
+     * 
+     * @return suit: suit of the card
      */
     public Suit getSuit() {
         return this.suit;
@@ -36,12 +41,17 @@ public class Card {
 
     /**
      * Checks if card is face up
+     * 
      * @return isFaceUp: True if the card is face up
      */
-    public boolean isCardFaceUp() {return isCardUp;}
+    public boolean isCardFaceUp() {
+        return isCardUp;
+    }
 
     /**
      * Sets card face up
      */
-    public void setCardFaceUp() { this.isCardUp = true;}
+    public void setCardFaceUp() {
+        this.isCardUp = true;
+    }
 }

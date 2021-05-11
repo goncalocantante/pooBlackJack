@@ -1,7 +1,6 @@
 package com.Casino.gamelogic.classes;
 
 import com.Casino.gamelogic.interfaces.GameState;
-import com.Casino.gamelogic.classes.Game;
 
 public class GameStartState implements GameState {
 
@@ -9,16 +8,35 @@ public class GameStartState implements GameState {
 
     /**
      * Contructor to set the game of the state to the game being played
+     * 
      * @param game: game being played
      */
-    public GameStartState(Game game) { this.game = game;}
+    public GameStartState(Game game) {
+        this.game = game;
+    }
 
     @Override
-    public void startState() { System.out.println("Game started!");}
+    public void initializeGame() {
+        // Create Shoe
+        // initialize parameters
+        // min-bet max-bet balance shuffle
+        System.out.println("Game has started.");
+        game.setGameState(game.getPlayerTurnState());
+
+    }
 
     @Override
-    public void resolveState() { System.out.println("Game is started.");}
+    public void playerTurn() {
+        System.out.println("Game hasn't started yet.");
+    }
 
     @Override
-    public void endState() { game.setCurrentState(game.getPlayerTurnState());}
+    public void dealerTurn() {
+        System.out.println("Game hasn't started yet.");
+    }
+
+    @Override
+    public void finishRound() {
+        System.out.println("Game hasn't started yet.");
+    }
 }
