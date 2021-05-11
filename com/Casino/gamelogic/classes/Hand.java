@@ -28,7 +28,7 @@ public class Hand {
     public String toString() {
         String cardListOutput = "";
         for (Card aCard : this.cards) {
-            cardListOutput += aCard.toString() + "\n";
+            cardListOutput += aCard.toString() + " ";
         }
         return cardListOutput;
     }
@@ -97,12 +97,6 @@ public class Hand {
         int nAces = 0;
 
         for (Card card : this.cards) {
-            if (card.getRank().equals(Rank.ACE)) {
-                nAces++;
-            }
-        }
-
-        for (Card card : this.cards) {
             switch (card.getRank()) {
                 case TWO:
                     value += 2;
@@ -126,7 +120,7 @@ public class Hand {
                     value += 8;
                     break;
                 case NINE:
-                    value += 10;
+                    value += 9;
                     break;
                 case TEN:
                 case JACK:
@@ -135,6 +129,7 @@ public class Hand {
                     value += 10;
                     break;
                 case ACE:
+                    nAces++;
                     break;
             }
         }

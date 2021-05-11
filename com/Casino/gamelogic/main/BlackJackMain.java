@@ -8,19 +8,9 @@ public class BlackJackMain {
 
         Game game = new Game();
 
-        System.out.println("it worked");
-
-        /*
-         * game.getShoe().shuffle();
-         * 
-         * game.getPlayerTurnState().startState();
-         * game.getPlayerTurnState().resolveState();
-         */
-
         game.initializeGame();
         game.playerTurn();
-        // game.dealerTurn();
-        // game.finishRound();
+        game.initializeGame();
 
     }
 

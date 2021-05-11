@@ -54,7 +54,7 @@ public class PlayerTurnState implements GameState {
         for (Hand hand : this.game.getPlayer().getHands()) {
             while (!hand.isHandClosed()) {
 
-                System.out.print(hand);
+                System.out.println(hand);
                 System.out.println("h - HIT;   s - Stand");
                 input = scanner.next().charAt(0);
                 switch (input) {
