@@ -2,18 +2,12 @@ package com.Casino.gamelogic.interfaces;
 
 public interface GameState {
 
-    /**
-     * Initializes the state
-     */
-    void startState();
+    void initializeGame();
 
-    /**
-     * Resolves the state
-     */
-    void resolveState();
+    void playerTurn();
 
-    /**
-     * Ens the state and sets the next state
-     */
-    void endState();
+    void dealerTurn();
+
+    void finishRound();
+
 }
