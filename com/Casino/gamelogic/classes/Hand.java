@@ -12,9 +12,9 @@ import java.util.Collections;
  */
 public class Hand {
 
-    //List containing the cards in the hand
+    // List containing the cards in the hand
     private ArrayList<Card> cards;
-    //True if the hand is finished playing
+    // True if the hand is finished playing
     private boolean handClosed;
 
     /**
@@ -23,6 +23,14 @@ public class Hand {
     public Hand() {
         this.cards = new ArrayList<Card>();
         this.handClosed = false;
+    }
+
+    public String toString() {
+        String cardListOutput = "";
+        for (Card aCard : this.cards) {
+            cardListOutput += aCard.toString() + " ";
+        }
+        return cardListOutput;
     }
 
     /**
@@ -89,12 +97,6 @@ public class Hand {
         int nAces = 0;
 
         for (Card card : this.cards) {
-            if (card.getRank().equals(Rank.ACE)) {
-                nAces++;
-            }
-        }
-
-        for (Card card : this.cards) {
             switch (card.getRank()) {
                 case TWO:
                     value += 2;
@@ -118,7 +120,7 @@ public class Hand {
                     value += 8;
                     break;
                 case NINE:
-                    value += 10;
+                    value += 9;
                     break;
                 case TEN:
                 case JACK:
@@ -127,6 +129,7 @@ public class Hand {
                     value += 10;
                     break;
                 case ACE:
+                    nAces++;
                     break;
             }
         }
@@ -184,5 +187,3 @@ public class Hand {
         return this.getHandSize() == 2 && this.getCard(0).getRank().equals(this.getCard(1).getRank());
     }
 }
-
-
