@@ -33,7 +33,7 @@ public class RoundEndState implements GameState {
 
     @Override
     public void finishRound() {
-        // ve quem ganhou
+        // vê quem ganhou
         // paga o que tem a pagar
         // muda de estado consoante o jogador quer continuar ou não
         // prepara a proxima round (reset do shoe ou wtv, maos dos jogadores) e faz set
