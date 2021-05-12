@@ -36,9 +36,8 @@ public class RoundEndState implements GameState {
         // ve quem ganhou
         // paga o que tem a pagar
         // muda de estado consoante o jogador quer continuar ou não
-        // game.isOver = true;
-        // prepara a proxima round e faz set next state
-        // EndGame ou PlayerPlays
+        // prepara a proxima round (reset do shoe ou wtv, maos dos jogadores) e faz set
+        // next state: EndGame ou PlayerPlays
         System.out.println("Ronda Terminada.");
         game.setGameState(game.getPlayerTurnState());
     }
