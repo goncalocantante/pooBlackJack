@@ -47,7 +47,6 @@ public class PlayerTurnState implements GameState {
         int nHand = 0;
 
         // loop de side rules
-        // TODO
         // loop do player
         System.out.println("Player is playing.");
         // loops through all hands of the player

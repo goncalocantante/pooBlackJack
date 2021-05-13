@@ -9,7 +9,7 @@ public class BlackJackMain {
         Game game = new Game();
 
         game.initializeGame();
-        
+
         // loop para o jogador pedir mais cartas
         // jogador acaba este estado bust ou stand
         game.playerTurn();

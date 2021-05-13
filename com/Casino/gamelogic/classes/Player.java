@@ -125,9 +125,9 @@ public class Player {
 
         if (hands.size() > 1) {
             while (hands.size() != 0) {
-                game.getDiscardPile().addAll(hands.get(1).emptyHand());
+                game.getDiscardPile().addAll(hands.get(0).emptyHand());
+
             }
         }
-
     }
 }

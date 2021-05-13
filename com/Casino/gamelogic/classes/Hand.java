@@ -25,12 +25,13 @@ public class Hand {
         this.handClosed = false;
     }
 
-    public String toString() {
-        String cardListOutput = "";
-        for (Card aCard : this.cards) {
-            cardListOutput += aCard.toString() + " ";
-        }
-        return cardListOutput;
+    /**
+     * Removes card from the Hand
+     *
+     * @param ncard: index of the card to remove.
+     */
+    public void removeCard(int ncard) {
+        this.cards.remove(ncard);
     }
 
     /**
@@ -44,34 +45,18 @@ public class Hand {
     }
 
     /**
-     * Receives and adds card to the hand
+     * Adds card to the hand
      *
      * @param card: card to receive
      */
-    public void receiveCard(Card card) {
+    public void addCard(Card card) {
         cards.add(card);
     }
 
-    /**
-     * Removes the card in position i of the cards array
-     *
-     * @param ncard: index of cards ArrayList to remove
-     */
-    public void removeCard(int ncard) {
-        this.cards.remove(ncard);
-    }
-
-    /**
-     * Draws card from hand
-     *
-     * @return card: card drawn
-     */
-    public Card drawCard() {
-        Card buff;
-
-        buff = this.getCard(0);
-        this.removeCard(0);
-        return buff;
+    // Draws a card from the Shoe
+    public void drawCard(ShoeClass comingFrom) {
+        this.cards.add(comingFrom.getCard(0));
+        comingFrom.removeCard(0);
     }
 
     /**
@@ -185,5 +170,13 @@ public class Hand {
      */
     public boolean canSplit() {
         return this.getHandSize() == 2 && this.getCard(0).getRank().equals(this.getCard(1).getRank());
+    }
+
+    public String toString() {
+        String cardListOutput = "";
+        for (Card aCard : this.cards) {
+            cardListOutput += aCard.toString() + " ";
+        }
+        return cardListOutput;
     }
 }
