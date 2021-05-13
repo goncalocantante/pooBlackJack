@@ -29,10 +29,28 @@ public class DealerTurnState implements GameState {
 
     @Override
     public void dealerTurn() {
-        // loop do dealer
-        System.out.println("Dealer is playing.");
-        game.setGameState(game.getRoundEndState());
+        Hand dealer = game.getDealer();
 
+        // the dealer turns over his hidden card
+        dealer.getCard(0).setCardFaceUp();
+        // Display dealers cards
+        System.out.println("dealer's hand " + dealer + " " + "(" + dealer.handValue() + ")");
+
+        // If the dealer has a blackjack with his two cards
+        if (dealer.handValue() == 21) {
+            // Doesn't take any more cards
+            dealer.closeHand();
+        } else {
+            // Dealer Hits at 16, Holds at 17
+            while (dealer.handValue() < 17) {
+                System.out.println("dealer hits");
+                dealer.drawCard(game.getShoe());
+                System.out.println("dealer's hand " + dealer + " " + "(" + dealer.handValue() + ")");
+            }
+            dealer.closeHand();
+        }
+        // Sets next state
+        game.setGameState(game.getRoundEndState());
     }
 
     @Override

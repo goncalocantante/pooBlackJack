@@ -3,6 +3,7 @@ package com.Casino.gamelogic.classes;
 import com.Casino.gamelogic.classes.Card;
 import com.Casino.gamelogic.enumerations.Rank;
 import com.Casino.gamelogic.enumerations.Suit;
+import com.Casino.gamelogic.interfaces.Shoe;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +17,8 @@ public class Hand {
     private ArrayList<Card> cards;
     // True if the hand is finished playing
     private boolean handClosed;
+    // Amount which the player has bet
+    private int betAmount;
 
     /**
      * Constructor to initialize hand
@@ -23,6 +26,7 @@ public class Hand {
     public Hand() {
         this.cards = new ArrayList<Card>();
         this.handClosed = false;
+        this.betAmount = 0;
     }
 
     /**
@@ -54,22 +58,22 @@ public class Hand {
     }
 
     // Draws a card from the Shoe
-    public void drawCard(ShoeClass comingFrom) {
-        this.cards.add(comingFrom.getCard(0));
-        comingFrom.removeCard(0);
+    public void drawCard(Shoe shoe) {
+        this.cards.add(shoe.getCard(0));
+        shoe.removeCard(0);
     }
 
     /**
-     * Empties the hand
+     * Clears hand and moves to discard pile
      *
-     * @return buff: cards emptied from the hand
+     * @return buff: cards emptied from the hand / public ArrayList<Card>
      */
-    public ArrayList<Card> emptyHand() {
-        ArrayList<Card> buff = new ArrayList<Card>();
+    // A emptyHand
+    public void emptyHand(ArrayList<Card> discardPile) {
+        discardPile.addAll(this.cards);
 
-        buff.addAll(this.cards);
         this.cards.clear();
-        return buff;
+        return;
     }
 
     /**
@@ -170,6 +174,24 @@ public class Hand {
      */
     public boolean canSplit() {
         return this.getHandSize() == 2 && this.getCard(0).getRank().equals(this.getCard(1).getRank());
+    }
+
+    /**
+     * Gets the player's bet amount
+     * 
+     * @return betAmount:player's bet amount
+     */
+    public int getBetAmount() {
+        return this.betAmount;
+    }
+
+    /**
+     * Sets the bet amount for this hand
+     * 
+     * @param bet: bet amount
+     */
+    public void setBetAmount(int bet) {
+        this.betAmount = bet;
     }
 
     public String toString() {

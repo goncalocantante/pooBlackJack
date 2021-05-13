@@ -20,7 +20,7 @@ public class Deck {
     public void createDeck() {
         for (Suit cardSuit : Suit.values()) {
             for (Rank cardValue : Rank.values()) {
-                this.cards.add(new Card(cardSuit, cardValue, false));
+                this.cards.add(new Card(cardSuit, cardValue, true));
             }
         }
     }
