@@ -99,6 +99,7 @@ public class Player {
     public void hit(int nHand) {
         System.out.println("Player has hit");
         this.addCard(this.game.getShoe().drawCard(), nHand);
+        this.hands.get(nHand).drawCard();
     }
 
     /**

@@ -192,13 +192,4 @@ public class Hand {
     public boolean isBust() {
         return this.handValue() > 21;
     }
-
-    /**
-     * Checks if the hand can be split
-     *
-     * @return canSplitTrue: true if the hand can be split
-     */
-    public boolean canSplit() {
-        return this.getHandSize() == 2 && this.getCard(0).getRank().equals(this.getCard(1).getRank());
-    }
 }
