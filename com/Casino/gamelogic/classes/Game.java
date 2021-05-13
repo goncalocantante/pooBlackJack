@@ -125,7 +125,6 @@ public class Game {
 
     /**
      * Gets the player
-     * 
      * @return player: game's player
      */
     public Player getPlayer() {
@@ -133,21 +132,18 @@ public class Game {
     }
 
     /**
-     * Gets the discard pile
+     * Gets the dealer
+     * @return player: game's dealer
      */
-    public ArrayList<Card> getDiscardPile() {
-        return discardPile;
-    }
+    public Hand getDealer() { return dealer; }
 
     /**
-     * Deals the cards at the beginning of a round
+     * Gets the discard pile
      */
-    public void dealCards() {
-        this.player.addCard(this.shoe.drawCard(), 0);
-        this.dealer.receiveCard(this.shoe.drawCard());
-        this.dealer.getCard(0).setCardFaceUp();
-        this.player.addCard(this.shoe.drawCard(), 0);
-        this.dealer.receiveCard(this.shoe.drawCard());
+
+
+    public ArrayList<Card> getDiscardPile() {
+        return discardPile;
     }
 
 }

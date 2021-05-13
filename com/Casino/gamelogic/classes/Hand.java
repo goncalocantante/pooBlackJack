@@ -16,6 +16,8 @@ public class Hand {
     private ArrayList<Card> cards;
     // True if the hand is finished playing
     private boolean handClosed;
+    //Amount which the player has bet
+    private int betAmount;
 
     /**
      * Constructor to initialize hand
@@ -23,7 +25,20 @@ public class Hand {
     public Hand() {
         this.cards = new ArrayList<Card>();
         this.handClosed = false;
+        this.betAmount = 0;
     }
+
+    /**
+     * Gets the player's bet amount
+     * @return betAmount: player's bet amount
+     */
+    public int getBetAmount() { return this.betAmount;}
+
+    /**
+     * Sets the bet amount for this hand
+     * @param bet: bet amount
+     */
+    public void setBetAmount(int bet) { this.betAmount = bet;}
 
     public String toString() {
         String cardListOutput = "";
