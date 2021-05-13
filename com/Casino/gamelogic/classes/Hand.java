@@ -3,6 +3,7 @@ package com.Casino.gamelogic.classes;
 import com.Casino.gamelogic.classes.Card;
 import com.Casino.gamelogic.enumerations.Rank;
 import com.Casino.gamelogic.enumerations.Suit;
+import com.Casino.gamelogic.interfaces.Shoe;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +17,8 @@ public class Hand {
     private ArrayList<Card> cards;
     // True if the hand is finished playing
     private boolean handClosed;
+    // Amount which the player has bet
+    private int betAmount;
 
     /**
      * Constructor to initialize hand
@@ -23,14 +26,16 @@ public class Hand {
     public Hand() {
         this.cards = new ArrayList<Card>();
         this.handClosed = false;
+        this.betAmount = 0;
     }
 
-    public String toString() {
-        String cardListOutput = "";
-        for (Card aCard : this.cards) {
-            cardListOutput += aCard.toString() + " ";
-        }
-        return cardListOutput;
+    /**
+     * Removes card from the Hand
+     *
+     * @param ncard: index of the card to remove.
+     */
+    public void removeCard(int ncard) {
+        this.cards.remove(ncard);
     }
 
     /**
@@ -44,47 +49,31 @@ public class Hand {
     }
 
     /**
-     * Receives and adds card to the hand
+     * Adds card to the hand
      *
      * @param card: card to receive
      */
-    public void receiveCard(Card card) {
+    public void addCard(Card card) {
         cards.add(card);
     }
 
-    /**
-     * Removes the card in position i of the cards array
-     *
-     * @param ncard: index of cards ArrayList to remove
-     */
-    public void removeCard(int ncard) {
-        this.cards.remove(ncard);
+    // Draws a card from the Shoe
+    public void drawCard(Shoe shoe) {
+        this.cards.add(shoe.getCard(0));
+        shoe.removeCard(0);
     }
 
     /**
-     * Draws card from hand
+     * Clears hand and moves to discard pile
      *
-     * @return card: card drawn
+     * @return buff: cards emptied from the hand / public ArrayList<Card>
      */
-    public Card drawCard() {
-        Card buff;
+    // A emptyHand
+    public void emptyHand(ArrayList<Card> discardPile) {
+        discardPile.addAll(this.cards);
 
-        buff = this.getCard(0);
-        this.removeCard(0);
-        return buff;
-    }
-
-    /**
-     * Empties the hand
-     *
-     * @return buff: cards emptied from the hand
-     */
-    public ArrayList<Card> emptyHand() {
-        ArrayList<Card> buff = new ArrayList<Card>();
-
-        buff.addAll(this.cards);
         this.cards.clear();
-        return buff;
+        return;
     }
 
     /**
@@ -185,5 +174,31 @@ public class Hand {
      */
     public boolean canSplit() {
         return this.getHandSize() == 2 && this.getCard(0).getRank().equals(this.getCard(1).getRank());
+    }
+
+    /**
+     * Gets the player's bet amount
+     * 
+     * @return betAmount:player's bet amount
+     */
+    public int getBetAmount() {
+        return this.betAmount;
+    }
+
+    /**
+     * Sets the bet amount for this hand
+     * 
+     * @param bet: bet amount
+     */
+    public void setBetAmount(int bet) {
+        this.betAmount = bet;
+    }
+
+    public String toString() {
+        String cardListOutput = "";
+        for (Card aCard : this.cards) {
+            cardListOutput += aCard.toString() + " ";
+        }
+        return cardListOutput;
     }
 }

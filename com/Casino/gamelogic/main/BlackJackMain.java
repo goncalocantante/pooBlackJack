@@ -9,8 +9,9 @@ public class BlackJackMain {
         Game game = new Game();
 
         game.initializeGame();
-        game.playerTurn();
-        game.initializeGame();
+
+        game.playerTurn(); // loop para o dealer fazer a sua jogada
+        game.dealerTurn(); // avaliar pontuações e pagar as bets game.finishRound();
 
     }
 
