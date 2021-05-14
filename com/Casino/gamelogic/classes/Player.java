@@ -199,7 +199,7 @@ public class Player {
             System.out.println("i: Illegal command(cannot insure twice)");
         if (this.hands.get(0).getHandSize() > 2 || this.hands.size() > 1)
             System.out.println("i: Illegal command(insurance must be first command)");
-        return (this.insurance == 0 && this.hands.get(0).getHandSize() == 2 && this.hands.size() == 1 && this.balance >= originalBet && dealerCardRank.equals(Rank.ACE))
+        return (this.insurance == 0 && this.hands.get(0).getHandSize() == 2 && this.hands.size() == 1 && this.balance >= originalBet && dealerCardRank.equals(Rank.ACE));
     }
 
     /**
