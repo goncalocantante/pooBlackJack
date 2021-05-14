@@ -55,6 +55,6 @@ public class InteractiveMode implements Mode {
     }
 
     @Override
-    public String getCommand() { return scanner.nextLine();}
+    public String getCommand() { return this.scanner.nextLine(); }
 
 }

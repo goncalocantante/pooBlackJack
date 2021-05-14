@@ -88,38 +88,23 @@ public class Hand {
         for (Card card : this.cards) {
             switch (card.getRank()) {
                 case TWO:
-                    value += 2;
-                    break;
                 case THREE:
-                    value += 3;
-                    break;
                 case FOUR:
-                    value += 4;
-                    break;
                 case FIVE:
-                    value += 5;
-                    break;
                 case SIX:
-                    value += 6;
-                    break;
                 case SEVEN:
-                    value += 7;
-                    break;
                 case EIGHT:
-                    value += 8;
-                    break;
                 case NINE:
-                    value += 9;
-                    break;
                 case TEN:
                 case JACK:
                 case KING:
                 case QUEEN:
-                    value += 10;
+                    value += card.cardValue();
                     break;
                 case ACE:
                     nAces++;
                     break;
+                default:
             }
         }
         for (int i = 0; i < nAces; i++) {
