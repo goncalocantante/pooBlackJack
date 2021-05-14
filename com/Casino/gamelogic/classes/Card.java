@@ -13,6 +13,40 @@ public class Card {
         this.isCardUp = isCardUp;
     }
 
+    /**
+     * Returns the card's value (ace returns 1)
+     * @return cardValue: card's value
+     */
+    public int cardValue() {
+        switch(this.rank){
+            case TWO:
+                return 2;
+            case THREE:
+                return 3;
+            case FOUR:
+                return 4;
+            case FIVE:
+                return 5;
+            case SIX:
+                return 6;
+            case SEVEN:
+                return 7;
+            case EIGHT:
+                return 8;
+            case NINE:
+                return 9;
+            case TEN:
+            case JACK:
+            case KING:
+            case QUEEN:
+                return 10;
+            case ACE:
+                return 1;
+            default:
+                return 0;
+        }
+    }
+
     public String toString() {
         String cardString = "";
         if (this.isCardUp == false) {
