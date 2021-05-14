@@ -116,7 +116,7 @@ public class RoundEndState implements GameState {
 
         //Shuffles if the card limit has been reached
         if(this.game.getDiscardPile().size() >= nCardsShuffle) {
-            this.game.getShoe().moveAllToShoe();
+            this.game.getShoe().moveAllToShoe(this.game.getDiscardPile());
             this.game.getShoe().shuffle();
             System.out.println("Shuffling shoe...");
         }
