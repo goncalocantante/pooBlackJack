@@ -7,5 +7,4 @@ public interface Mode {
     void InitializeShoeAndParameters(Game game);
 
     String getCommand();
-
 }

@@ -70,8 +70,12 @@ public class Hand {
      */
     // A emptyHand
     public void emptyHand(ArrayList<Card> discardPile) {
-        discardPile.addAll(this.cards);
 
+        //Set all cards face up
+        for(Card card : this.cards){ card.setCardFaceUp(); }
+        //Add them to discard pile
+        discardPile.addAll(this.cards);
+        //Empty the hand
         this.cards.clear();
         return;
     }
@@ -141,6 +145,11 @@ public class Hand {
     public void closeHand() {
         this.handClosed = true;
     }
+
+    /**
+     * Opens hand
+     */
+    public void openHand() { this.handClosed = false;}
 
     /**
      * Indicates if the hand has bust

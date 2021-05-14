@@ -36,6 +36,7 @@ public class RoundEndState implements GameState {
 
         // muda de estado consoante o jogador quer continuar ou não
 
+        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         System.out.println("Ronda Terminada.");
 
         Hand dealer = game.getDealer();
@@ -73,12 +74,13 @@ public class RoundEndState implements GameState {
                 if(dealerBlackjack) {
                     // if the player and the dealer both have blackjack
                     // there's a push and the player gets his bet amount back
+                    player.addBalance(bet);
                     System.out.println("Push! Player receives " + bet + "$ back");
                     continue;
                 }
                 else {
                     //Pays 2.5 to 1 --------------------------------------
-                    System.out.println("Player wins with blackjack redeiving " + bet*3 + "$");
+                    System.out.println("Player wins with blackjack receiving " + bet*3 + "$");
                     player.addBalance(bet * 3);
                     continue;
                 }
@@ -97,48 +99,28 @@ public class RoundEndState implements GameState {
             } else {
                 //Push
                 System.out.println("Push! Player receives " + bet + "$ back");
-                player.addBalance(bet / 2);
+                player.addBalance(bet);
             }
 
         }
 
-        /*if (dealer.isBust()) {
-            // Pays all hands
-            for (int i = 0; i < player.getHands().size(); i++) {
-                // TODO side rules
-                //If player hasn't bust and hasn't surrendered pay him
-                if (!((player.getHand(i).isBust() || player.getHand(i).getBetAmount() == 0)) {
-                    int prize = player.getHand(i).getBetAmount() * 2;
-                    player.addBalance(prize);
-                }
-            }
-        } else {
-            // Iterates over all hands
-            for (int i = 0; i < player.getHands().size(); i++) {
-                Hand hand = player.getHand(i);
-                int prize = hand.getBetAmount() * 2;
-                //If player hasn't bust and hasn't surrendered
-                if(!((player.getHand(i).isBust() || player.getHand(i).getBetAmount() == 0)) {
-                    if (hand.handValue() > dealer.handValue()) {
-                        // player wins
-                        player.addBalance(prize);
-                    } else if (hand.handValue() < dealer.handValue()) {
-                        // dealer wins
-                        // player doesn't receive money
-                    } else {
-                        // push
-                        // player keeps the same balance
-                        player.addBalance(prize / 2);
-                    }
-                }
-
-            }
-        }*/
-
-        // player gets rid of his cards
+        //Player gets rid of his cards and parameters are reset
         player.playerResets();
         dealer.emptyHand(game.getDiscardPile());
-        // next state: EndGame ou PlayerPlays
+
+        int shoeSize = this.game.getShoe().getShoeSize();
+        //Percentage of shoe played until there's a shuffle
+        int shufflePercentage = this.game.getParameters()[2]/100;
+        //Limit of cards drawn until there's a shuffle
+        int nCardsShuffle = shoeSize * (shufflePercentage);
+
+        //Shuffles if the card limit has been reached
+        if(this.game.getDiscardPile().size() >= nCardsShuffle) {
+            this.game.getShoe().moveAllToShoe();
+            this.game.getShoe().shuffle();
+            System.out.println("Shuffling shoe...");
+        }
+        //Next state: EndGame ou PlayerPlays
         game.setGameState(game.getPlayerTurnState());
     }
 }
