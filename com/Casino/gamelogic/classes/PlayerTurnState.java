@@ -82,7 +82,8 @@ public class PlayerTurnState implements GameState {
             System.out.println("Playing hand " + (nHand+1) + ":");
             // While hand is playable
             while (!hand.isHandClosed()) {
-
+                if(hand.getHandSize() == 1)
+                    this.game.getPlayer().hit(nHand);
                 System.out.println(hand);
                 System.out.println("Enter command:");
                 inputString = this.game.getGameMode().getCommand();

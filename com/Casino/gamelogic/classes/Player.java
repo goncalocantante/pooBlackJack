@@ -136,8 +136,8 @@ public class Player {
         // If the hand can be split
         if (this.canSplit(nHand)) {
             // Creates new hand
-            this.hands.add(new Hand());
-            newHand = this.hands.get(this.hands.size() - 1);
+            this.hands.add(nHand+1, new Hand());
+            newHand = this.hands.get(nHand+1);
 
             // Takes a card from originalHand and puts in newHand
             newHand.addCard(originalHand.getCard(0));
@@ -146,7 +146,6 @@ public class Player {
             newHand.setBetAmount(originalHand.getBetAmount());
             // Both hands receive another card
             this.hit(nHand);
-            this.hit(this.hands.size() - 1);
         }
     }
 
