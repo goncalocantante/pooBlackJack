@@ -22,21 +22,7 @@ public class Player {
      */
     public Player(Game game) {
         this.game = game;
-        this.balance = 100;
-        this.insurance = 0;
-        this.hands = new ArrayList<Hand>();
-
-        this.hands.add(new Hand());
-    }
-
-    /**
-     * Constructor to initialize the player with desired balance
-     * 
-     * @param amount: initial balance of the player
-     */
-    public Player(Game game, int amount) {
-        this.game = game;
-        this.balance = amount;
+        this.balance = 0;
         this.insurance = 0;
         this.hands = new ArrayList<Hand>();
 
@@ -75,7 +61,7 @@ public class Player {
      * 
      * @return insurance: amount bet as insurance, 0 if not insured
      */
-    private int getInsurance() {
+    public int getInsurance() {
         return this.insurance;
     }
 
@@ -175,16 +161,19 @@ public class Player {
         Card card2 = this.hands.get(nHand).getCard(1);
         int handSize = this.hands.get(nHand).getHandSize();
         int originalBet = this.hands.get(nHand).getBetAmount();
+        Rank dealerCardRank = this.game.getDealer().getCard(0).getRank();
         // True if the hand has only 2 cards of equal rank and the player has enough
         // money to split
 
+        if(!dealerCardRank.equals(Rank.ACE))
+            System.out.println("p: Illegal command(dealer's face-up card is not ace)");
         if (handSize != 2)
             System.out.println("p: Illegal command(cannot split after hitting)");
         if (!card1.getRank().equals(card2.getRank()))
             System.out.println("p: Illegal command(cards do not have the same rank)");
         if (this.balance < originalBet)
             System.out.println("p: Illegal command(balance too low)");
-        return (handSize == 2 && card1.getRank().equals(card2.getRank()) && this.balance >= originalBet);
+        return (handSize == 2 && card1.getRank().equals(card2.getRank()) && this.balance >= originalBet & dealerCardRank.equals(Rank.ACE));
     }
 
     public void insure() {
@@ -240,18 +229,20 @@ public class Player {
      * Returns the player's cards to the discard pile and sets the number of his
      * hands to 1
      */
-    public void returnCards() {
+    public void playerResets() {
 
         ArrayList<Hand> playerHands = this.hands;
 
-        // Clears all the hands
+        // Clears all the hands to the discard pile
         for (Hand hand : playerHands) {
             hand.emptyHand(game.getDiscardPile());
         }
-        // Reset playersHands to One
+        // Reset player's hands to One
         while (playerHands.size() < 1) {
             playerHands.remove(0);
         }
 
+        //Insurance amount is set to 0
+        this.insurance = 0;
     }
 }

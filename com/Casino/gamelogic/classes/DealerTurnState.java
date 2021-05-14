@@ -34,7 +34,7 @@ public class DealerTurnState implements GameState {
         // the dealer turns over his hidden card
         dealer.getCard(0).setCardFaceUp();
         // Display dealers cards
-        System.out.println("dealer's hand " + dealer + " " + "(" + dealer.handValue() + ")");
+        System.out.println("dealer's hand: " + dealer + " " + "(" + dealer.handValue() + ")");
 
         // If the dealer has a blackjack with his two cards
         if (dealer.handValue() == 21) {

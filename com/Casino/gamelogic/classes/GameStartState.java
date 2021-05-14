@@ -17,9 +17,8 @@ public class GameStartState implements GameState {
 
     @Override
     public void initializeGame() {
-        // Create Shoe
-        // initialize parameters
-        // min-bet max-bet balance shuffle
+        this.game.getGameMode().InitializeShoeAndParameters(this.game);
+        this.game.getShoe().shuffle();
         System.out.println("Game has started.");
         game.setGameState(game.getPlayerTurnState());
 
