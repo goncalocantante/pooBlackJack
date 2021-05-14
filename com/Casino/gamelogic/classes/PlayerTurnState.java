@@ -2,6 +2,7 @@ package com.Casino.gamelogic.classes;
 
 import java.util.Scanner;
 
+import com.Casino.gamelogic.enumerations.Rank;
 import com.Casino.gamelogic.interfaces.GameState;
 
 public class PlayerTurnState implements GameState {
@@ -26,7 +27,6 @@ public class PlayerTurnState implements GameState {
     public void playerTurn() {
         Scanner scanner = new Scanner(System.in);
         Scanner betScan;
-        char input = '0';
         String inputString;
         int nHand = 0;
         boolean deal = false;
@@ -34,7 +34,7 @@ public class PlayerTurnState implements GameState {
         int currentBet;
 
         while (!deal) {
-            inputString = scanner.nextLine();
+            inputString = this.game.getGameMode().getCommand();
             switch (inputString.charAt(0)) {
                 case 'b':
                     // If there are digits in the input string
@@ -79,13 +79,14 @@ public class PlayerTurnState implements GameState {
         System.out.println("Player is playing.");
         // loops through all of the player's hands
         for (Hand hand : this.game.getPlayer().getHands()) {
+            System.out.println("Playing hand " + (nHand+1) + ":");
             // While hand is playable
             while (!hand.isHandClosed()) {
 
                 System.out.println(hand);
                 System.out.println("Enter command:");
-                input = scanner.next().charAt(0);
-                switch (input) {
+                inputString = this.game.getGameMode().getCommand();
+                switch (inputString.charAt(0)) {
                     case 'h':
                         this.game.getPlayer().hit(nHand);
                         break;
@@ -113,6 +114,11 @@ public class PlayerTurnState implements GameState {
                 // If hand busts it closes, becoming not playable
                 if (hand.isBust()) {
                     hand.closeHand();
+                    System.out.println("Player busts");
+                }
+                if(hand.handValue() == 21 && hand.getHandSize() == 2){
+                    hand.closeHand();
+                    System.out.println("Blackjack!");
                 }
             }
             // Next hand
