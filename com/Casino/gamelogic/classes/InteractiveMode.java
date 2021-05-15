@@ -63,8 +63,9 @@ public class InteractiveMode implements Mode {
 
         // Sets parameters in game object
         this.game.setParameters(minBet, maxBet, balance, shuffle);
-        // Create shoe
+        // Create and shuffles shoe
         this.game.setShoe(new ShoeClass(shoe));
+        this.game.getShoe().shuffle();
     }
 
     @Override
