@@ -38,14 +38,4 @@ public class GameEndState implements GameState {
         // TODO Auto-generated method stub
 
     }
-
-    /*
-     * @Override public void startState() { System.out.println("Game is gonna end");
-     * }
-     * 
-     * @Override public void resolveState() { System.out.println("Game has ended.");
-     * }
-     * 
-     * @Override public void endState() { return; }
-     */
 }

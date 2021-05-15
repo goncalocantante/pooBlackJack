@@ -176,4 +176,10 @@ public class Game {
         this.player.addBalance(balance);
         this.shuffle = shuffle;
     }
+
+    public int[] getParameters(){
+        int[] params = new int[]{this.minBet, this.maxBet, shuffle};
+
+        return params;
+    }
 }
