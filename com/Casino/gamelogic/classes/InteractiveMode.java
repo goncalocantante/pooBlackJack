@@ -27,7 +27,7 @@ public class InteractiveMode implements Mode {
         boolean check = true;
         int minBet;
         int maxBet;
-        int balance;
+        int balance = 0;
         int shoe;
         int shuffle;
 
@@ -37,12 +37,13 @@ public class InteractiveMode implements Mode {
 
         // If parameters aren't ints (except for the mode parameter)
         for (int i = 0; i < args.length; i++) {
-            if (!args[0].matches(".*\\d.*"))
+            if (!args[0].matches(".*\\D.*"))
                 check = false;
         }
         minBet = Integer.parseInt(args[1]);
         maxBet = Integer.parseInt(args[2]);
         balance = Integer.parseInt(args[3]);
+        System.out.println(balance);
         shoe = Integer.parseInt(args[4]);
         shuffle = Integer.parseInt(args[5]);
 

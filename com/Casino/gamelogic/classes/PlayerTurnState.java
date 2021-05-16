@@ -27,22 +27,27 @@ public class PlayerTurnState implements GameState {
     public void playerTurn() {
         Scanner betScan;
         String inputString;
-        int nHand = 0;
+
         boolean deal = false;
+
+        int nHand = 0;
         int previousBet = 0;
-        int currentBet;
+        int currentBet = 0;
 
         System.out.println("Please bet to continue playing or quit game:");
 
         while (!deal) {
             inputString = this.game.getGameMode().getCommand();
             switch (inputString.charAt(0)) {
+                //ou so recebes um char
+                //b 10
                 case 'b':
                     // If there are digits in the input string
                     if (inputString.matches(".*\\d.*")) {
                         // Scan the first integer in the string (bet amount)
                         betScan = new Scanner(inputString);
                         currentBet = betScan.useDelimiter("\\D+").nextInt();
+                        System.out.println("curr Bet " + currentBet);
                         // Bet the specified amount
                         game.getPlayer().bet(currentBet, 0);
                         // Set previous bet value
@@ -70,7 +75,138 @@ public class PlayerTurnState implements GameState {
                     System.out.println("Current balance: " + game.getPlayer().getBalance() + "$");
                     break;
                 default:
-                    System.out.println("Illegal command");
+                    //System.out.println("Illegal command");
+            }
+        }
+
+        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+
+        // Deal cards
+        this.dealCards();
+        System.out.println("dealer's hand " + game.getDealer());
+
+        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+
+        System.out.println("Player is playing.");
+        // loops through all of the player's hands
+        for (int j = 0; j < this.game.getPlayer().getHands().size(); j++) {
+
+            Hand hand = this.game.getPlayer().getHand(j);
+
+            System.out.println("Playing hand " + (nHand+1) + ":");
+            // While hand is playable
+
+            //If there was a split - Hit
+            if(hand.getHandSize() == 1)
+                this.game.getPlayer().hit(nHand);
+            else
+                System.out.println("Player's hand: " + hand);
+
+            while (!hand.isHandClosed()) {
+
+                System.out.println("Enter command:");
+
+                //Get the input
+                inputString = this.game.getGameMode().getCommand();
+                //Check which command is in input
+                switch (inputString.charAt(0)) {
+                    case 'h':
+                        this.game.getPlayer().hit(nHand);
+                        break;
+                    case 's':
+                        this.game.getPlayer().stand(nHand);
+                        break;
+                    case '$':
+                        System.out.println("Current balance: " + game.getPlayer().getBalance() + "$");
+                        break;
+                    case 'i':
+                        game.getPlayer().insure();
+                        break;
+                    case 'u':
+                        game.getPlayer().surrender(nHand);
+                        break;
+                    case 'p':
+                        game.getPlayer().split(nHand);
+                        break;
+                    case '2':
+                        game.getPlayer().doubleBet(nHand);
+                        break;
+                    default:
+                        System.out.println("Illegal command");
+                }
+
+                // If hand busts it closes, becoming not playable
+                if (hand.isBust()) {
+                    hand.closeHand();
+                    System.out.println("Player busts");
+                }
+
+                //If player gets blackjack on this hand close it
+                if(hand.handValue() == 21 && hand.getHandSize() == 2){
+                    hand.closeHand();
+                    System.out.println("Blackjack!");
+                }
+                System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+            }
+            // Next hand
+            nHand++;
+        }
+        // Set next state
+        game.setGameState(game.getDealerTurnState());
+    }
+
+     /*
+    @Override
+    public void playerTurn() {
+        Scanner betScan;
+        String inputString;
+
+        boolean deal = false;
+
+        int nHand = 0;
+        int previousBet = 0;
+        int currentBet = 0;
+
+        System.out.println("Please bet to continue playing or quit game:");
+
+        while (!deal) {
+            inputString = this.game.getGameMode().getCommand();
+            switch (inputString.charAt(0)) {
+                case 'b':
+                    // If there are digits in the input string
+                    if (inputString.matches(".*\\d.*")) {
+                        // Scan the first integer in the string (bet amount)
+                        betScan = new Scanner(inputString);
+                        currentBet = betScan.useDelimiter("\\D+").nextInt();
+                        System.out.println("curr Bet " + currentBet);
+                        // Bet the specified amount
+                        game.getPlayer().bet(currentBet, 0);
+                        // Set previous bet value
+                        previousBet = currentBet;
+                        betScan.close();
+                    } else {
+                        // If no amount is specified, bet previous bet value or minimum
+                        // bet value if there is no previous bet
+                        if (previousBet == 0) {
+                            game.getPlayer().bet(5 /* minbet * /, 0); -------------------------------------------
+                            previousBet = 5;
+                        } else {
+                            game.getPlayer().bet(previousBet, 0);
+                        }
+                    }
+                    break;
+                case 'd':
+                    // If the player has already bet, deal. Else he must bet
+                    if (previousBet != 0)
+                        deal = true;
+                    else
+                        System.out.println("Please bet before cards are dealt");
+                    break;
+                case '$':
+                    System.out.println("Current balance: " + game.getPlayer().getBalance() + "$");
+                    break;
+                default:
+                    //System.out.println("Illegal command");
             }
         }
 
@@ -149,6 +285,8 @@ public class PlayerTurnState implements GameState {
         // Set next state
         game.setGameState(game.getDealerTurnState());
     }
+
+      */
 
     @Override
     public void dealerTurn() {

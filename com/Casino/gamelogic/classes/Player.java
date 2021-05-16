@@ -101,8 +101,9 @@ public class Player {
             System.out.println("Player has bet " + amount + "$");
             this.rmBalance(amount);
             this.hands.get(nHand).setBetAmount(currentBet + amount);
-        } else
-            System.out.println("b: Illegal command(balance too low)");
+        } //else
+
+            // TODO  System.out.println("b: Illegal command(balance too low)");
     }
 
     /**

@@ -90,25 +90,10 @@ public class Hand {
         int nAces = 0;
 
         for (Card card : this.cards) {
-            switch (card.getRank()) {
-                case TWO:
-                case THREE:
-                case FOUR:
-                case FIVE:
-                case SIX:
-                case SEVEN:
-                case EIGHT:
-                case NINE:
-                case TEN:
-                case JACK:
-                case KING:
-                case QUEEN:
-                    value += card.cardValue();
-                    break;
-                case ACE:
-                    nAces++;
-                    break;
-                default:
+            if( card.getRank() == Rank.ACE){
+                nAces++;
+            }else{
+                value += card.cardValue();
             }
         }
         for (int i = 0; i < nAces; i++) {
@@ -193,6 +178,7 @@ public class Hand {
         for (Card aCard : this.cards) {
             cardListOutput += aCard.toString() + " ";
         }
+        cardListOutput += "(" + this.handValue() + ")";
         return cardListOutput;
     }
 }

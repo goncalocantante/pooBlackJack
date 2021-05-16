@@ -4,7 +4,8 @@ import com.Casino.gamelogic.interfaces.Mode;
 
 import java.util.Scanner;
 
-public class DebugMode {
+public class DebugMode implements Mode {
+    String cmdFile;
     String[] args;
     ShoeClass shoe;
     Game game;
@@ -12,7 +13,6 @@ public class DebugMode {
 
     public DebugMode(String[] arguments) {
         args = arguments;
-        scanner = new Scanner(System.in);
     }
 
     /**
@@ -27,8 +27,9 @@ public class DebugMode {
         int minBet;
         int maxBet;
         int balance;
-        int shoe;
-        int shuffle;
+        String shoeFilePath;
+
+        //TODO checkar as verificações
 
         // If there arent's 6 parameters
         if (args.length != 6)
@@ -36,26 +37,22 @@ public class DebugMode {
 
         // If parameters aren't ints (except for the mode parameter)
         for (int i = 0; i < args.length; i++) {
-            if (!args[0].matches(".*\\d.*"))
+            if (!args[0].matches(".*\\D.*"))
                 check = false;
         }
         minBet = Integer.parseInt(args[1]);
         maxBet = Integer.parseInt(args[2]);
         balance = Integer.parseInt(args[3]);
-        // TODO
-        // aqui é suposto ler o ficheiro
-        // não se faz isto aqui
-        // guarda só o nome do ficheiro
-        shoe = Integer.parseInt(args[4]);
-        shuffle = Integer.parseInt(args[5]);
+        // Reads shoe and cmd file names
+        shoeFilePath = args[4];
+        // opens cmd commands file
+        cmdFile = args[5];
+        this.scanner = new Scanner(cmdFile);
 
         // Check if min-bet and max-bet parameters are correct
         if (minBet < 1 || maxBet < 10 * minBet || maxBet > 20 * maxBet || balance < 50 * minBet)
             check = false;
 
-        // Check if shoe and shuffle parameters are correct
-        if (shoe < 4 || shoe > 8 || shuffle < 10 || shuffle > 100)
-            check = false;
 
         if (!check) {
             // exit
@@ -65,17 +62,31 @@ public class DebugMode {
         }
 
         // Sets parameters in game object
-        this.game.setParameters(minBet, maxBet, balance, shuffle);
+        this.game.setParameters(minBet, maxBet, balance, 100);
         // Create shoe from file
-        this.game.setShoe(new ShoeClass());
-
+        this.game.setShoe(new ShoeClass(shoeFilePath));
     }
 
     @Override
     public String getCommand() {
-        if (this.scanner.hasNextLine())
-            return this.scanner.nextLine();
-        System.out.println("no text to scan");
+        String cmd = "";
+        if(this.scanner.hasNext()){
+            cmd = String.valueOf(this.scanner.next().charAt(0));
+
+            // If bet amount is specified
+            if((cmd == "b") && (this.scanner.hasNextInt())){
+                cmd += " " + String.valueOf(this.scanner.nextInt());
+                System.out.println("Get command inside: " + cmd);
+            }
+
+            System.out.println("Get command: " + cmd);
+
+            return cmd;
+        }else{
+            System.out.println("no text to scan");
+        }
+
+
         return null;
     }
 }

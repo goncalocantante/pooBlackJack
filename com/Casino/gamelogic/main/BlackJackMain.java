@@ -2,6 +2,7 @@ package com.Casino.gamelogic.main;
 
 import com.Casino.gamelogic.classes.*;
 
+
 public class BlackJackMain {
 
     public static void main(String[] args) {
@@ -13,6 +14,8 @@ public class BlackJackMain {
             return;
         }
 
+
+
         switch (args[0]) {
             case "-i":
                 game = new Game(new InteractiveMode(args));
@@ -21,6 +24,7 @@ public class BlackJackMain {
                 game = new Game(new DebugMode(args));
                 break;
             default:
+                System.out.println("");
                 System.exit(0);
         }
 
@@ -32,5 +36,6 @@ public class BlackJackMain {
             game.finishRound();
         }
     }
-
 }
+
+

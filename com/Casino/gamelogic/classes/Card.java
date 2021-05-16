@@ -18,33 +18,7 @@ public class Card {
      * @return cardValue: card's value
      */
     public int cardValue() {
-        switch(this.rank){
-            case TWO:
-                return 2;
-            case THREE:
-                return 3;
-            case FOUR:
-                return 4;
-            case FIVE:
-                return 5;
-            case SIX:
-                return 6;
-            case SEVEN:
-                return 7;
-            case EIGHT:
-                return 8;
-            case NINE:
-                return 9;
-            case TEN:
-            case JACK:
-            case KING:
-            case QUEEN:
-                return 10;
-            case ACE:
-                return 1;
-            default:
-                return 0;
-        }
+        return this.rank.getVal();
     }
 
     public String toString() {
@@ -95,22 +69,7 @@ public class Card {
                 default:
                     break;
             }
-            switch (this.suit) {
-                case CLUBS:
-                    cardString += "C";
-                    break;
-                case DIAMONDS:
-                    cardString += "D";
-                    break;
-                case SPADES:
-                    cardString += "S";
-                    break;
-                case HEARTS:
-                    cardString += "H";
-                    break;
-                default:
-                    break;
-            }
+            cardString += this.suit.toString();
         }
         return cardString;
     }

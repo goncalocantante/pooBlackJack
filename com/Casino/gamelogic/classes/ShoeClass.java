@@ -20,8 +20,8 @@ public class ShoeClass implements Shoe {
         this.createShoe(ndecks);
     }
 
-    public ShoeClass() {
-        this.createShoeFromFile();
+    public ShoeClass(String filePath) {
+        this.createShoeFromFile(filePath);
     }
 
     /**
@@ -38,74 +38,60 @@ public class ShoeClass implements Shoe {
         }
     }
 
-    public void createShoeFromFile() {
-        Rank rank;
-        Suit suit;
+    /**
+     * Creates the shoe from file
+     *
+     * @param fileName: name of the file containing the list of cards
+     */
+    @Override
+    public void createShoeFromFile(String fileName) {
 
-        File file = new File("shoe-file.txt");
-        Scanner myReader = new Scanner(file);
+        File file = new File(fileName);
+        Scanner myReader = null;
+        try {
+            myReader = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         while (myReader.hasNextLine()) {
-            String data = myReader.nextLine();
-            System.out.println(data);
+            String rankStr = "";
+            Rank rank;
+            rank = Rank.ACE;
+            String suit = "";
 
+            // The cards are separated by spaces in the file
+            // Splits next line of the file into chunks containing each Card of the Shoe
+            // Iterates over each card
+            for (String data : myReader.nextLine().split(" "))
+            {
+                int len = data.length();
+                if(data.length() == 3){
+                    rankStr = "";
+                    suit = "";
+                    rankStr += String.valueOf(data.charAt(0));
+                    rankStr += String.valueOf(data.charAt(1));
+                    //1 char suit
+                    suit = String.valueOf(data.charAt(2));
+                    this.cards.add(new Card( Suit.valueOf(suit), rank.getRank(rankStr), true));
+                }else if(data.length() == 2){
+                    rankStr = "";
+                    suit = "";
+                    rankStr = String.valueOf(data.charAt(0));
+                    suit = String.valueOf(data.charAt(1));
+                    this.cards.add(new Card(Suit.valueOf(suit), rank.getRank(rankStr), true));
+                }else if(data.length() == 0){
+                    return;
+                }else{
+                    System.out.println("Error reading card.");
+                    System.exit(0);
+                }
+            }
         }
         myReader.close();
-
-        // criar carta
-        // Card cardToAdd = new Card(rank, suit, false);
-        // adicionar carta
-        // this.cards.add(cardToAdd);
-
     }
 
-    public Rank returnRank(String rank) {
 
-        switch (rank) {
-            case "2":
-                return Rank.TWO;
-                break;
-            case "3":
-                return Rank.THREE;
-                break;
-            case "4":
-                return Rank.FOUR;
-                break;
-            case "5":
-                return Rank.FIVE;
-                break;
-            case "6":
-                return Rank.SIX;
-                break;
-            case "7":
-                return Rank.SEVEN;
-                break;
-            case "8":
-                return Rank.EIGHT;
-                break;
-            case "9":
-                return Rank.NINE;
-                break;
-            case "10":
-                return Rank.TEN;
-                break;
-            case "J":
-                return Rank.JACK;
-                break;
-            case "K":
-                return Rank.KING;
-                break;
-            case "Q":
-                return Rank.QUEEN;
-                break;
-            case "A":
-                return Rank.ACE;
-                break;
-            default:
-
-        }
-
-    }
 
     /**
      * Shuffles the cards in the shoe
@@ -139,7 +125,6 @@ public class ShoeClass implements Shoe {
     @Override
     public void moveAllToShoe(ArrayList<Card> cardsToAdd) {
         this.cards.addAll(cardsToAdd);
-        return;
     }
 
     /**
