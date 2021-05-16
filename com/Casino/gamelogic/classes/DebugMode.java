@@ -2,10 +2,11 @@ package com.Casino.gamelogic.classes;
 
 import com.Casino.gamelogic.interfaces.Mode;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class DebugMode implements Mode {
-    String cmdFile;
     String[] args;
     ShoeClass shoe;
     Game game;
@@ -45,9 +46,13 @@ public class DebugMode implements Mode {
         balance = Integer.parseInt(args[3]);
         // Reads shoe and cmd file names
         shoeFilePath = args[4];
-        // opens cmd commands file
-        cmdFile = args[5];
-        this.scanner = new Scanner(cmdFile);
+        // opens cmd commands filegit add
+        File file = new File(args[5]);
+        try {
+            this.scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         // Check if min-bet and max-bet parameters are correct
         if (minBet < 1 || maxBet < 10 * minBet || maxBet > 20 * maxBet || balance < 50 * minBet)
@@ -72,21 +77,16 @@ public class DebugMode implements Mode {
         String cmd = "";
         if(this.scanner.hasNext()){
             cmd = String.valueOf(this.scanner.next().charAt(0));
-
             // If bet amount is specified
-            if((cmd == "b") && (this.scanner.hasNextInt())){
+            if((cmd.equals("b")) && this.scanner.hasNextInt()){
                 cmd += " " + String.valueOf(this.scanner.nextInt());
-                System.out.println("Get command inside: " + cmd);
             }
-
-            System.out.println("Get command: " + cmd);
-
+            System.out.println("cmd: " + cmd);
             return cmd;
         }else{
-            System.out.println("no text to scan");
+            System.out.println("No more commands");
+            System.exit(0);
         }
-
-
         return null;
     }
 }

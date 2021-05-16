@@ -98,12 +98,10 @@ public class Player {
         int currentBet = this.hands.get(nHand).getBetAmount();
 
         if (this.canBet(amount)) {
-            System.out.println("Player has bet " + amount + "$");
+            System.out.println("player is betting " + amount);
             this.rmBalance(amount);
             this.hands.get(nHand).setBetAmount(currentBet + amount);
-        } //else
-
-            // TODO  System.out.println("b: Illegal command(balance too low)");
+        }
     }
 
     /**
@@ -113,7 +111,7 @@ public class Player {
      */
     public boolean canBet(int amount){
         int minBet = this.game.getParameters()[0];
-        int maxBet = this.game.getParameters()[0];
+        int maxBet = this.game.getParameters()[1];
 
         if (this.balance < amount)
             System.out.println("b: Illegal command(balance too low)");
@@ -122,7 +120,7 @@ public class Player {
         if(amount > maxBet)
             System.out.println("b: Illegal command(bet must be lower than maximum bet)");
 
-        return (this.balance >= amount && minBet < amount  && amount < maxBet);
+        return (this.balance >= amount && minBet <= amount  && amount <= maxBet);
     }
 
     /**

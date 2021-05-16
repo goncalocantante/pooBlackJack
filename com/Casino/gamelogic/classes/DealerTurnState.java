@@ -44,10 +44,10 @@ public class DealerTurnState implements GameState {
         } else {
             // Dealer Hits at 16, Holds at 17
             while (dealer.handValue() < 17) {
-                System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
-                System.out.println("Dealer hits");
+                //System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+                System.out.println("dealer hits");
                 dealer.drawCard(game.getShoe());
-                System.out.println("Dealer's hand " + dealer + " " + "(" + dealer.handValue() + ")");
+                System.out.println("dealer's hand " + dealer);
             }
             if(dealer.isBust())
                 System.out.println("Dealer busts");

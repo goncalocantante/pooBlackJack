@@ -36,8 +36,8 @@ public class RoundEndState implements GameState {
 
         // muda de estado consoante o jogador quer continuar ou não
 
-        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
-        System.out.println("Ronda Terminada.");
+        // System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+        //System.out.println("Ronda Terminada.");
 
         Hand dealer = game.getDealer();
         Player player = game.getPlayer();
