@@ -62,15 +62,6 @@ public class Tables {
 
     }
 
-    public void printTable(char [][] table) {
-        for (int i = 0; i < table.length; i++) {
-            // Loop through all elements of current row
-            for (int j = 0; j < table[i].length; j++) {
-                System.out.print(table[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
 
     //table = 1 for pair, = 2 for hard and = 3 for soft
     public char getAction (int tableType, int playerCards, int dealerCard){
@@ -100,11 +91,6 @@ public class Tables {
     public static void main (String[] args) {
         Tables table = new Tables();
 
-        table.printTable(table.createHardTable());
-        System.out.println();
-        table.printTable(table.createSoftTable());
-        System.out.println();
-        table.printTable(table.createPairTable());
 
         System.out.println((table.getAction(2, 9, 6)));
 

@@ -35,7 +35,7 @@ public class PlayerTurnState implements GameState {
         System.out.println("Please bet to continue playing or quit game:");
 
         while (!deal) {
-            inputString = this.game.getGameMode().getCommand();
+            inputString = this.game.getGameMode().getCommand(nHand);
             switch (inputString.charAt(0)) {
                 case 'b':
                     // If there are digits in the input string
@@ -102,7 +102,7 @@ public class PlayerTurnState implements GameState {
                 System.out.println("Enter command:");
 
                 //Get the input
-                inputString = this.game.getGameMode().getCommand();
+                inputString = this.game.getGameMode().getCommand(nHand);
                 //Check which command is in input
                 switch (inputString.charAt(0)) {
                     case 'h':

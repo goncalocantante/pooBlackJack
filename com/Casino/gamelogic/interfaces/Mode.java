@@ -6,5 +6,5 @@ public interface Mode {
 
     void InitializeShoeAndParameters(Game game);
 
-    String getCommand();
+    String getCommand(int nHand);
 }

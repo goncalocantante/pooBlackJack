@@ -121,6 +121,41 @@ public class Hand {
         return value;
     }
 
+
+    public boolean isSoft() {
+        int value = 0;
+        int nAces = 0;
+
+        for (Card card : this.cards) {
+            switch (card.getRank()) {
+                case TWO:
+                case THREE:
+                case FOUR:
+                case FIVE:
+                case SIX:
+                case SEVEN:
+                case EIGHT:
+                case NINE:
+                case TEN:
+                case JACK:
+                case KING:
+                case QUEEN:
+                    value += card.cardValue();
+                    break;
+                case ACE:
+                    nAces++;
+                    break;
+                default:
+            }
+        }
+        if (value + 11 < 21) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
     /**
      * Indicates the number of cards in the hand
      *
@@ -194,5 +229,9 @@ public class Hand {
             cardListOutput += aCard.toString() + " ";
         }
         return cardListOutput;
+    }
+
+    public boolean isEmpty() {
+        return this.cards.isEmpty();
     }
 }

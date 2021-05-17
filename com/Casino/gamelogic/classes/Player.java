@@ -290,5 +290,4 @@ public class Player {
         this.insurance = 0;
     }
 
-
 }
