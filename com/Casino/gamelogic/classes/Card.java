@@ -13,6 +13,14 @@ public class Card {
         this.isCardUp = isCardUp;
     }
 
+    /**
+     * Returns the card's value (ace returns 1)
+     * @return cardValue: card's value
+     */
+    public int cardValue() {
+        return this.rank.getVal();
+    }
+
     public String toString() {
         String cardString = "";
         if (this.isCardUp == false) {
@@ -61,22 +69,7 @@ public class Card {
                 default:
                     break;
             }
-            switch (this.suit) {
-                case CLUBS:
-                    cardString += "C";
-                    break;
-                case DIAMONDS:
-                    cardString += "D";
-                    break;
-                case SPADES:
-                    cardString += "S";
-                    break;
-                case HEARTS:
-                    cardString += "H";
-                    break;
-                default:
-                    break;
-            }
+            cardString += this.suit.toString();
         }
         return cardString;
     }

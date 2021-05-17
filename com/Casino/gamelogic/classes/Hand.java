@@ -70,8 +70,12 @@ public class Hand {
      */
     // A emptyHand
     public void emptyHand(ArrayList<Card> discardPile) {
-        discardPile.addAll(this.cards);
 
+        //Set all cards face up
+        for(Card card : this.cards){ card.setCardFaceUp(); }
+        //Add them to discard pile
+        discardPile.addAll(this.cards);
+        //Empty the hand
         this.cards.clear();
         return;
     }
@@ -86,40 +90,10 @@ public class Hand {
         int nAces = 0;
 
         for (Card card : this.cards) {
-            switch (card.getRank()) {
-                case TWO:
-                    value += 2;
-                    break;
-                case THREE:
-                    value += 3;
-                    break;
-                case FOUR:
-                    value += 4;
-                    break;
-                case FIVE:
-                    value += 5;
-                    break;
-                case SIX:
-                    value += 6;
-                    break;
-                case SEVEN:
-                    value += 7;
-                    break;
-                case EIGHT:
-                    value += 8;
-                    break;
-                case NINE:
-                    value += 9;
-                    break;
-                case TEN:
-                case JACK:
-                case KING:
-                case QUEEN:
-                    value += 10;
-                    break;
-                case ACE:
-                    nAces++;
-                    break;
+            if( card.getRank() == Rank.ACE){
+                nAces++;
+            }else{
+                value += card.cardValue();
             }
         }
         for (int i = 0; i < nAces; i++) {
@@ -156,6 +130,11 @@ public class Hand {
     public void closeHand() {
         this.handClosed = true;
     }
+
+    /**
+     * Opens hand
+     */
+    public void openHand() { this.handClosed = false;}
 
     /**
      * Indicates if the hand has bust
@@ -199,6 +178,7 @@ public class Hand {
         for (Card aCard : this.cards) {
             cardListOutput += aCard.toString() + " ";
         }
+        cardListOutput += "(" + this.handValue() + ")";
         return cardListOutput;
     }
 }

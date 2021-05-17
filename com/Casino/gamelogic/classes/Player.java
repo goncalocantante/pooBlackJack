@@ -22,21 +22,7 @@ public class Player {
      */
     public Player(Game game) {
         this.game = game;
-        this.balance = 100;
-        this.insurance = 0;
-        this.hands = new ArrayList<Hand>();
-
-        this.hands.add(new Hand());
-    }
-
-    /**
-     * Constructor to initialize the player with desired balance
-     * 
-     * @param amount: initial balance of the player
-     */
-    public Player(Game game, int amount) {
-        this.game = game;
-        this.balance = amount;
+        this.balance = 0;
         this.insurance = 0;
         this.hands = new ArrayList<Hand>();
 
@@ -75,7 +61,7 @@ public class Player {
      * 
      * @return insurance: amount bet as insurance, 0 if not insured
      */
-    private int getInsurance() {
+    public int getInsurance() {
         return this.insurance;
     }
 
@@ -109,12 +95,32 @@ public class Player {
      */
     public void bet(int amount, int nHand) {
 
-        if (this.balance >= amount) {
-            System.out.println("Player has bet " + amount + "$");
+        int currentBet = this.hands.get(nHand).getBetAmount();
+
+        if (this.canBet(amount)) {
+            System.out.println("player is betting " + amount);
             this.rmBalance(amount);
-            this.hands.get(nHand).setBetAmount(amount);
-        } else
+            this.hands.get(nHand).setBetAmount(currentBet + amount);
+        }
+    }
+
+    /**
+     * Checks if the specified amount can be bet
+     * @param amount: amount to be bet
+     * @return
+     */
+    public boolean canBet(int amount){
+        int minBet = this.game.getParameters()[0];
+        int maxBet = this.game.getParameters()[1];
+
+        if (this.balance < amount)
             System.out.println("b: Illegal command(balance too low)");
+        if(amount < minBet)
+            System.out.println("b: Illegal command(bet must be higher than minimum bet)");
+        if(amount > maxBet)
+            System.out.println("b: Illegal command(bet must be lower than maximum bet)");
+
+        return (this.balance >= amount && minBet <= amount  && amount <= maxBet);
     }
 
     /**
@@ -127,6 +133,7 @@ public class Player {
 
         System.out.println("Player hits");
         this.hands.get(nHand).drawCard(shoe);
+        System.out.println("Player's hand: " +this.game.getPlayer().getHand(nHand));
     }
 
     /**
@@ -137,6 +144,7 @@ public class Player {
     public void stand(int nHand) {
         System.out.println("Player has stand");
         this.hands.get(nHand).closeHand();
+        System.out.println("Player's hand: " +this.game.getPlayer().getHand(nHand));
     }
 
     /**
@@ -149,9 +157,10 @@ public class Player {
         Hand originalHand = this.hands.get(nHand);
         // If the hand can be split
         if (this.canSplit(nHand)) {
+            System.out.println("Player splits");
             // Creates new hand
-            this.hands.add(new Hand());
-            newHand = this.hands.get(this.hands.size() - 1);
+            this.hands.add(nHand+1, new Hand());
+            newHand = this.hands.get(nHand+1);
 
             // Takes a card from originalHand and puts in newHand
             newHand.addCard(originalHand.getCard(0));
@@ -160,7 +169,6 @@ public class Player {
             newHand.setBetAmount(originalHand.getBetAmount());
             // Both hands receive another card
             this.hit(nHand);
-            this.hit(this.hands.size() - 1);
         }
     }
 
@@ -180,27 +188,39 @@ public class Player {
 
         if (handSize != 2)
             System.out.println("p: Illegal command(cannot split after hitting)");
-        if (!card1.getRank().equals(card2.getRank()))
-            System.out.println("p: Illegal command(cards do not have the same rank)");
+        if (card1.cardValue() != card2.cardValue())
+            System.out.println("p: Illegal command(cards do not have the same value)");
         if (this.balance < originalBet)
             System.out.println("p: Illegal command(balance too low)");
-        return (handSize == 2 && card1.getRank().equals(card2.getRank()) && this.balance >= originalBet);
+        if (hands.size() > 3)
+            System.out.println("p: Illegal command(can only split 3 times)");
+        return (handSize == 2 && card1.cardValue() == card2.cardValue() && this.balance >= originalBet && hands.size() <= 4);
     }
 
     public void insure() {
         int originalBet = this.hands.get(0).getBetAmount();
         // If the player hasn't already insured
-        if (this.insurance == 0) {
-            // if he has enough money to insure
-            if (this.balance >= originalBet) {
-                // Insure
-                this.insurance = originalBet;
-                this.balance -= originalBet;
-                System.out.println("Player has insured, " + originalBet + "$ bet");
-            } else
-                System.out.println("i: Illegal command(balance too low)");
-        } else
-            System.out.println("i: Illegal command(Cannot insure twice)");
+        if (this.canInsure()) {
+            // Insure
+            this.insurance = originalBet;
+            this.balance -= originalBet;
+            System.out.println("Player has insured, " + originalBet + "$ bet");
+        }
+    }
+
+    public boolean canInsure() {
+        int originalBet = this.hands.get(0).getBetAmount();
+        Rank dealerCardRank = this.game.getDealer().getCard(0).getRank();
+        //checks if we haven't insured yet and no other command given
+        if(!dealerCardRank.equals(Rank.ACE))
+            System.out.println("p: Illegal command(dealer's face-up card is not ace)");
+        if (this.balance < originalBet)
+            System.out.println("i: Illegal command(balance too low)");
+        if (this.insurance != 0)
+            System.out.println("i: Illegal command(cannot insure twice)");
+        if (this.hands.get(0).getHandSize() > 2 || this.hands.size() > 1)
+            System.out.println("i: Illegal command(insurance must be first command)");
+        return (this.insurance == 0 && this.hands.get(0).getHandSize() == 2 && this.hands.size() == 1 && this.balance >= originalBet && dealerCardRank.equals(Rank.ACE));
     }
 
     /**
@@ -223,8 +243,8 @@ public class Player {
 
     public void doubleBet(int nHand) {
         int originalBet = this.hands.get(nHand).getBetAmount();
-        // If the player has enough to double his bet and has not hit yet
-        if (this.balance >= originalBet && this.hands.get(nHand).getHandSize() == 2) {
+        // if player can double
+        if (canDouble (nHand)) {
             // Double his bet
             this.hands.get(nHand).setBetAmount(2 * originalBet);
             System.out.println("Player has doubled his bet to " + 2 * originalBet + "$");
@@ -232,26 +252,43 @@ public class Player {
             this.hit(nHand);
             // Closes hand, not getting any more cards
             this.hands.get(nHand).closeHand();
-        } else
+        }
+    }
+
+    public boolean canDouble (int nHand){
+        int originalBet = this.hands.get(nHand).getBetAmount();
+
+        if (this.balance < originalBet)
             System.out.println("2: Illegal command(balance too low)");
+        if (this.hands.get(nHand).getHandSize() > 2)
+            System.out.println("2: Illegal command(cannot double after hitting)");
+        if (this.hands.get(nHand).handValue() < 9 || this.hands.get(nHand).handValue() > 11)
+            System.out.println("2: Illegal command(can only double on opening hand worth 9, 10 or 11)");
+        return (this.balance >= originalBet && this.hands.get(nHand).getHandSize() == 2 && this.hands.get(nHand).handValue() >= 9 && this.hands.get(nHand).handValue() <= 11);
     }
 
     /**
      * Returns the player's cards to the discard pile and sets the number of his
      * hands to 1
      */
-    public void returnCards() {
+    public void playerResets() {
 
         ArrayList<Hand> playerHands = this.hands;
 
-        // Clears all the hands
+        // Clears all the hands to the discard pile
         for (Hand hand : playerHands) {
             hand.emptyHand(game.getDiscardPile());
         }
-        // Reset playersHands to One
-        while (playerHands.size() < 1) {
+        // Reset player's hands to One
+        while (playerHands.size() > 1) {
             playerHands.remove(0);
         }
+        playerHands.get(0).setBetAmount(0);
+        playerHands.get(0).openHand();
 
+        //Insurance amount is set to 0
+        this.insurance = 0;
     }
+
+
 }

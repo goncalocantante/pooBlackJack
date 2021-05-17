@@ -1,6 +1,7 @@
 package com.Casino.gamelogic.classes;
 
 import com.Casino.gamelogic.interfaces.GameState;
+import com.Casino.gamelogic.interfaces.Mode;
 import com.Casino.gamelogic.interfaces.Shoe;
 
 import java.util.ArrayList;
@@ -11,6 +12,9 @@ public class Game {
     private Player player;
     private Hand dealer;
     private ArrayList<Card> discardPile;
+    private int minBet, maxBet, shuffle;
+
+    Mode gameMode;
 
     private GameState gameState;
     private GameState gameStartState;
@@ -19,20 +23,20 @@ public class Game {
     private GameState roundEndState;
     private GameState gameEndState;
 
-    public Game() {
+    public Game(Mode gameMode) {
         this.gameStartState = new GameStartState(this);
         this.playerTurnState = new PlayerTurnState(this);
         this.dealerTurnState = new DealerTurnState(this);
         this.roundEndState = new RoundEndState(this);
         this.gameEndState = new GameEndState(this);
 
+
         this.player = new Player(this);
         this.dealer = new Hand();
         this.discardPile = new ArrayList<Card>();
-        this.shoe = new ShoeClass(2);
+        this.gameMode = gameMode;
 
         this.gameState = this.gameStartState;
-
     }
 
     /**
@@ -124,6 +128,17 @@ public class Game {
     }
 
     /**
+     * Sets the game's shoe to the provided shoe
+     * @param shoe: shoe to be set used in the game
+     */
+    public void setShoe(ShoeClass shoe) {
+        if(this.shoe == null)
+            this.shoe = shoe;
+        else
+            System.out.println("Shoe already set");
+    }
+
+    /**
      * Gets the player
      * 
      * @return player: game's player
@@ -143,10 +158,28 @@ public class Game {
 
     /**
      * Gets the discard pile
+     * @return discardPile: discard pile
      */
-
     public ArrayList<Card> getDiscardPile() {
         return discardPile;
     }
 
+    /**
+     * Gets the game mode
+     * @return gameMode: game mode
+     */
+    public Mode getGameMode() { return this.gameMode; }
+
+    public void setParameters(int minBet, int maxBet, int balance, int shuffle){
+        this.minBet = minBet;
+        this.maxBet = maxBet;
+        this.player.addBalance(balance);
+        this.shuffle = shuffle;
+    }
+
+    public int[] getParameters(){
+        int[] params = new int[]{this.minBet, this.maxBet, shuffle};
+
+        return params;
+    }
 }

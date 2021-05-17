@@ -2,6 +2,7 @@ package com.Casino.gamelogic.classes;
 
 import java.util.Scanner;
 
+import com.Casino.gamelogic.enumerations.Rank;
 import com.Casino.gamelogic.interfaces.GameState;
 
 public class PlayerTurnState implements GameState {
@@ -24,24 +25,26 @@ public class PlayerTurnState implements GameState {
 
     @Override
     public void playerTurn() {
-        Scanner scanner = new Scanner(System.in);
         Scanner betScan;
-        char input = '0';
         String inputString;
-        int nHand = 0;
+
         boolean deal = false;
+
+        int nHand = 0;
         int previousBet = 0;
-        int currentBet;
+        int currentBet = 0;
 
         while (!deal) {
-            inputString = scanner.nextLine();
+            inputString = this.game.getGameMode().getCommand();
             switch (inputString.charAt(0)) {
+
                 case 'b':
                     // If there are digits in the input string
                     if (inputString.matches(".*\\d.*")) {
                         // Scan the first integer in the string (bet amount)
                         betScan = new Scanner(inputString);
                         currentBet = betScan.useDelimiter("\\D+").nextInt();
+                        System.out.println("curr Bet " + currentBet);
                         // Bet the specified amount
                         game.getPlayer().bet(currentBet, 0);
                         // Set previous bet value
@@ -69,23 +72,37 @@ public class PlayerTurnState implements GameState {
                     System.out.println("Current balance: " + game.getPlayer().getBalance() + "$");
                     break;
                 default:
-                    System.out.println("Illegal command");
+                    //System.out.println("Illegal command");
             }
         }
+
+
         // Deal cards
         this.dealCards();
         System.out.println("dealer's hand " + game.getDealer());
 
-        System.out.println("Player is playing.");
+        //System.out.println("Player is playing.");
         // loops through all of the player's hands
-        for (Hand hand : this.game.getPlayer().getHands()) {
+        for (int j = 0; j < this.game.getPlayer().getHands().size(); j++) {
+
+            Hand hand = this.game.getPlayer().getHand(j);
+
+            //System.out.println("Playing hand " + (nHand + 1) + ":");
             // While hand is playable
+
+            //If there was a split - Hit
+            if(hand.getHandSize() == 1)
+                this.game.getPlayer().hit(nHand);
+            else
+                System.out.println("player's hand " + hand);
+
             while (!hand.isHandClosed()) {
 
-                System.out.println(hand);
-                System.out.println("Enter command:");
-                input = scanner.next().charAt(0);
-                switch (input) {
+                //System.out.println("Enter command:");
+                //Get the input
+                inputString = this.game.getGameMode().getCommand();
+                //Check which command is in input
+                switch (inputString.charAt(0)) {
                     case 'h':
                         this.game.getPlayer().hit(nHand);
                         break;
@@ -110,9 +127,17 @@ public class PlayerTurnState implements GameState {
                     default:
                         System.out.println("Illegal command");
                 }
+
                 // If hand busts it closes, becoming not playable
                 if (hand.isBust()) {
                     hand.closeHand();
+                    System.out.println("Player busts");
+                }
+
+                //If player gets blackjack on this hand close it
+                if(hand.handValue() == 21 && hand.getHandSize() == 2){
+                    hand.closeHand();
+                    System.out.println("Blackjack!");
                 }
             }
             // Next hand
@@ -120,7 +145,6 @@ public class PlayerTurnState implements GameState {
         }
         // Set next state
         game.setGameState(game.getDealerTurnState());
-        scanner.close();
     }
 
     @Override
@@ -137,12 +161,16 @@ public class PlayerTurnState implements GameState {
      * Deals the cards at the beginning of a round
      */
     public void dealCards() {
+
+        // Dealer is dealt one card faced up and one faced down
+        game.getDealer().drawCard(game.getShoe());
+        game.getDealer().drawCard(game.getShoe());
+        game.getDealer().getCard(1).setCardFaceDown();
+
         // Player is dealt two face up cards
-        // and the dealer is dealt one face up card and one face down
         game.getPlayer().getHand(0).drawCard(game.getShoe());
-        game.getDealer().drawCard(game.getShoe());
         game.getPlayer().getHand(0).drawCard(game.getShoe());
-        game.getDealer().drawCard(game.getShoe());
-        game.getDealer().getCard(0).setCardFaceDown();
+
+
     }
 }
