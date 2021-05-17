@@ -70,7 +70,7 @@ public class InteractiveMode implements Mode {
     }
 
     @Override
-    public String getCommand() {
+    public String getCommand(int nHand) {
         if (this.scanner.hasNextLine())
             return this.scanner.nextLine();
         System.out.println("no text to scan");

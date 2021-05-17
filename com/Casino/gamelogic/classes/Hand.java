@@ -107,6 +107,33 @@ public class Hand {
     }
 
     /**
+     * Indicates if the hand is soft
+     *
+     * @return value: true if soft, false if hard
+     */
+    public boolean isSoft() {
+        int value = 0;
+        int nAces = 0;
+
+        for (Card card : this.cards) {
+            if( card.getRank() == Rank.ACE){
+                nAces++;
+            }else{
+                value += card.cardValue();
+            }
+        }
+        for (int i = 0; i < nAces; i++) {
+            if (value + 11 < 21) {
+                return true;
+            } else {
+                value += 1;
+            }
+        }
+        return false;
+    }
+
+
+    /**
      * Indicates the number of cards in the hand
      *
      * @return ncards: number of cards in the hand
@@ -180,5 +207,14 @@ public class Hand {
         }
         cardListOutput += "(" + this.handValue() + ")";
         return cardListOutput;
+    }
+
+    /**
+     * Indicates whether or not hand is empty
+     *
+     * @return
+     */
+    public boolean isEmpty() {
+        return this.cards.isEmpty();
     }
 }

@@ -73,7 +73,7 @@ public class DebugMode implements Mode {
     }
 
     @Override
-    public String getCommand() {
+    public String getCommand(int nHand) {
         String cmd = "";
         if(this.scanner.hasNext()){
             cmd = String.valueOf(this.scanner.next().charAt(0));
