@@ -108,12 +108,6 @@ public class Tables {
 
         System.out.println((table.getAction(2, 9, 6)));
 
-        /*for (i = 13; i <= 21; i++){
-            for (j = 2; j <= 11; j++){
-                System.out.println((table.getAction(2, i, j)));
-            }
-            System.out.println();
-        }*/
     }
 
 }
