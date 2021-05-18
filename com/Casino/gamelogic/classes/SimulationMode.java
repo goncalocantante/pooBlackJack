@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class SimulationMode implements Mode {
 
     String[] args;
-    ShoeClass shoe;
+//    ShoeClass shoe;
     Game game;
     Scanner scanner;
 
@@ -26,8 +26,8 @@ public class SimulationMode implements Mode {
         int balance;
         int shoe;
         int shuffle;
-        int sNumber;
-        String Strategy;
+        //int sNumber;
+        //String Strategy;
         String Basic;
         String BasicAce;
         String HiLo;
@@ -47,8 +47,8 @@ public class SimulationMode implements Mode {
         balance = Integer.parseInt(args[3]);
         shoe = Integer.parseInt(args[4]);
         shuffle = Integer.parseInt(args[5]);
-        sNumber = Integer.parseInt(args[6]);
-        Strategy = args[7];
+        //sNumber = Integer.parseInt(args[6]);
+        //Strategy = args[7];
         Basic = "BS";
         BasicAce = "BS-AF";
         HiLo = "HL";
@@ -85,13 +85,14 @@ public class SimulationMode implements Mode {
 
         Tables table = new Tables();
 
+        String Action;
         int playerValue;
         int dealerValue;
         playerValue = this.game.getPlayer().getHand(nHand).handValue();
         dealerValue = this.game.getDealer().getCard(0).cardValue();
 
         //if what we want is the bet string
-        //check if the betting strategy is Ace Five or Standard Bet Strategy
+        //check if the betting strategy is Ace Five or Standard Bet Strategy and return
         if (this.game.getPlayer().getHand(0).isEmpty()){
             if (args[7].contains("AF")){
                 return aceFiveBet();
@@ -101,21 +102,31 @@ public class SimulationMode implements Mode {
             }
         }
 
+        //checks if the strategy is Hi Lo
+        //If it is, bet accordingly
+        //if it isn't or if case doesn't exist, then basic
+        if (args[7].contains("HL")){
+            Action = HiLo(nHand);
+            if (!Action.equals("basic")){
+                return Action;
+            }
+        }
         if (args[7].contains("BS")){
             if (this.game.getPlayer().getHand(nHand).canSplit()){
-                return String.valueOf(table.getAction (1, playerValue, dealerValue));
+                Action = String.valueOf(table.getAction (1, playerValue, dealerValue));
+                return Action;
             }
             if (!this.game.getPlayer().getHand(nHand).isSoft()){
-                return String.valueOf(table.getAction (2, playerValue, dealerValue));
+                Action = String.valueOf(table.getAction (2, playerValue, dealerValue));
+                return Action;
             }
             else if (this.game.getPlayer().getHand(nHand).isSoft()){
-                return String.valueOf(table.getAction (3, playerValue, dealerValue));
+                Action = String.valueOf(table.getAction (3, playerValue, dealerValue));
+                return Action;
             }
         }
-        else if (args[7].contains("HL")){
-            HiLo(nHand);
-        }
-        return "not done";
+
+        return "Not correct betting strategy";
     }
 
 
@@ -155,7 +166,11 @@ public class SimulationMode implements Mode {
 
     public String HiLo(int nHand) {
         int runningCount = 0;
+        int cardsDiscarded = 0;
+        int decksRemaining = 0;
         int trueCount = 0;
+        int cardsInShoe = Integer.parseInt(args[5])*52;
+        String toReturn;
 
         for (runningCount = 0; runningCount < this.game.getDiscardPile().size(); runningCount++){
             switch (this.game.getDiscardPile().get(runningCount).getRank()){
@@ -173,14 +188,120 @@ public class SimulationMode implements Mode {
                     runningCount--;
             }
         }
-        return "not done";
+        cardsDiscarded++;
+        decksRemaining = cardsInShoe/cardsDiscarded;
+        trueCount = runningCount/decksRemaining;
+
+        toReturn = fab4(nHand, trueCount);
+        if (!toReturn.equals("basic")){
+            return toReturn;
+        }
+        return (illustrious18(nHand, trueCount));
     }
 
-    public String illustrous18 (int nHand, int counter){
+    public String illustrious18 (int nHand, int trueCount){
         int playerHand = this.game.getPlayer().getHand(nHand).handValue();
         int dealerHand = this.game.getDealer().handValue();
 
-        return null;
+        if (playerHand == 16 && dealerHand == 10){
+            return standOrHit(trueCount, 0);
+        } else if (playerHand == 15 && dealerHand == 10){
+            return standOrHit(trueCount, 4);
+        } else if (playerHand == 20 && dealerHand == 5){
+            return splitOrStand(trueCount, 5);
+        } else if (playerHand == 20 && dealerHand == 6){
+            return splitOrStand(trueCount, 4);
+        } else if (playerHand == 10 && dealerHand == 10){
+            return doubleOrHit(trueCount, 4);
+        } else if (playerHand == 12 && dealerHand == 3){
+            return standOrHit(trueCount, 2);
+        } else if (playerHand == 12 && dealerHand == 2){
+            return standOrHit(trueCount, 3);
+        } else if (playerHand == 11 && dealerHand == 11){
+            return doubleOrHit(trueCount, 1);
+        } else if (playerHand == 9 && dealerHand == 2){
+            return doubleOrHit(trueCount, 1);
+        } else if (playerHand == 10 && dealerHand == 11){
+            return doubleOrHit(trueCount, 4);
+        } else if (playerHand == 9 && dealerHand == 7){
+            return doubleOrHit(trueCount, 3);
+        } else if (playerHand == 16 && dealerHand == 9){
+            return standOrHit(trueCount, 5);
+        } else if (playerHand == 13 && dealerHand == 2){
+            return standOrHit(trueCount, -1);
+        } else if (playerHand == 12 && dealerHand == 4){
+            return standOrHit(trueCount, 0);
+        } else if (playerHand == 12 && dealerHand == 5){
+            return standOrHit(trueCount, -2);
+        } else if (playerHand == 12 && dealerHand == 6){
+            return standOrHit(trueCount, -1);
+        }else if (playerHand == 13 && dealerHand == 3){
+            return standOrHit(trueCount, -2);
+        }
+        return "basic";
     }
 
+    public String standOrHit (int trueCount, int indexNumber) {
+
+        if (trueCount >= indexNumber){
+            return "s";
+        }
+        else{
+            return "h";
+        }
+    }
+
+    public String splitOrStand (int trueCount, int indexNumber) {
+
+        if (trueCount >= indexNumber){
+            return "p";
+        }
+        else{
+            return "s";
+        }
+    }
+
+    public String doubleOrHit (int trueCount, int indexNumber) {
+
+        if (trueCount >= indexNumber){
+            return "2";
+        }
+        else{
+            return "h";
+        }
+    }
+
+    public String fab4 (int nHand, int trueCount){
+        int playerHand = this.game.getPlayer().getHand(nHand).handValue();
+        int dealerHand = this.game.getDealer().handValue();
+
+        if (playerHand == 14 && dealerHand == 10){
+            return surrenderOrBasic(trueCount, 3);
+        } else if (playerHand == 15 && dealerHand == 9){
+            return surrenderOrBasic(trueCount, 2);
+        } else if (playerHand == 15 && dealerHand == 11){
+            return surrenderOrBasic(trueCount, 1);
+        } else if (playerHand == 15 && dealerHand == 10){
+            if (trueCount <= 0 && trueCount >= 3){
+                return "u";
+            } else if (trueCount >= 4){
+                return "s";
+            }
+            else {
+                return "h";
+            }
+        }
+        return "basic";
+
+    }
+
+    public String surrenderOrBasic (int trueCount, int indexNumber){
+
+        if (trueCount >= indexNumber){
+            return "u";
+        }
+        else{
+            return "basic";
+        }
+    }
 }
