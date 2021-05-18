@@ -16,6 +16,9 @@ public class Player {
     private ArrayList<Hand> hands;
     // True if player is insured
     private int insurance;
+    //-1 perdi, 0 empatei, 1 ganhei preciso de get e set
+    private int lastResult;
+
 
     /**
      * Contructor to initialize the player with 0 balance
@@ -289,6 +292,5 @@ public class Player {
         //Insurance amount is set to 0
         this.insurance = 0;
     }
-
 
 }

@@ -10,7 +10,7 @@ public class SimulationMode implements Mode {
 //    ShoeClass shoe;
     Game game;
     Scanner scanner;
-
+    int previousBet = 0;
 
     public SimulationMode(String[] arguments) {
         args = arguments;
@@ -89,7 +89,7 @@ public class SimulationMode implements Mode {
         int playerValue;
         int dealerValue;
         playerValue = this.game.getPlayer().getHand(nHand).handValue();
-        dealerValue = this.game.getDealer().getCard(0).cardValue();
+        dealerValue = this.game.getDealer().getCard(1).cardValue();
 
         //if what we want is the bet string
         //check if the betting strategy is Ace Five or Standard Bet Strategy and return
@@ -172,7 +172,7 @@ public class SimulationMode implements Mode {
         int cardsInShoe = Integer.parseInt(args[5])*52;
         String toReturn;
 
-        for (runningCount = 0; runningCount < this.game.getDiscardPile().size(); runningCount++){
+        for (cardsDiscarded = 0; cardsDiscarded < this.game.getDiscardPile().size(); cardsDiscarded++){
             switch (this.game.getDiscardPile().get(runningCount).getRank()){
                 case TWO:
                 case THREE:
@@ -187,8 +187,8 @@ public class SimulationMode implements Mode {
                 case ACE:
                     runningCount--;
             }
+
         }
-        cardsDiscarded++;
         decksRemaining = cardsInShoe/cardsDiscarded;
         trueCount = runningCount/decksRemaining;
 

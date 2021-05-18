@@ -33,6 +33,7 @@ public class DealerTurnState implements GameState {
 
         // the dealer turns over his hidden card
         dealer.getCard(0).setCardFaceUp();
+
         // Display dealers cards
         System.out.println("Dealer's hand: " + dealer + " " + "(" + dealer.handValue() + ")");
 
