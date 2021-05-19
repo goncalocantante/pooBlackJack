@@ -37,8 +37,7 @@ public class PlayerTurnState implements GameState {
         while (!deal) {
             inputString = this.game.getGameMode().getCommand();
             switch (inputString.charAt(0)) {
-
-                case 'b':
+                case ('b'):
                     // If there are digits in the input string
                     if (inputString.matches(".*\\d.*")) {
                         // Scan the first integer in the string (bet amount)
@@ -46,10 +45,10 @@ public class PlayerTurnState implements GameState {
                         currentBet = betScan.useDelimiter("\\D+").nextInt();
                         System.out.println("curr Bet " + currentBet);
                         // Bet the specified amount
-                        game.getPlayer().bet(currentBet, 0);
-                        // Set previous bet value
-                        previousBet = currentBet;
-                        betScan.close();
+                        if(game.getPlayer().bet(currentBet, 0)) {
+                            previousBet = currentBet;  // Set previous bet value
+                            betScan.close();
+                        }
                     } else {
                         // If no amount is specified, bet previous bet value or minimum
                         // bet value if there is no previous bet
@@ -70,6 +69,12 @@ public class PlayerTurnState implements GameState {
                     break;
                 case '$':
                     System.out.println("Current balance: " + game.getPlayer().getBalance() + "$");
+                    break;
+                case 's':
+                    System.out.println("BOTAAA");
+                    if (inputString.length() == 2 && inputString.charAt(1) == 't' ){
+                        game.statistics();
+                    }
                     break;
                 default:
                     //System.out.println("Illegal command");
@@ -94,35 +99,37 @@ public class PlayerTurnState implements GameState {
             if(hand.getHandSize() == 1)
                 this.game.getPlayer().hit(nHand);
             else
-                System.out.println("player's hand " + hand);
+                System.out.println("player's hand " + hand + "(" + hand.handValue() + ")");
 
             while (!hand.isHandClosed()) {
 
-                //System.out.println("Enter command:");
                 //Get the input
                 inputString = this.game.getGameMode().getCommand();
                 //Check which command is in input
-                switch (inputString.charAt(0)) {
-                    case 'h':
+                switch (inputString) {
+                    case "h":
                         this.game.getPlayer().hit(nHand);
                         break;
-                    case 's':
+                    case "s":
                         this.game.getPlayer().stand(nHand);
                         break;
-                    case '$':
+                    case "$":
                         System.out.println("Current balance: " + game.getPlayer().getBalance() + "$");
                         break;
-                    case 'i':
+                    case "i":
                         game.getPlayer().insure();
                         break;
-                    case 'u':
+                    case "u":
                         game.getPlayer().surrender(nHand);
                         break;
-                    case 'p':
+                    case "p":
                         game.getPlayer().split(nHand);
                         break;
-                    case '2':
+                    case "2":
                         game.getPlayer().doubleBet(nHand);
+                        break;
+                    case "st":
+                        game.statistics();
                         break;
                     default:
                         System.out.println("Illegal command");
@@ -170,7 +177,5 @@ public class PlayerTurnState implements GameState {
         // Player is dealt two face up cards
         game.getPlayer().getHand(0).drawCard(game.getShoe());
         game.getPlayer().getHand(0).drawCard(game.getShoe());
-
-
     }
 }

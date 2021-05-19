@@ -14,6 +14,8 @@ public class Game {
     private ArrayList<Card> discardPile;
     private int minBet, maxBet, shuffle;
 
+    public int totalPlayerHandsCount, totalDealerHandsCount, totalPlayerWins, playerBlackJackCount, dealerBlackJackCount, totalPushes;
+
     Mode gameMode;
 
     private GameState gameState;
@@ -28,7 +30,6 @@ public class Game {
         this.playerTurnState = new PlayerTurnState(this);
         this.dealerTurnState = new DealerTurnState(this);
         this.roundEndState = new RoundEndState(this);
-        this.gameEndState = new GameEndState(this);
 
 
         this.player = new Player(this);
@@ -37,6 +38,13 @@ public class Game {
         this.gameMode = gameMode;
 
         this.gameState = this.gameStartState;
+
+        totalPlayerHandsCount = 1;
+        totalDealerHandsCount = 1;
+        totalPlayerWins = 0;
+        playerBlackJackCount = 0;
+        dealerBlackJackCount = 0;
+        totalPushes = 0;
     }
 
     /**
@@ -48,18 +56,30 @@ public class Game {
         this.gameState = state;
     }
 
+    /**
+     * Calls method initializeGame() for the current game state
+     */
     public void initializeGame() {
         gameState.initializeGame();
     }
 
+    /**
+     * Calls method playerTurn() for the current game state
+     */
     public void playerTurn() {
         gameState.playerTurn();
     }
 
+    /**
+     * Calls method dealerTurn() for the current game state
+     */
     public void dealerTurn() {
         gameState.dealerTurn();
     }
 
+    /**
+     * Calls method finishRound() for the current game state
+     */
     public void finishRound() {
         gameState.finishRound();
     }
@@ -170,16 +190,42 @@ public class Game {
      */
     public Mode getGameMode() { return this.gameMode; }
 
+    /**
+     * Sets the game parameters: min bet, max bet, balance and shuffle percentage
+     */
     public void setParameters(int minBet, int maxBet, int balance, int shuffle){
         this.minBet = minBet;
         this.maxBet = maxBet;
         this.player.addBalance(balance);
+        this.player.setInitialBalance(balance);
         this.shuffle = shuffle;
     }
-
+    /**
+     * Gets the game parameters: min bet, max bet, balance and shuffle percentage
+     * @return params: game parameters
+     */
     public int[] getParameters(){
         int[] params = new int[]{this.minBet, this.maxBet, shuffle};
 
         return params;
+    }
+
+    public void statistics(){
+        int N1 = this.playerBlackJackCount/this.totalPlayerHandsCount, N2 = this.dealerBlackJackCount/this.totalDealerHandsCount;
+        int N3 = this.totalPlayerWins/this.totalPlayerHandsCount;
+        int totalLosses = this.totalPlayerHandsCount - this.totalPlayerWins - this.totalPushes;
+        int N4 = totalLosses/this.totalPlayerHandsCount;
+        int N7 = (this.player.getBalance()/this.player.getInitialBalance())*100;
+
+       // if(totalLosses == 1 && this.totalPlayerWins == 0 && this.totalPushes == 0){
+         //   totalLosses = 0;
+           // N4 = totalLosses/this.totalPlayerHandsCount;
+        //}
+        System.out.println("meke puto " + N1 + N2 + N3 + this.totalPushes);
+        System.out.format("%-10s%-10s%-2d/%-2d%-8s\n", "BJ", "P/D", N1, N2, "");
+        System.out.format("%-10s%-10s%-10d\n", "Win", "", N3);
+        System.out.format("%-10s%-10s%-10d\n", "Lose", "", N4);
+        System.out.format("%-10s%-10s%-10d\n", "Push", "", this.totalPushes);
+        System.out.format("%-10s%-10s%-5d(%3d)\n", "Balance", "", this.player.getBalance(), N7);
     }
 }

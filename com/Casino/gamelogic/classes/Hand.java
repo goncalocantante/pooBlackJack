@@ -178,7 +178,6 @@ public class Hand {
         for (Card aCard : this.cards) {
             cardListOutput += aCard.toString() + " ";
         }
-        cardListOutput += "(" + this.handValue() + ")";
         return cardListOutput;
     }
 }

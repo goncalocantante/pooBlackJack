@@ -34,8 +34,6 @@ public class RoundEndState implements GameState {
     @Override
     public void finishRound() {
 
-        // muda de estado consoante o jogador quer continuar ou não
-
         // System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         //System.out.println("Ronda Terminada.");
 
@@ -50,6 +48,9 @@ public class RoundEndState implements GameState {
             System.out.println("Player receives " + player.getInsurance() + "$ due to insurance win");
         }
 
+        // Updates statistics
+        this.game.totalPlayerHandsCount += player.getHands().size();
+        this.game.totalDealerHandsCount++;
         //Iterates over every hand
         for (int i = 0; i < player.getHands().size(); i++) {
             System.out.println("Hand " + (i+1) + ":");
@@ -64,6 +65,7 @@ public class RoundEndState implements GameState {
             //If dealer has bust and player hasn't bust or surrendered, pay him
             if(dealer.isBust()){
                 System.out.println("Player wins, receives " + bet*2 + "$");
+                this.game.totalPlayerWins++;
                 int prize = player.getHand(i).getBetAmount() * 2;
                 player.addBalance(bet*2);
                 continue;
@@ -74,16 +76,18 @@ public class RoundEndState implements GameState {
                 if(dealerBlackjack) {
                     // if the player and the dealer both have blackjack
                     // there's a push and the player gets his bet amount back
+                    this.game.totalPushes++;
                     player.addBalance(bet);
                     System.out.println("Push! Player receives " + bet + "$ back");
-                    continue;
                 }
                 else {
                     //Pays 2.5 to 1 --------------------------------------
                     System.out.println("Player wins with blackjack receiving " + bet*3 + "$");
+                    this.game.playerBlackJackCount++;
+                    this.game.totalPlayerWins++;
                     player.addBalance(bet * 3);
-                    continue;
                 }
+                continue;
             }else if(dealerBlackjack){
                 //If player doesn't have blackjack and dealer does, player loses
                 continue;
@@ -92,6 +96,7 @@ public class RoundEndState implements GameState {
             //if player's hand value is bigger than the dealer's he wins
             if (hand.handValue() > dealer.handValue()) {
                 System.out.println("Player wins, receives " + bet*2 + "$");
+                this.game.totalPlayerWins++;
                 player.addBalance(bet * 2);
             } else if (hand.handValue() < dealer.handValue()) {
                 // if the opposite is true, player loses
@@ -99,6 +104,7 @@ public class RoundEndState implements GameState {
             } else {
                 //Push
                 System.out.println("Push! Player receives " + bet + "$ back");
+                this.game.totalPushes++;
                 player.addBalance(bet);
             }
 
