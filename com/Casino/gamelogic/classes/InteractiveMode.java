@@ -35,10 +35,14 @@ public class InteractiveMode implements Mode {
         if (args.length != 6)
             check = false;
 
-        // If parameters aren't ints (except for the mode parameter)
-        for (int i = 0; i < args.length; i++) {
-            if (!args[0].matches(".*\\D.*"))
-                check = false;
+        // checks if min bet, max bet, balance, number of deck and shuffle percentage are ints
+        for (int i = 1; i < args.length; i++) {
+            try {
+                int intValue = Integer.parseInt(args[i]);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid Arguments!");
+                System.exit(0);
+            }
         }
         minBet = Integer.parseInt(args[1]);
         maxBet = Integer.parseInt(args[2]);
@@ -60,7 +64,6 @@ public class InteractiveMode implements Mode {
             scanner.close();
             System.exit(0);
         }
-        // quit
 
         // Sets parameters in game object
         this.game.setParameters(minBet, maxBet, balance, shuffle);

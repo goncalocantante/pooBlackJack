@@ -17,8 +17,10 @@ public class DebugMode implements Mode {
     }
 
     /**
-     * Creates shoe and initializes parameters min-bet, max-bet, balance and shuffle
-     * 
+     * Recebe e valida os parametros de input do programa
+     * Regista os parametros min bet, max bet e balance nos respetivos atributos do Game game
+     * Lê o nome dos ficheiros do shoe e dos comandos do terminal
+     * Inicialia o shoe
      * @param game
      */
     public void InitializeShoeAndParameters(Game game) {
@@ -30,23 +32,28 @@ public class DebugMode implements Mode {
         int balance;
         String shoeFilePath;
 
-        //TODO checkar as verificações
-
-        // If there arent's 6 parameters
+        // incorrect number of arguments
         if (args.length != 6)
             check = false;
 
-        // If parameters aren't ints (except for the mode parameter)
-        for (int i = 0; i < args.length; i++) {
-            if (!args[0].matches(".*\\D.*"))
-                check = false;
+        // checks if min bet, max bet and balance are ints
+        for (int i = 1; i < (args.length-2); i++) {
+            try {
+                int intValue = Integer.parseInt(args[i]);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid Arguments!");
+                System.exit(0);
+            }
         }
+
         minBet = Integer.parseInt(args[1]);
         maxBet = Integer.parseInt(args[2]);
         balance = Integer.parseInt(args[3]);
+
+
         // Reads shoe and cmd file names
         shoeFilePath = args[4];
-        // opens cmd commands filegit add
+        // opens cmd commands file
         File file = new File(args[5]);
         try {
             this.scanner = new Scanner(file);
@@ -60,7 +67,6 @@ public class DebugMode implements Mode {
 
 
         if (!check) {
-            // exit
             System.out.println("Invalid Arguments!");
             scanner.close();
             System.exit(0);
@@ -72,14 +78,29 @@ public class DebugMode implements Mode {
         this.game.setShoe(new ShoeClass(shoeFilePath));
     }
 
+    /**
+     * Lê do ficheiro a próxima ação a tomar pelo jogador
+     * @return string com a ação do jogador
+     */
     @Override
     public String getCommand(int nHand) {
         String cmd = "";
         if(this.scanner.hasNext()){
+            /*
             cmd = String.valueOf(this.scanner.next().charAt(0));
             // If bet amount is specified
             if((cmd.equals("b")) && this.scanner.hasNextInt()){
                 cmd += " " + String.valueOf(this.scanner.nextInt());
+            }
+             */
+
+            cmd = String.valueOf(this.scanner.next());
+            // If bet amount is specified
+            if((cmd.equals("b")) && this.scanner.hasNextInt()){
+                cmd += " " + String.valueOf(this.scanner.nextInt());
+            }
+            if(cmd.equals("ad")){
+               return cmd;
             }
             System.out.println("cmd: " + cmd);
             return cmd;
