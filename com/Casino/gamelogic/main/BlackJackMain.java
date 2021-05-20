@@ -23,6 +23,9 @@ public class BlackJackMain {
             case "-d":
                 game = new Game(new DebugMode(args));
                 break;
+            case "-s":
+                game = new Game(new SimulationMode(args));
+                break;
             default:
                 System.out.println("");
                 System.exit(0);

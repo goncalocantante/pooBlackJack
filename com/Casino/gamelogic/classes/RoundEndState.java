@@ -7,7 +7,7 @@ public class RoundEndState implements GameState {
     private Game game;
 
     /**
-     * Contructor to set the game of the state to the game being played
+     * Constructor to set the game of the state to the game being played
      * 
      * @param game: game being played
      */
@@ -59,6 +59,7 @@ public class RoundEndState implements GameState {
             //If player has bust or surrendered on this hand there's no payout
             if(player.getHand(i).isBust() || player.getHand(i).getBetAmount() == 0){
                 System.out.println("Player loses");
+                game.getPlayer().setLastResult(-1);
                 continue;
             }
             //If dealer has bust and player hasn't bust or surrendered, pay him
@@ -66,6 +67,7 @@ public class RoundEndState implements GameState {
                 System.out.println("Player wins, receives " + bet*2 + "$");
                 int prize = player.getHand(i).getBetAmount() * 2;
                 player.addBalance(bet*2);
+                game.getPlayer().setLastResult(1);
                 continue;
             }
 
@@ -76,12 +78,14 @@ public class RoundEndState implements GameState {
                     // there's a push and the player gets his bet amount back
                     player.addBalance(bet);
                     System.out.println("Push! Player receives " + bet + "$ back");
+                    game.getPlayer().setLastResult(0);
                     continue;
                 }
                 else {
                     //Pays 2.5 to 1 --------------------------------------
                     System.out.println("Player wins with blackjack receiving " + bet*3 + "$");
                     player.addBalance(bet * 3);
+                    game.getPlayer().setLastResult(1);
                     continue;
                 }
             }else if(dealerBlackjack){
@@ -93,13 +97,16 @@ public class RoundEndState implements GameState {
             if (hand.handValue() > dealer.handValue()) {
                 System.out.println("Player wins, receives " + bet*2 + "$");
                 player.addBalance(bet * 2);
+                game.getPlayer().setLastResult(1);
             } else if (hand.handValue() < dealer.handValue()) {
                 // if the opposite is true, player loses
                 System.out.println("Player loses");
+                game.getPlayer().setLastResult(-1);
             } else {
                 //Push
                 System.out.println("Push! Player receives " + bet + "$ back");
                 player.addBalance(bet);
+                game.getPlayer().setLastResult(0);
             }
 
         }

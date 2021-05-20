@@ -1,5 +1,6 @@
 package com.Casino.gamelogic.classes;
 
+
 public class Tables {
 
 
@@ -35,7 +36,7 @@ public class Tables {
                 {'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'},
                 {'H', 'H', 'D', 'D', 'D', 'H', 'H', 'H', 'H', 'H'},
                 {'H', 'D', 'D', 'D', 'D', 'H', 'H', 'H', 'H', 'H'},
-                {'S', 'D', 'D', 'D', 'D', 'S', 'S', 'H', 'H', 'H'},
+                {'S', 'd', 'd', 'd', 'd', 'S', 'S', 'H', 'H', 'H'},
                 {'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'},
                 {'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'},
                 {'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'},
@@ -64,7 +65,7 @@ public class Tables {
 
 
     //table = 1 for pair, = 2 for hard and = 3 for soft
-    public char getAction (int tableType, int playerCards, int dealerCard){
+    public String getAction (int tableType, int playerCards, int dealerCard){
         int column;
         int line;
         char action = 'i';
@@ -84,7 +85,7 @@ public class Tables {
             line = dealerCard - 2;
             action = createSoftTable()[column][line];
         }
-        return action;
+        return String.valueOf(action);
     }
 
 

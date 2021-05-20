@@ -36,6 +36,9 @@ public class PlayerTurnState implements GameState {
 
         while (!deal) {
             inputString = this.game.getGameMode().getCommand(nHand);
+            for (int k = 0; k < 10000; k++){
+
+            }
             switch (inputString.charAt(0)) {
 
                 case 'b':
@@ -76,6 +79,7 @@ public class PlayerTurnState implements GameState {
             }
         }
 
+        this.game.getPlayer().clearLastResult();
 
         // Deal cards
         this.dealCards();

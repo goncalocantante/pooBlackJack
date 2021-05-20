@@ -2,6 +2,8 @@ package com.Casino.gamelogic.classes;
 
 import com.Casino.gamelogic.enumerations.Rank;
 import com.Casino.gamelogic.interfaces.Mode;
+
+import java.util.Locale;
 import java.util.Scanner;
 
 public class SimulationMode implements Mode {
@@ -11,6 +13,7 @@ public class SimulationMode implements Mode {
     Game game;
     Scanner scanner;
     int previousBet = 0;
+    boolean betOrDeal = true;
 
     public SimulationMode(String[] arguments) {
         args = arguments;
@@ -23,32 +26,31 @@ public class SimulationMode implements Mode {
         boolean check = true;
         int minBet;
         int maxBet;
-        int balance;
+        int balance = 0;
         int shoe;
         int shuffle;
-        //int sNumber;
-        //String Strategy;
         String Basic;
         String BasicAce;
         String HiLo;
         String HiLoAce;
 
-        // If there arent's 6 parameters
-        if (args.length != 8)
-            check = false;
 
+        // If there arent's 6 parameters
+        if (args.length != 8) {
+            check = false;
+            System.out.println("andre");
+        }
         // If parameters aren't ints (except for the mode parameter)
-        for (int i = 0; i < args.length -1; i++) {
-            if (!args[0].matches(".*\\d.*"))
+        for (int i = 0; i < args.length -2; i++) {
+            if (!args[0].matches(".*\\D.*")) {
                 check = false;
+            }
         }
         minBet = Integer.parseInt(args[1]);
         maxBet = Integer.parseInt(args[2]);
         balance = Integer.parseInt(args[3]);
         shoe = Integer.parseInt(args[4]);
         shuffle = Integer.parseInt(args[5]);
-        //sNumber = Integer.parseInt(args[6]);
-        //Strategy = args[7];
         Basic = "BS";
         BasicAce = "BS-AF";
         HiLo = "HL";
@@ -56,18 +58,18 @@ public class SimulationMode implements Mode {
 
 
         // Check if min-bet and max-bet parameters are correct
-        if (minBet < 1 || maxBet < 10 * minBet || maxBet > 20 * maxBet || balance < 50 * minBet)
+        if (minBet < 1 || maxBet < 10 * minBet || maxBet > 20 * maxBet || balance < 50 * minBet) {
             check = false;
+        }
 
         // Check if shoe and shuffle parameters are correct
-        if (shoe < 4 || shoe > 8 || shuffle < 10 || shuffle > 100)
+        if (shoe < 4 || shoe > 8 || shuffle < 10 || shuffle > 100) {
             check = false;
-
-        if (!args[7].equals(Basic) && !args[7].equals(BasicAce) && !args[7].equals(HiLo) && !args[7].equals(HiLoAce))
+        }
+        if (!args[7].equals(Basic) && !args[7].equals(BasicAce) && !args[7].equals(HiLo) && !args[7].equals(HiLoAce)) {
             check = false;
-
+        }
         if (!check) {
-            System.out.println("Invalid Arguments!");
             scanner.close();
             System.exit(0);
         }
@@ -79,29 +81,29 @@ public class SimulationMode implements Mode {
         this.game.setShoe(new ShoeClass(shoe));
     }
 
+    public void setPreviousBet (int lastBet) {
+        this.previousBet = lastBet;
+    }
 
     @Override
     public String getCommand(int nHand) {
 
-        Tables table = new Tables();
-
         String Action;
-        int playerValue;
-        int dealerValue;
-        playerValue = this.game.getPlayer().getHand(nHand).handValue();
-        dealerValue = this.game.getDealer().getCard(1).cardValue();
-
         //if what we want is the bet string
         //check if the betting strategy is Ace Five or Standard Bet Strategy and return
-        if (this.game.getPlayer().getHand(0).isEmpty()){
+        if (this.game.getPlayer().getHand(0).isEmpty() && betOrDeal){
             if (args[7].contains("AF")){
+                betOrDeal = false;
                 return aceFiveBet();
             }
             else {
+                betOrDeal = false;
                 return StandardBetStrategy();
             }
+        } else if (this.game.getPlayer().getHand(0).isEmpty() && !betOrDeal){
+            return "d";
         }
-
+        betOrDeal = true;
         //checks if the strategy is Hi Lo
         //If it is, bet accordingly
         //if it isn't or if case doesn't exist, then basic
@@ -112,31 +114,64 @@ public class SimulationMode implements Mode {
             }
         }
         if (args[7].contains("BS")){
-            if (this.game.getPlayer().getHand(nHand).canSplit()){
-                Action = String.valueOf(table.getAction (1, playerValue, dealerValue));
-                return Action;
-            }
-            if (!this.game.getPlayer().getHand(nHand).isSoft()){
-                Action = String.valueOf(table.getAction (2, playerValue, dealerValue));
-                return Action;
-            }
-            else if (this.game.getPlayer().getHand(nHand).isSoft()){
-                Action = String.valueOf(table.getAction (3, playerValue, dealerValue));
-                return Action;
-            }
+            Action = basicStrategy((nHand));
+            return Action;
         }
 
         return "Not correct betting strategy";
     }
 
+    public String basicStrategy (int nHand) {
+
+        Tables table = new Tables();
+
+        String Action = "";
+        int playerValue;
+        int dealerValue;
+        playerValue = this.game.getPlayer().getHand(nHand).handValue();
+        dealerValue = this.game.getDealer().getCard(1).cardValue();
+
+        if (this.game.getPlayer().getHand(nHand).canSplit()){
+            Action = String.valueOf(table.getAction (1, playerValue, dealerValue));
+        }
+        else if (!this.game.getPlayer().getHand(nHand).isSoft()){
+            Action = String.valueOf(table.getAction (2, playerValue, dealerValue));
+        }
+        else if (this.game.getPlayer().getHand(nHand).isSoft()){
+            Action = String.valueOf(table.getAction (3, playerValue, dealerValue));
+        }
+        if (Action.equals("D")){
+            if (this.game.getPlayer().canDouble(nHand)){
+                Action = "2";
+            } else {
+                Action = "h";
+            }
+        }
+        else if (Action.equals("d")){
+            if (this.game.getPlayer().canDouble(nHand)){
+                Action = "2";
+            } else {
+                Action = "s";
+            }
+        }
+        else if (Action.equals("R")){
+            if (this.game.getPlayer().canSurrender(nHand)){
+                Action = "u";
+            } else {
+                Action = "s";
+            }
+        }
+        Action = Action.toLowerCase(Locale.ROOT);
+        return Action;
+    }
 
     //bets certain amount according to Ace Five strategy
     public String aceFiveBet () {
-
-        String minBet = args[1];
-        String maxBet = args[2];
+        int minBet = Integer.parseInt(args[1]);
+        int maxBet = Integer.parseInt(args[2]);
         int counter = 0;
         int aceFive = 0;
+        int toBet;
 
 
         for (counter = 0; counter < this.game.getDiscardPile().size(); counter++){
@@ -146,21 +181,46 @@ public class SimulationMode implements Mode {
                 aceFive--;
             }
         }
+
+        toBet = previousBet*2;
+        if (toBet > maxBet){
+            toBet = maxBet;
+        }
+
         if (aceFive <= 1){
+            this.previousBet = minBet;
             return ("b " + minBet);
         }
-        else if (aceFive >= 2){
-            return ("b " + maxBet);
+        else {
+            this.previousBet = toBet;
+            return ("b " + toBet);
         }
-        return null;
     }
 
     //amount to bet when we are not using the Ave Five strategy
     public String StandardBetStrategy() {
-        String minBet = args[1];
-        //String maxBet = args[2];
+        int minBet = Integer.parseInt(args[1]);
+        int maxBet = Integer.parseInt(args[2]);
+        int toBet;
 
-        return ("b " + minBet);
+        //if it is the first bet of the game, then use minBet
+        if (game.getPlayer().getLastResult() == -5){
+            this.previousBet = minBet;
+            return ("b " + minBet);
+        }
+
+        //get next bet by seeing last results
+        toBet = game.getPlayer().getLastResult()*minBet + previousBet;
+        //if this exceeds maxBet or smaller than minBet, then set them as the true bet
+        if (toBet < minBet){
+            toBet = minBet;
+        }
+        else if (toBet > maxBet){
+            toBet = maxBet;
+        }
+        this.previousBet = toBet;
+        return ("b " + toBet);
+
     }
 
 
@@ -189,7 +249,8 @@ public class SimulationMode implements Mode {
             }
 
         }
-        decksRemaining = cardsInShoe/cardsDiscarded;
+
+        decksRemaining = (cardsInShoe - cardsDiscarded)/52;
         trueCount = runningCount/decksRemaining;
 
         toReturn = fab4(nHand, trueCount);

@@ -17,7 +17,7 @@ public class Player {
     // True if player is insured
     private int insurance;
     //-1 perdi, 0 empatei, 1 ganhei preciso de get e set
-    private int lastResult;
+    private int lastResult = -5;
 
 
     /**
@@ -230,7 +230,7 @@ public class Player {
      * Surrender, reclaiming half your bet
      */
     public void surrender(int nHand) {
-        if (this.hands.get(nHand).getHandSize() == 2) {
+        if (canSurrender(nHand)) {
             // Print out informative message
             System.out.println("Player has surrendered. " + this.hands.get(nHand).getBetAmount() / 2 + "$ returned");
             // Return half the bet to the player
@@ -242,6 +242,17 @@ public class Player {
         } else
             System.out.println("u: Illegal command (cannot surrender after hitting)");
 
+    }
+
+
+    //checks if surrender is possible
+    public boolean canSurrender (int nHand) {
+        if (this.hands.get(nHand).getHandSize() == 2){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public void doubleBet(int nHand) {
@@ -293,4 +304,16 @@ public class Player {
         this.insurance = 0;
     }
 
+
+    public int getLastResult() {
+        return this.lastResult;
+    }
+
+    public void setLastResult(int result) {
+        this.lastResult = this.lastResult + result;
+    }
+
+    public void clearLastResult (){
+        this.lastResult = 0;
+    }
 }
