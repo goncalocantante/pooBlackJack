@@ -10,11 +10,18 @@ import java.util.ArrayList;
 public interface Shoe {
 
     /**
-     * Creates the deck with the specified number of decks
+     * Creates the shoe with the specified number of decks
      * 
      * @param ndecks: number of decks contained in the shoe
      */
     void createShoe(int ndecks);
+
+    /**
+     * Creates the shoe from the specified file
+     *
+     * @param fileName: file name string
+     */
+    void createShoeFromFile(String fileName);
 
     /**
      * Shuffles the cards in the shoe
@@ -28,15 +35,14 @@ public interface Shoe {
 
     /**
      * Gets the card from the shoe without removing it
-     * 
-     * @param card: ----------
+     *
+     * @param i: index of the card
      */
     Card getCard(int i);
 
     /**
      * Gets the size of the shoe
-     * 
-     * @param shoe: Shoe to get the size of
+     *
      */
     int getShoeSize();
 

@@ -11,11 +11,14 @@ public class Player {
     // Game being played
     private Game game;
     // Player's balance
-    private int balance;
+    private int balance, initialBalance;
     // ArrayList of the player's hands
     private ArrayList<Hand> hands;
     // True if player is insured
     private int insurance;
+    //-1 perdi, 0 empatei, 1 ganhei preciso de get e set
+    private int lastResult = -5;
+
 
     /**
      * Contructor to initialize the player with 0 balance
@@ -23,6 +26,7 @@ public class Player {
     public Player(Game game) {
         this.game = game;
         this.balance = 0;
+        this.initialBalance = 0;
         this.insurance = 0;
         this.hands = new ArrayList<Hand>();
 
@@ -47,6 +51,9 @@ public class Player {
         this.balance += amount;
     }
 
+    public void setInitialBalance(int amount){this.initialBalance = amount;}
+
+    public int getInitialBalance(){return this.initialBalance;}
     /**
      * Subtracts a certain amount of money from player's balance
      * 
@@ -93,15 +100,18 @@ public class Player {
      * 
      * @param amount: amount to be bet
      */
-    public void bet(int amount, int nHand) {
+    public boolean bet(int amount, int nHand) {
 
         int currentBet = this.hands.get(nHand).getBetAmount();
 
         if (this.canBet(amount)) {
-            System.out.println("Player has bet " + amount + "$");
+            System.out.println("player is betting " + amount);
             this.rmBalance(amount);
             this.hands.get(nHand).setBetAmount(currentBet + amount);
+
+            return true;
         }
+        return false;
     }
 
     /**
@@ -112,8 +122,6 @@ public class Player {
     public boolean canBet(int amount){
         int minBet = this.game.getParameters()[0];
         int maxBet = this.game.getParameters()[1];
-
-        System.out.println(this.balance >= amount && minBet < amount  && amount < maxBet);
 
         if (this.balance < amount)
             System.out.println("b: Illegal command(balance too low)");
@@ -133,9 +141,9 @@ public class Player {
     public void hit(int nHand) {
         Shoe shoe = this.game.getShoe();
 
-        System.out.println("Player hits");
+        System.out.println("player hits");
         this.hands.get(nHand).drawCard(shoe);
-        System.out.println("Player's hand: " +this.game.getPlayer().getHand(nHand));
+        System.out.println("player's hand: " + this.game.getPlayer().getHand(nHand) + "(" + this.game.getPlayer().getHand(nHand).handValue() + ")");
     }
 
     /**
@@ -229,7 +237,7 @@ public class Player {
      * Surrender, reclaiming half your bet
      */
     public void surrender(int nHand) {
-        if (this.hands.get(nHand).getHandSize() == 2) {
+        if (canSurrender(nHand)) {
             // Print out informative message
             System.out.println("Player has surrendered. " + this.hands.get(nHand).getBetAmount() / 2 + "$ returned");
             // Return half the bet to the player
@@ -241,6 +249,17 @@ public class Player {
         } else
             System.out.println("u: Illegal command (cannot surrender after hitting)");
 
+    }
+
+
+    //checks if surrender is possible
+    public boolean canSurrender (int nHand) {
+        if (this.hands.get(nHand).getHandSize() == 2){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public void doubleBet(int nHand) {
@@ -293,4 +312,15 @@ public class Player {
     }
 
 
+    public int getLastResult() {
+        return this.lastResult;
+    }
+
+    public void setLastResult(int result) {
+        this.lastResult = this.lastResult + result;
+    }
+
+    public void clearLastResult (){
+        this.lastResult = 0;
+    }
 }
