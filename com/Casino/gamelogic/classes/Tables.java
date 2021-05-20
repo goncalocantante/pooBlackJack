@@ -71,7 +71,7 @@ public class Tables {
         char action = 'i';
 
         if (tableType == 1){
-            column = playerCards - 2;
+            column = playerCards/2 - 2;
             line = dealerCard - 2;
             action = createPairTable()[column][line];
         }
