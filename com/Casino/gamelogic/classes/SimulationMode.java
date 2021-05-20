@@ -131,6 +131,13 @@ public class SimulationMode implements Mode {
         playerValue = this.game.getPlayer().getHand(nHand).handValue();
         dealerValue = this.game.getDealer().getCard(1).cardValue();
 
+        //Bug resolvido
+        //meio um pouco rafeiro. basicamente se a carta é um ás vai retornar o valor 1. Eu faço este if em que digo simplesmente que o valor é 11
+        //funciona, mas vejam se querem resolver de outra maneira mais presentável
+        if (dealerValue == 1){
+            dealerValue = 11;
+        }
+
         if (this.game.getPlayer().getHand(nHand).canSplit()){
             Action = String.valueOf(table.getAction (1, playerValue, dealerValue));
         }

@@ -71,18 +71,30 @@ public class Tables {
         char action = 'i';
 
         if (tableType == 1){
+            System.out.println("o player tem "+ playerCards);
+            System.out.println("o dealer tem "+ dealerCard);
             column = playerCards/2 - 2;
             line = dealerCard - 2;
+            System.out.println("o valor é "+ column);
+            System.out.println("o valor da linha é "+ line);
             action = createPairTable()[column][line];
         }
         else if (tableType == 2){
+            System.out.println("o player tem "+ playerCards);
+            System.out.println("o dealer tem "+ dealerCard);
             column = playerCards - 5;
             line = dealerCard - 2;
+            System.out.println("o valor é "+ column);
+            System.out.println("o valor da linha é "+ line);
             action = createHardTable()[column][line];
         }
         else if (tableType == 3) {
+            System.out.println("o player tem "+ playerCards);
+            System.out.println("o dealer tem "+ dealerCard);
             column = playerCards - 13;
             line = dealerCard - 2;
+            System.out.println("o valor é "+ column);
+            System.out.println("o valor da linha é "+ line);
             action = createSoftTable()[column][line];
         }
         return String.valueOf(action);
