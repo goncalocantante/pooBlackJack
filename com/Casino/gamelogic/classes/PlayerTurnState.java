@@ -31,7 +31,6 @@ public class PlayerTurnState implements GameState {
         boolean deal = false;
 
         int nHand = 0;
-        int previousBet = 0;
         int currentBet = 0;
 
         while (!deal) {
@@ -49,23 +48,25 @@ public class PlayerTurnState implements GameState {
                         System.out.println("curr Bet " + currentBet);
                         // Bet the specified amount
                         if(game.getPlayer().bet(currentBet, 0)) {
-                            previousBet = currentBet;  // Set previous bet value
+                            this.game.setPreviousBet(currentBet);  // Set previous bet value
                             betScan.close();
                         }
                     } else {
                         // If no amount is specified, bet previous bet value or minimum
                         // bet value if there is no previous bet
-                        if (previousBet == 0) {
-                            game.getPlayer().bet(5 /* minbet */, 0);
-                            previousBet = 5;
+                        if (this.game.getPreviousBet() == 0) {
+                            //Bet minimum bet
+                            game.getPlayer().bet(this.game.getParameters()[0], 0);
+                            this.game.setPreviousBet(this.game.getParameters()[0]);
                         } else {
-                            game.getPlayer().bet(previousBet, 0);
+                            //Bet previous bet
+                            game.getPlayer().bet(this.game.getPreviousBet(), 0);
                         }
                     }
                     break;
                 case 'd':
                     // If the player has already bet, deal. Else he must bet
-                    if (previousBet != 0)
+                    if (this.game.getPreviousBet() != 0)
                         deal = true;
                     else
                         System.out.println("Please bet before cards are dealt");
@@ -79,6 +80,7 @@ public class PlayerTurnState implements GameState {
                     }
                     break;
                 default:
+                    System.out.println("Illegal Command");
             }
         }
 
@@ -87,6 +89,9 @@ public class PlayerTurnState implements GameState {
         // Deal cards
         this.dealCards();
         System.out.println("dealer's hand " + game.getDealer());
+
+        //Update running count after deal
+        this.game.updateRunningCount();
 
         // loops through all of the player's hands
         for (int j = 0; j < this.game.getPlayer().getHands().size(); j++) {
@@ -121,6 +126,9 @@ public class PlayerTurnState implements GameState {
                         break;
                     case "p":
                         game.getPlayer().split(nHand);
+                        break;
+                    case "f":
+                        game.getPlayer().forcedSplit(nHand);
                         break;
                     case "2":
                         game.getPlayer().doubleBet(nHand);

@@ -97,7 +97,7 @@ public class Hand {
             }
         }
         for (int i = 0; i < nAces; i++) {
-            if (value + 11 < 21) {
+            if (value + 11 <= 21) {
                 value += 11;
             } else {
                 value += 1;
@@ -123,7 +123,7 @@ public class Hand {
             }
         }
         for (int i = 0; i < nAces; i++) {
-            if (value + 11 < 21) {
+            if (value + 11 <= 21) {
                 return true;
             } else {
                 value += 1;

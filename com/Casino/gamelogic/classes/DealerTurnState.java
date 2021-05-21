@@ -52,6 +52,10 @@ public class DealerTurnState implements GameState {
             if(dealer.isBust())
                 System.out.println("dealer busts");
         }
+
+        //Update running count after dealer plays
+        this.game.updateRunningCount();
+
         dealer.closeHand();
         // Sets next state
         game.setGameState(game.getRoundEndState());

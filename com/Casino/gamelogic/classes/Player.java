@@ -144,6 +144,8 @@ public class Player {
         System.out.println("player hits");
         this.hands.get(nHand).drawCard(shoe);
         System.out.println("player's hand: " + this.game.getPlayer().getHand(nHand) + "(" + this.game.getPlayer().getHand(nHand).handValue() + ")");
+        //Update running count
+        this.game.updateRunningCount();
     }
 
     /**
@@ -160,7 +162,7 @@ public class Player {
     /**
      * Splits, if possible to
      *
-     * @param nHand
+     * @param nHand: hand to split
      */
     public void split(int nHand) {
         Hand newHand = null;
@@ -180,7 +182,37 @@ public class Player {
             // Both hands receive another card
             this.hit(nHand);
         }
+        else { System.out.println("p: Illegal command"); }
     }
+
+    /**
+     * Splits even if player doesn't have enough balance and even if he has split 3 or more times
+     * @param nHand: hand to split
+     */
+    public void forcedSplit(int nHand) {
+        Hand newHand = null;
+        Hand originalHand = this.hands.get(nHand);
+
+        Card card1 = this.hands.get(nHand).getCard(0);
+        Card card2 = this.hands.get(nHand).getCard(1);
+
+        //If hand only has 2 cards of the same value
+        if (originalHand.getHandSize() == 2 && card1.cardValue() == card2.cardValue()) {
+            System.out.println("player splits");
+            // Creates new hand
+            this.hands.add(nHand+1, new Hand());
+            newHand = this.hands.get(nHand+1);
+
+            // Takes a card from originalHand and puts in newHand
+            newHand.addCard(originalHand.getCard(0));
+            originalHand.removeCard(0);
+            // Set the new hand's bet as the same as the original hand
+            newHand.setBetAmount(originalHand.getBetAmount());
+            // Both hands receive another card
+            this.hit(nHand);
+        }
+    }
+
 
     /**
      * Checks if the specified hand can be split
@@ -197,13 +229,13 @@ public class Player {
         // money to split
 
         if (handSize != 2)
-            System.out.println("p: Illegal command(cannot split after hitting)");
+            System.out.println("cannot split after hitting");
         if (card1.cardValue() != card2.cardValue())
-            System.out.println("p: Illegal command(cards do not have the same value)");
+            System.out.println("cannot split if cards do not have the same value");
         if (this.balance < originalBet)
-            System.out.println("p: Illegal command(balance too low)");
+            System.out.println("balance too low to split");
         if (hands.size() > 3)
-            System.out.println("p: Illegal command(can only split 3 times)");
+            System.out.println("can only split 3 times");
         return (handSize == 2 && card1.cardValue() == card2.cardValue() && this.balance >= originalBet && hands.size() <= 4);
     }
 
@@ -216,6 +248,7 @@ public class Player {
             this.balance -= originalBet;
             System.out.println("player insures, " + originalBet + "$ bet");
         }
+        else { System.out.println("p: Illegal command");}
     }
 
     public boolean canInsure() {
@@ -223,13 +256,13 @@ public class Player {
         Rank dealerCardRank = this.game.getDealer().getCard(0).getRank();
         //checks if we haven't insured yet and no other command given
         if(!dealerCardRank.equals(Rank.ACE))
-            System.out.println("p: Illegal command(dealer's face-up card is not ace)");
+            System.out.println("dealer's face-up card is not ace, cannot insure");
         if (this.balance < originalBet)
-            System.out.println("i: Illegal command(balance too low)");
+            System.out.println("balance too low to insure");
         if (this.insurance != 0)
-            System.out.println("i: Illegal command(cannot insure twice)");
+            System.out.println("cannot insure twice");
         if (this.hands.get(0).getHandSize() > 2 || this.hands.size() > 1)
-            System.out.println("i: Illegal command(insurance must be first command)");
+            System.out.println("insurance must be first command");
         return (this.insurance == 0 && this.hands.get(0).getHandSize() == 2 && this.hands.size() == 1 && this.balance >= originalBet && dealerCardRank.equals(Rank.ACE));
     }
 
@@ -274,17 +307,18 @@ public class Player {
             // Closes hand, not getting any more cards
             this.hands.get(nHand).closeHand();
         }
+        else { System.out.println("2: Illegal command"); }
     }
 
     public boolean canDouble (int nHand){
         int originalBet = this.hands.get(nHand).getBetAmount();
 
         if (this.balance < originalBet)
-            System.out.println("2: Illegal command(balance too low)");
+            System.out.println("balance too low to double");
         if (this.hands.get(nHand).getHandSize() > 2)
-            System.out.println("2: Illegal command(cannot double after hitting)");
+            System.out.println("cannot double after hitting");
         if (this.hands.get(nHand).handValue() < 9 || this.hands.get(nHand).handValue() > 11)
-            System.out.println("2: Illegal command(can only double on opening hand worth 9, 10 or 11)");
+            System.out.println("can only double on opening hand worth 9, 10 or 11");
         return (this.balance >= originalBet && this.hands.get(nHand).getHandSize() == 2 && this.hands.get(nHand).handValue() >= 9 && this.hands.get(nHand).handValue() <= 11);
     }
 

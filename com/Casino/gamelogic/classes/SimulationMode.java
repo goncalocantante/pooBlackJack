@@ -53,12 +53,7 @@ public class SimulationMode implements Mode {
         balance = Integer.parseInt(args[3]);
         shoe = Integer.parseInt(args[4]);
         shuffle = Integer.parseInt(args[5]);
-<<<<<<< HEAD
         nShuffle = Integer.parseInt(args[6]);
-=======
-
-
->>>>>>> origin/ress
         Basic = "BS";
         BasicAce = "BS-AF";
         HiLo = "HL";
@@ -92,17 +87,19 @@ public class SimulationMode implements Mode {
     @Override
     public String getCommand(int nHand) {
 
-        String Action;
+        String action = "";
+
+        int cardsInShoe = Integer.parseInt(args[5])*52;
         //if what we want is the bet string
         //check if the betting strategy is Ace Five or Standard Bet Strategy and return
         if (this.game.getPlayer().getHand(0).isEmpty() && betOrDeal){
             if (args[7].contains("AF")){
                 betOrDeal = false;
-                return aceFiveBet();
+                return this.game.aceFiveBet();
             }
             else {
                 betOrDeal = false;
-                return StandardBetStrategy();
+                return this.game.StandardBetStrategy();
             }
         } else if (this.game.getPlayer().getHand(0).isEmpty() && !betOrDeal){
             return "d";
@@ -112,272 +109,17 @@ public class SimulationMode implements Mode {
         //If it is, bet accordingly
         //if it isn't or if case doesn't exist, then basic
         if (args[7].contains("HL")){
-            Action = HiLo(nHand);
-            if (!Action.equals("basic")){
-                return Action;
+            action = this.game.HiLo(nHand, cardsInShoe);
+            if (!action.equals("basic")){
+                return action;
             }
         }
-        if (args[7].contains("BS")){
-            Action = basicStrategy((nHand));
-            return Action;
+        if (args[7].contains("BS") || action.equals("basic")){
+            action = this.game.basicStrategy((nHand));
+            return action;
         }
 
         return "Not correct betting strategy";
     }
 
-    public String basicStrategy (int nHand) {
-
-        Tables table = new Tables();
-
-        String Action = "";
-        int playerValue;
-        Card card1 = this.game.getPlayer().getHand(nHand).getCard(0);
-        Card card2 = this.game.getPlayer().getHand(nHand).getCard(1);
-        int dealerValue;
-        playerValue = this.game.getPlayer().getHand(nHand).handValue();
-        dealerValue = this.game.getDealer().getCard(1).cardValue();
-
-        //Bug resolvido
-        //meio um pouco rafeiro. basicamente se a carta é um ás vai retornar o valor 1. Eu faço este if em que digo simplesmente que o valor é 11
-        //funciona, mas vejam se querem resolver de outra maneira mais presentável
-        if (dealerValue == 1){
-            dealerValue = 11;
-        }
-
-        if (card1.getRank().equals(card2.getRank())){
-            Action = String.valueOf(table.getAction (1, playerValue, dealerValue));
-        }
-        else if (!this.game.getPlayer().getHand(nHand).isSoft()){
-            Action = String.valueOf(table.getAction (2, playerValue, dealerValue));
-        }
-        else if (this.game.getPlayer().getHand(nHand).isSoft()){
-            Action = String.valueOf(table.getAction (3, playerValue, dealerValue));
-        }
-        if (Action.equals("D")){
-            if (this.game.getPlayer().canDouble(nHand)){
-                Action = "2";
-            } else {
-                Action = "h";
-            }
-        }
-        else if (Action.equals("d")){
-            if (this.game.getPlayer().canDouble(nHand)){
-                Action = "2";
-            } else {
-                Action = "s";
-            }
-        }
-        else if (Action.equals("R")){
-            if (this.game.getPlayer().canSurrender(nHand)){
-                Action = "u";
-            } else {
-                Action = "h";
-                //Aqui estava 's' mas acho que é suposto ser 'h'
-            }
-        }
-        Action = Action.toLowerCase(Locale.ROOT);
-        return Action;
-    }
-
-    //bets certain amount according to Ace Five strategy
-    public String aceFiveBet () {
-        int minBet = Integer.parseInt(args[1]);
-        int maxBet = Integer.parseInt(args[2]);
-        int counter = 0;
-        int aceFive = 0;
-        int toBet;
-
-
-        for (counter = 0; counter < this.game.getDiscardPile().size(); counter++){
-            if (this.game.getDiscardPile().get(counter).equals(Rank.FIVE)) {
-                aceFive++;
-            } else if (this.game.getDiscardPile().get(counter).equals(Rank.ACE)) {
-                aceFive--;
-            }
-        }
-
-        toBet = previousBet*2;
-        if (toBet > maxBet){
-            toBet = maxBet;
-        }
-
-        if (aceFive <= 1){
-            this.previousBet = minBet;
-            return ("b " + minBet);
-        }
-        else {
-            this.previousBet = toBet;
-            return ("b " + toBet);
-        }
-    }
-
-    //amount to bet when we are not using the Ave Five strategy
-    public String StandardBetStrategy() {
-        int minBet = Integer.parseInt(args[1]);
-        int maxBet = Integer.parseInt(args[2]);
-        int toBet;
-
-        //if it is the first bet of the game, then use minBet
-        if (game.getPlayer().getLastResult() == -5){
-            this.previousBet = minBet;
-            return ("b " + minBet);
-        }
-
-        //get next bet by seeing last results
-        toBet = game.getPlayer().getLastResult()*minBet + previousBet;
-        //if this exceeds maxBet or smaller than minBet, then set them as the true bet
-        if (toBet < minBet){
-            toBet = minBet;
-        }
-        else if (toBet > maxBet){
-            toBet = maxBet;
-        }
-        this.previousBet = toBet;
-        return ("b " + toBet);
-
-    }
-
-
-    public String HiLo(int nHand) {
-        int runningCount = 0;
-        int cardsDiscarded = 0;
-        int decksRemaining = 0;
-        int trueCount = 0;
-        int cardsInShoe = Integer.parseInt(args[5])*52;
-        String toReturn;
-
-        for (cardsDiscarded = 0; cardsDiscarded < this.game.getDiscardPile().size(); cardsDiscarded++){
-            switch (this.game.getDiscardPile().get(runningCount).getRank()){
-                case TWO:
-                case THREE:
-                case FOUR:
-                case FIVE:
-                case SIX:
-                    runningCount++;
-                case TEN:
-                case JACK:
-                case KING:
-                case QUEEN:
-                case ACE:
-                    runningCount--;
-            }
-
-        }
-
-        decksRemaining = (cardsInShoe - cardsDiscarded)/52;
-        trueCount = runningCount/decksRemaining;
-        //Inteiro?
-
-        toReturn = fab4(nHand, trueCount);
-        if (!toReturn.equals("basic")){
-            return toReturn;
-        }
-        return (illustrious18(nHand, trueCount));
-    }
-
-    public String illustrious18 (int nHand, int trueCount){
-        int playerHand = this.game.getPlayer().getHand(nHand).handValue();
-        int dealerHand = this.game.getDealer().handValue();
-
-        if (playerHand == 16 && dealerHand == 10){
-            return standOrHit(trueCount, 0);
-        } else if (playerHand == 15 && dealerHand == 10){
-            return standOrHit(trueCount, 4);
-        } else if (playerHand == 20 && dealerHand == 5){
-            return splitOrStand(trueCount, 5);
-        } else if (playerHand == 20 && dealerHand == 6){
-            return splitOrStand(trueCount, 4);
-        } else if (playerHand == 10 && dealerHand == 10){
-            return doubleOrHit(trueCount, 4);
-        } else if (playerHand == 12 && dealerHand == 3){
-            return standOrHit(trueCount, 2);
-        } else if (playerHand == 12 && dealerHand == 2){
-            return standOrHit(trueCount, 3);
-        } else if (playerHand == 11 && dealerHand == 11){
-            return doubleOrHit(trueCount, 1);
-        } else if (playerHand == 9 && dealerHand == 2){
-            return doubleOrHit(trueCount, 1);
-        } else if (playerHand == 10 && dealerHand == 11){
-            return doubleOrHit(trueCount, 4);
-        } else if (playerHand == 9 && dealerHand == 7){
-            return doubleOrHit(trueCount, 3);
-        } else if (playerHand == 16 && dealerHand == 9){
-            return standOrHit(trueCount, 5);
-        } else if (playerHand == 13 && dealerHand == 2){
-            return standOrHit(trueCount, -1);
-        } else if (playerHand == 12 && dealerHand == 4){
-            return standOrHit(trueCount, 0);
-        } else if (playerHand == 12 && dealerHand == 5){
-            return standOrHit(trueCount, -2);
-        } else if (playerHand == 12 && dealerHand == 6){
-            return standOrHit(trueCount, -1);
-        }else if (playerHand == 13 && dealerHand == 3){
-            return standOrHit(trueCount, -2);
-        }
-        return "basic";
-    }
-
-    public String standOrHit (int trueCount, int indexNumber) {
-
-        if (trueCount >= indexNumber){
-            return "s";
-        }
-        else{
-            return "h";
-        }
-    }
-
-    public String splitOrStand (int trueCount, int indexNumber) {
-
-        if (trueCount >= indexNumber){
-            return "p";
-        }
-        else{
-            return "s";
-        }
-    }
-
-    public String doubleOrHit (int trueCount, int indexNumber) {
-
-        if (trueCount >= indexNumber){
-            return "2";
-        }
-        else{
-            return "h";
-        }
-    }
-
-    public String fab4 (int nHand, int trueCount){
-        int playerHand = this.game.getPlayer().getHand(nHand).handValue();
-        int dealerHand = this.game.getDealer().handValue();
-
-        if (playerHand == 14 && dealerHand == 10){
-            return surrenderOrBasic(trueCount, 3);
-        } else if (playerHand == 15 && dealerHand == 9){
-            return surrenderOrBasic(trueCount, 2);
-        } else if (playerHand == 15 && dealerHand == 11){
-            return surrenderOrBasic(trueCount, 1);
-        } else if (playerHand == 15 && dealerHand == 10){
-            if (trueCount <= 0 && trueCount >= 3){
-                return "u";
-            } else if (trueCount >= 4){
-                return "s";
-            }
-            else {
-                return "h";
-            }
-        }
-        return "basic";
-
-    }
-
-    public String surrenderOrBasic (int trueCount, int indexNumber){
-
-        if (trueCount >= indexNumber){
-            return "u";
-        }
-        else{
-            return "basic";
-        }
-    }
 }

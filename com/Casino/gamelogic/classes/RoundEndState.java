@@ -5,6 +5,7 @@ import com.Casino.gamelogic.interfaces.GameState;
 public class RoundEndState implements GameState {
 
     private Game game;
+    private int shuffleCount = 0;
 
     /**
      * Constructor to set the game of the state to the game being played
@@ -36,7 +37,6 @@ public class RoundEndState implements GameState {
 
         Hand dealer = game.getDealer();
         Player player = game.getPlayer();
-        int shuffleCount = 0;
 
         boolean dealerBlackjack = dealer.handValue() == 21 && dealer.getHandSize() == 2;
 
@@ -78,7 +78,7 @@ public class RoundEndState implements GameState {
                     // there's a push and the player gets his bet amount back
                     this.game.totalPushes++;
                     player.addBalance(bet);
-                    System.out.println("player pushes and his current balance is" + player.getBalance());
+                    System.out.println("player pushes and his current balance is " + player.getBalance());
                     game.getPlayer().setLastResult(0);
                     continue;
 
@@ -95,6 +95,8 @@ public class RoundEndState implements GameState {
                 }
             }else if(dealerBlackjack){
                 //If player doesn't have blackjack and dealer does, player loses
+                System.out.println("player loses and his current balance is " + player.getBalance());
+                game.getPlayer().setLastResult(-1);
                 continue;
             }
 
@@ -106,14 +108,14 @@ public class RoundEndState implements GameState {
                 game.getPlayer().setLastResult(1);
             } else if (hand.handValue() < dealer.handValue()) {
                 // if the opposite is true, player loses
-                System.out.println("player loses and his current balance is" + player.getBalance());
+                System.out.println("player loses and his current balance is " + player.getBalance());
                 game.getPlayer().setLastResult(-1);
             } else {
                 //Push
                 this.game.totalPushes++;
                 player.addBalance(bet);
                 game.getPlayer().setLastResult(0);
-                System.out.println("player pushes and his current balance is" + player.getBalance());
+                System.out.println("player pushes and his current balance is " + player.getBalance());
             }
 
         }
@@ -133,7 +135,7 @@ public class RoundEndState implements GameState {
         if(this.game.getDiscardPile().size() >= nCardsShuffle) {
             this.game.getShoe().moveAllToShoe(this.game.getDiscardPile());
             this.game.getShoe().shuffle();
-            shuffleCount++;
+            this.shuffleCount++;
             System.out.println("Shuffling shoe...");
         }
         if(shuffleCount == game.getParameters()[3] && game.getParameters()[3] != -1){
