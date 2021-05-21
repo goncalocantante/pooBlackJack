@@ -217,11 +217,7 @@ public class Game {
         int N4 = totalLosses/this.totalPlayerHandsCount;
         int N7 = (this.player.getBalance()/this.player.getInitialBalance())*100;
 
-       // if(totalLosses == 1 && this.totalPlayerWins == 0 && this.totalPushes == 0){
-         //   totalLosses = 0;
-           // N4 = totalLosses/this.totalPlayerHandsCount;
-        //}
-        System.out.println("meke puto " + N1 + N2 + N3 + this.totalPushes);
+
         System.out.format("%-10s%-10s%-2d/%-2d%-8s\n", "BJ", "P/D", N1, N2, "");
         System.out.format("%-10s%-10s%-10d\n", "Win", "", N3);
         System.out.format("%-10s%-10s%-10d\n", "Lose", "", N4);

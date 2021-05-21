@@ -18,7 +18,6 @@ public class GameStartState implements GameState {
     @Override
     public void initializeGame() {
         this.game.getGameMode().InitializeShoeAndParameters(this.game);
-        System.out.println("Game has started.");
         game.setGameState(game.getPlayerTurnState());
 
     }

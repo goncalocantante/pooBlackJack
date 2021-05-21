@@ -34,9 +34,6 @@ public class RoundEndState implements GameState {
     @Override
     public void finishRound() {
 
-        // System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
-        //System.out.println("Ronda Terminada.");
-
         Hand dealer = game.getDealer();
         Player player = game.getPlayer();
 
@@ -59,16 +56,16 @@ public class RoundEndState implements GameState {
             int bet = hand.getBetAmount();
             //If player has bust or surrendered on this hand there's no payout
             if(player.getHand(i).isBust() || player.getHand(i).getBetAmount() == 0){
-                System.out.println("Player loses");
+                System.out.println("player loses and his current balance is " + player.getBalance());
                 game.getPlayer().setLastResult(-1);
                 continue;
             }
             //If dealer has bust and player hasn't bust or surrendered, pay him
             if(dealer.isBust()){
-                System.out.println("Player wins, receives " + bet*2 + "$");
                 this.game.totalPlayerWins++;
                 int prize = player.getHand(i).getBetAmount() * 2;
                 player.addBalance(bet*2);
+                System.out.println("player wins and his current balance is " + player.getBalance());
                 game.getPlayer().setLastResult(1);
                 continue;
             }
@@ -80,17 +77,17 @@ public class RoundEndState implements GameState {
                     // there's a push and the player gets his bet amount back
                     this.game.totalPushes++;
                     player.addBalance(bet);
-                    System.out.println("Push! Player receives " + bet + "$ back");
+                    System.out.println("player pushes and his current balance is" + player.getBalance());
                     game.getPlayer().setLastResult(0);
                     continue;
 
                 }
                 else {
-                    //Pays 2.5 to 1 --------------------------------------
-                    System.out.println("Player wins with blackjack receiving " + bet*3 + "$");
+                    //Pays 2.5 to 1 -------------------------------------
                     this.game.playerBlackJackCount++;
                     this.game.totalPlayerWins++;
                     player.addBalance(bet * 3);
+                    System.out.println("player wins and his current balance is " + player.getBalance());
                     game.getPlayer().setLastResult(1);
                     continue;
 
@@ -102,20 +99,20 @@ public class RoundEndState implements GameState {
 
             //if player's hand value is bigger than the dealer's he wins
             if (hand.handValue() > dealer.handValue()) {
-                System.out.println("Player wins, receives " + bet*2 + "$");
                 this.game.totalPlayerWins++;
                 player.addBalance(bet * 2);
+                System.out.println("player wins and his current balance is " + player.getBalance());
                 game.getPlayer().setLastResult(1);
             } else if (hand.handValue() < dealer.handValue()) {
                 // if the opposite is true, player loses
-                System.out.println("Player loses");
+                System.out.println("player loses and his current balance is" + player.getBalance());
                 game.getPlayer().setLastResult(-1);
             } else {
                 //Push
-                System.out.println("Push! Player receives " + bet + "$ back");
                 this.game.totalPushes++;
                 player.addBalance(bet);
                 game.getPlayer().setLastResult(0);
+                System.out.println("player pushes and his current balance is" + player.getBalance());
             }
 
         }
@@ -125,18 +122,18 @@ public class RoundEndState implements GameState {
         dealer.emptyHand(game.getDiscardPile());
 
         int shoeSize = this.game.getShoe().getShoeSize();
-        //Percentage of shoe played until there's a shuffle
-        int shufflePercentage = this.game.getParameters()[2]/100;
-        //Limit of cards drawn until there's a shuffle
-        int nCardsShuffle = shoeSize * (shufflePercentage);
+        // Percentage of shoe played until there's a shuffle
+        double shufflePercentage = (double) this.game.getParameters()[2]/100;
+        // Limit of cards drawn until there's a shuffle
+        double nCardsShuffle = shoeSize * (shufflePercentage);
+
 
         //Shuffles if the card limit has been reached
         if(this.game.getDiscardPile().size() >= nCardsShuffle) {
             this.game.getShoe().moveAllToShoe(this.game.getDiscardPile());
             this.game.getShoe().shuffle();
-            System.out.println("Shuffling shoe...");
         }
-        //Next state: EndGame ou PlayerPlays
+        // Next state: EndGame ou PlayerPlays
         game.setGameState(game.getPlayerTurnState());
     }
 }

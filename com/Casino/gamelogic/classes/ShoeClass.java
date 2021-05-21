@@ -98,6 +98,7 @@ public class ShoeClass implements Shoe {
      */
     @Override
     public void shuffle() {
+        System.out.println("shuffling the shoe...");
         Collections.shuffle(this.cards);
     }
 

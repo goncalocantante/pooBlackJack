@@ -32,13 +32,13 @@ public class DealerTurnState implements GameState {
         Hand dealer = game.getDealer();
 
         // the dealer turns over his hidden card
-        dealer.getCard(0).setCardFaceUp();
+        dealer.getCard(1).setCardFaceUp();
         // Display dealers cards
-        System.out.println("Dealer's hand: " + dealer);
+        System.out.println("dealer's hand " + dealer);
 
         // If the dealer has a blackjack with his two cards
         if (dealer.handValue() == 21) {
-            System.out.println("Dealer blackjack!");
+            System.out.println("dealer blackjack!");
             this.game.dealerBlackJackCount++;
             // Doesn't take any more cards
         } else {
@@ -50,7 +50,7 @@ public class DealerTurnState implements GameState {
                 System.out.println("dealer's hand " + dealer);
             }
             if(dealer.isBust())
-                System.out.println("Dealer busts");
+                System.out.println("dealer busts");
         }
         dealer.closeHand();
         // Sets next state
@@ -62,13 +62,5 @@ public class DealerTurnState implements GameState {
         return;
     }
 
-    /*
-     * @Override public void startState() { System.out.println("Dealer's turn!"); }
-     * 
-     * @Override public void resolveState() { System.out.println("Dealer plays...");
-     * }
-     * 
-     * @Override public void endState() {
-     * game.setGameState(game.getRoundEndState()); }
-     */
+
 }

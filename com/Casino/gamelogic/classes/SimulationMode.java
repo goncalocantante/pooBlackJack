@@ -46,11 +46,14 @@ public class SimulationMode implements Mode {
                 check = false;
             }
         }
+
         minBet = Integer.parseInt(args[1]);
         maxBet = Integer.parseInt(args[2]);
         balance = Integer.parseInt(args[3]);
         shoe = Integer.parseInt(args[4]);
         shuffle = Integer.parseInt(args[5]);
+
+
         Basic = "BS";
         BasicAce = "BS-AF";
         HiLo = "HL";

@@ -102,7 +102,6 @@ public class DebugMode implements Mode {
             if(cmd.equals("ad")){
                return cmd;
             }
-            System.out.println("cmd: " + cmd);
             return cmd;
         }else{
             System.out.println("No more commands");
