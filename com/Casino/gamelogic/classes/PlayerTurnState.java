@@ -74,13 +74,11 @@ public class PlayerTurnState implements GameState {
                     System.out.println("Current balance: " + game.getPlayer().getBalance() + "$");
                     break;
                 case 's':
-                    System.out.println("BOTAAA");
                     if (inputString.length() == 2 && inputString.charAt(1) == 't' ){
                         game.statistics();
                     }
                     break;
                 default:
-                    //System.out.println("Illegal command");
             }
         }
 
@@ -90,14 +88,9 @@ public class PlayerTurnState implements GameState {
         this.dealCards();
         System.out.println("dealer's hand " + game.getDealer());
 
-        //System.out.println("Player is playing.");
         // loops through all of the player's hands
         for (int j = 0; j < this.game.getPlayer().getHands().size(); j++) {
-
             Hand hand = this.game.getPlayer().getHand(j);
-
-            //System.out.println("Playing hand " + (nHand + 1) + ":");
-            // While hand is playable
 
             //If there was a split - Hit
             if(hand.getHandSize() == 1)
@@ -142,7 +135,7 @@ public class PlayerTurnState implements GameState {
                 // If hand busts it closes, becoming not playable
                 if (hand.isBust()) {
                     hand.closeHand();
-                    System.out.println("Player busts");
+                    System.out.println("player busts");
                 }
 
                 //If player gets blackjack on this hand close it

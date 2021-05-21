@@ -152,9 +152,9 @@ public class Player {
      * @param nHand: index of hand to close
      */
     public void stand(int nHand) {
-        System.out.println("Player has stand");
+        System.out.println("player stands");
         this.hands.get(nHand).closeHand();
-        System.out.println("Player's hand: " +this.game.getPlayer().getHand(nHand));
+        System.out.println("player's hand " +this.game.getPlayer().getHand(nHand));
     }
 
     /**
@@ -167,7 +167,7 @@ public class Player {
         Hand originalHand = this.hands.get(nHand);
         // If the hand can be split
         if (this.canSplit(nHand)) {
-            System.out.println("Player splits");
+            System.out.println("player splits");
             // Creates new hand
             this.hands.add(nHand+1, new Hand());
             newHand = this.hands.get(nHand+1);
@@ -214,7 +214,7 @@ public class Player {
             // Insure
             this.insurance = originalBet;
             this.balance -= originalBet;
-            System.out.println("Player has insured, " + originalBet + "$ bet");
+            System.out.println("player insures, " + originalBet + "$ bet");
         }
     }
 

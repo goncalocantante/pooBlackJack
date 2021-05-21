@@ -44,12 +44,14 @@ public class InteractiveMode implements Mode {
                 System.exit(0);
             }
         }
+
         minBet = Integer.parseInt(args[1]);
         maxBet = Integer.parseInt(args[2]);
         balance = Integer.parseInt(args[3]);
-        System.out.println(balance);
         shoe = Integer.parseInt(args[4]);
         shuffle = Integer.parseInt(args[5]);
+
+
 
         // Check if min-bet and max-bet parameters are correct
         if (minBet < 1 || maxBet < 10 * minBet || maxBet > 20 * maxBet || balance < 50 * minBet)
