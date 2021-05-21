@@ -39,6 +39,7 @@ public class RoundEndState implements GameState {
 
         Hand dealer = game.getDealer();
         Player player = game.getPlayer();
+        int shuffleCount = 0;
 
         boolean dealerBlackjack = dealer.handValue() == 21 && dealer.getHandSize() == 2;
 
@@ -134,9 +135,13 @@ public class RoundEndState implements GameState {
         if(this.game.getDiscardPile().size() >= nCardsShuffle) {
             this.game.getShoe().moveAllToShoe(this.game.getDiscardPile());
             this.game.getShoe().shuffle();
+            shuffleCount++;
             System.out.println("Shuffling shoe...");
         }
-        //Next state: EndGame ou PlayerPlays
+        if(shuffleCount == game.getParameters()[3] && game.getParameters()[3] != -1){
+            System.out.println("Game ended");
+            System.exit(0);
+        }
         game.setGameState(game.getPlayerTurnState());
     }
 }

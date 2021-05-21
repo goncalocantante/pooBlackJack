@@ -216,4 +216,9 @@ public class Hand {
     public boolean isEmpty() {
         return this.cards.isEmpty();
     }
+
+    public static void main(String[] args) {
+        Hand hand = new Hand();
+
+    }
 }

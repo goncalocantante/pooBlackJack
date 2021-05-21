@@ -12,7 +12,7 @@ public class Game {
     private Player player;
     private Hand dealer;
     private ArrayList<Card> discardPile;
-    private int minBet, maxBet, shuffle;
+    private int minBet, maxBet, shuffle, nShuffle;
 
     public int totalPlayerHandsCount, totalDealerHandsCount, totalPlayerWins, playerBlackJackCount, dealerBlackJackCount, totalPushes;
 
@@ -39,12 +39,12 @@ public class Game {
 
         this.gameState = this.gameStartState;
 
-        totalPlayerHandsCount = 1;
-        totalDealerHandsCount = 1;
-        totalPlayerWins = 0;
-        playerBlackJackCount = 0;
-        dealerBlackJackCount = 0;
-        totalPushes = 0;
+        this.totalPlayerHandsCount = 1;
+        this.totalDealerHandsCount = 1;
+        this.totalPlayerWins = 0;
+        this.playerBlackJackCount = 0;
+        this.dealerBlackJackCount = 0;
+        this.totalPushes = 0;
     }
 
     /**
@@ -193,19 +193,21 @@ public class Game {
     /**
      * Sets the game parameters: min bet, max bet, balance and shuffle percentage
      */
-    public void setParameters(int minBet, int maxBet, int balance, int shuffle){
+    public void setParameters(int minBet, int maxBet, int balance, int shuffle, int nShuffle){
         this.minBet = minBet;
         this.maxBet = maxBet;
         this.player.addBalance(balance);
         this.player.setInitialBalance(balance);
         this.shuffle = shuffle;
+        this.nShuffle = nShuffle;
     }
     /**
-     * Gets the game parameters: min bet, max bet, balance and shuffle percentage
+     * Gets the game parameters: min bet, max bet, balance, shuffle percentage and number
+     * of shuffles until game end(-1 in interactive mode)
      * @return params: game parameters
      */
     public int[] getParameters(){
-        int[] params = new int[]{this.minBet, this.maxBet, shuffle};
+        int[] params = new int[]{this.minBet, this.maxBet, this.shuffle, this.nShuffle};
 
         return params;
     }

@@ -73,7 +73,7 @@ public class DebugMode implements Mode {
         }
 
         // Sets parameters in game object
-        this.game.setParameters(minBet, maxBet, balance, 100);
+        this.game.setParameters(minBet, maxBet, balance, 100, -1);
         // Create shoe from file
         this.game.setShoe(new ShoeClass(shoeFilePath));
     }
@@ -96,6 +96,7 @@ public class DebugMode implements Mode {
 
             cmd = String.valueOf(this.scanner.next());
             // If bet amount is specified
+            //Se o comando a seguir for double isto não dá merda?
             if((cmd.equals("b")) && this.scanner.hasNextInt()){
                 cmd += " " + String.valueOf(this.scanner.nextInt());
             }

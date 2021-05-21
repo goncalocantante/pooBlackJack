@@ -29,6 +29,7 @@ public class SimulationMode implements Mode {
         int balance = 0;
         int shoe;
         int shuffle;
+        int nShuffle;
         String Basic;
         String BasicAce;
         String HiLo;
@@ -51,6 +52,7 @@ public class SimulationMode implements Mode {
         balance = Integer.parseInt(args[3]);
         shoe = Integer.parseInt(args[4]);
         shuffle = Integer.parseInt(args[5]);
+        nShuffle = Integer.parseInt(args[6]);
         Basic = "BS";
         BasicAce = "BS-AF";
         HiLo = "HL";
@@ -76,13 +78,9 @@ public class SimulationMode implements Mode {
         // quit
 
         // Sets parameters in game object
-        this.game.setParameters(minBet, maxBet, balance, shuffle);
+        this.game.setParameters(minBet, maxBet, balance, shuffle, nShuffle);
         // Create shoe
         this.game.setShoe(new ShoeClass(shoe));
-    }
-
-    public void setPreviousBet (int lastBet) {
-        this.previousBet = lastBet;
     }
 
     @Override
@@ -127,6 +125,8 @@ public class SimulationMode implements Mode {
 
         String Action = "";
         int playerValue;
+        Card card1 = this.game.getPlayer().getHand(nHand).getCard(0);
+        Card card2 = this.game.getPlayer().getHand(nHand).getCard(1);
         int dealerValue;
         playerValue = this.game.getPlayer().getHand(nHand).handValue();
         dealerValue = this.game.getDealer().getCard(1).cardValue();
@@ -138,7 +138,7 @@ public class SimulationMode implements Mode {
             dealerValue = 11;
         }
 
-        if (this.game.getPlayer().getHand(nHand).canSplit()){
+        if (card1.getRank().equals(card2.getRank())){
             Action = String.valueOf(table.getAction (1, playerValue, dealerValue));
         }
         else if (!this.game.getPlayer().getHand(nHand).isSoft()){
@@ -165,7 +165,8 @@ public class SimulationMode implements Mode {
             if (this.game.getPlayer().canSurrender(nHand)){
                 Action = "u";
             } else {
-                Action = "s";
+                Action = "h";
+                //Aqui estava 's' mas acho que é suposto ser 'h'
             }
         }
         Action = Action.toLowerCase(Locale.ROOT);
@@ -259,6 +260,7 @@ public class SimulationMode implements Mode {
 
         decksRemaining = (cardsInShoe - cardsDiscarded)/52;
         trueCount = runningCount/decksRemaining;
+        //Inteiro?
 
         toReturn = fab4(nHand, trueCount);
         if (!toReturn.equals("basic")){
