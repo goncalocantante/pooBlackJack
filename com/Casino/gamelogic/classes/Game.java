@@ -320,18 +320,20 @@ public class Game {
     }
 
     public void statistics(){
-        int N1 = this.playerBlackJackCount/this.totalPlayerHandsCount, N2 = this.dealerBlackJackCount/this.totalDealerHandsCount;
-        int N3 = this.totalPlayerWins/this.totalPlayerHandsCount;
-        int totalLosses = this.totalPlayerHandsCount - this.totalPlayerWins - this.totalPushes;
-        int N4 = totalLosses/this.totalPlayerHandsCount;
-        int N7 = (this.player.getBalance()/this.player.getInitialBalance())*100;
+        float N1 = (float)this.playerBlackJackCount/(float)this.totalPlayerHandsCount;
+        float N2 = (float)this.dealerBlackJackCount/(float)this.totalDealerHandsCount;
+        float N3 = (float)this.totalPlayerWins/(float)this.totalPlayerHandsCount;
+        float totalLosses = this.totalPlayerHandsCount - this.totalPlayerWins - this.totalPushes;
+        float N4 = totalLosses/(float)this.totalPlayerHandsCount;
+        float N5 = (float)this.totalPushes/(float)this.totalPlayerHandsCount;
+        int N7 = (int)((float)this.player.getBalance()/(float)this.player.getInitialBalance()*100f);
 
 
-        System.out.format("%-10s%-10s%-2d/%-2d%-8s\n", "BJ", "P/D", N1, N2, "");
-        System.out.format("%-10s%-10s%-10d\n", "Win", "", N3);
-        System.out.format("%-10s%-10s%-10d\n", "Lose", "", N4);
-        System.out.format("%-10s%-10s%-10d\n", "Push", "", this.totalPushes);
-        System.out.format("%-10s%-10s%-5d(%3d)\n", "Balance", "", this.player.getBalance(), N7);
+        System.out.format("%-10s%-10s%-2.3f/%-2.3f%-8s\n", "BJ", "P/D", N1, N2, "");
+        System.out.format("%-10s%-10s%-10.3f\n", "Win", "", N3);
+        System.out.format("%-10s%-10s%-10.3f\n", "Lose", "", N4);
+        System.out.format("%-10s%-10s%-10.3f\n", "Push", "", N5);
+        System.out.format("%-10s%-10s%-5d(%d%%)\n", "Balance", "", this.player.getBalance(), N7);
     }
 
     public String basicStrategy (int nHand) {
@@ -463,28 +465,29 @@ public class Game {
     public String illustrious18 (int nHand, int trueCount){
         int playerHand = this.getPlayer().getHand(nHand).handValue();
         int dealerHand = this.getDealer().handValue();
+        boolean playerHandSizeIs2 = this.getPlayer().getHand(nHand).getHandSize() == 2;
 
         if (playerHand == 16 && dealerHand == 10){
             return standOrHit(trueCount, 0);
         } else if (playerHand == 15 && dealerHand == 10){
             return standOrHit(trueCount, 4);
-        } else if (playerHand == 20 && dealerHand == 5){
+        } else if (playerHand == 20 && dealerHand == 5 && playerHandSizeIs2){
             return splitOrStand(trueCount, 5);
-        } else if (playerHand == 20 && dealerHand == 6){
+        } else if (playerHand == 20 && dealerHand == 6 && playerHandSizeIs2){
             return splitOrStand(trueCount, 4);
-        } else if (playerHand == 10 && dealerHand == 10){
+        } else if (playerHand == 10 && dealerHand == 10 && playerHandSizeIs2){
             return doubleOrHit(trueCount, 4);
         } else if (playerHand == 12 && dealerHand == 3){
             return standOrHit(trueCount, 2);
         } else if (playerHand == 12 && dealerHand == 2){
             return standOrHit(trueCount, 3);
-        } else if (playerHand == 11 && dealerHand == 11){
+        } else if (playerHand == 11 && dealerHand == 11 && playerHandSizeIs2){
             return doubleOrHit(trueCount, 1);
-        } else if (playerHand == 9 && dealerHand == 2){
+        } else if (playerHand == 9 && dealerHand == 2 && playerHandSizeIs2){
             return doubleOrHit(trueCount, 1);
-        } else if (playerHand == 10 && dealerHand == 11){
+        } else if (playerHand == 10 && dealerHand == 11 && playerHandSizeIs2){
             return doubleOrHit(trueCount, 4);
-        } else if (playerHand == 9 && dealerHand == 7){
+        } else if (playerHand == 9 && dealerHand == 7 && playerHandSizeIs2){
             return doubleOrHit(trueCount, 3);
         } else if (playerHand == 16 && dealerHand == 9){
             return standOrHit(trueCount, 5);
@@ -515,7 +518,7 @@ public class Game {
     public String splitOrStand (int trueCount, int indexNumber) {
 
         if (trueCount >= indexNumber){
-            return "p";
+            return "f";
         }
         else{
             return "s";
@@ -537,11 +540,11 @@ public class Game {
         int dealerHand = this.getDealer().handValue();
 
         if (playerHand == 14 && dealerHand == 10){
-            return surrenderOrBasic(trueCount, 3);
+            return surrenderOrBasic(trueCount, 3, nHand);
         } else if (playerHand == 15 && dealerHand == 9){
-            return surrenderOrBasic(trueCount, 2);
+            return surrenderOrBasic(trueCount, 2, nHand);
         } else if (playerHand == 15 && dealerHand == 11){
-            return surrenderOrBasic(trueCount, 1);
+            return surrenderOrBasic(trueCount, 1, nHand);
         } else if (playerHand == 15 && dealerHand == 10){
             if (trueCount <= 0 && trueCount >= 3){
                 return "u";
@@ -556,9 +559,9 @@ public class Game {
 
     }
 
-    public String surrenderOrBasic (int trueCount, int indexNumber){
+    public String surrenderOrBasic (int trueCount, int indexNumber, int nHand){
 
-        if (trueCount >= indexNumber){
+        if (trueCount >= indexNumber && player.canSurrender(nHand)){
             return "u";
         }
         else{

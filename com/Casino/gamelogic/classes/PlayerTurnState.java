@@ -71,6 +71,10 @@ public class PlayerTurnState implements GameState {
                     else
                         System.out.println("Please bet before cards are dealt");
                     break;
+                case 'q':
+                    System.out.println("Game ended");
+                    this.game.statistics();
+                    System.exit(0);
                 case '$':
                     System.out.println("Current balance: " + game.getPlayer().getBalance() + "$");
                     break;
@@ -108,6 +112,8 @@ public class PlayerTurnState implements GameState {
                 this.game.getPlayer().hit(nHand);
             else
                 System.out.println("player's hand " + hand + "(" + hand.handValue() + ")");
+
+            System.out.println("");
 
             while (!hand.isHandClosed()) {
 

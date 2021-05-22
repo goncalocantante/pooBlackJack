@@ -144,6 +144,7 @@ public class Player {
         System.out.println("player hits");
         this.hands.get(nHand).drawCard(shoe);
         System.out.println("player's hand: " + this.game.getPlayer().getHand(nHand) + "(" + this.game.getPlayer().getHand(nHand).handValue() + ")");
+        System.out.println("");
         //Update running count
         this.game.updateRunningCount();
     }

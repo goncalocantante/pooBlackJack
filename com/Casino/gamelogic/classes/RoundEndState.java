@@ -35,8 +35,8 @@ public class RoundEndState implements GameState {
     @Override
     public void finishRound() {
 
-        Hand dealer = game.getDealer();
-        Player player = game.getPlayer();
+        Hand dealer = this.game.getDealer();
+        Player player = this.game.getPlayer();
 
         boolean dealerBlackjack = dealer.handValue() == 21 && dealer.getHandSize() == 2;
 
@@ -58,7 +58,7 @@ public class RoundEndState implements GameState {
             //If player has bust or surrendered on this hand there's no payout
             if(player.getHand(i).isBust() || player.getHand(i).getBetAmount() == 0){
                 System.out.println("player loses and his current balance is " + player.getBalance());
-                game.getPlayer().setLastResult(-1);
+                this.game.getPlayer().setLastResult(-1);
                 continue;
             }
             //If dealer has bust and player hasn't bust or surrendered, pay him
@@ -67,7 +67,7 @@ public class RoundEndState implements GameState {
                 int prize = player.getHand(i).getBetAmount() * 2;
                 player.addBalance(bet*2);
                 System.out.println("player wins and his current balance is " + player.getBalance());
-                game.getPlayer().setLastResult(1);
+                this.game.getPlayer().setLastResult(1);
                 continue;
             }
 
@@ -79,7 +79,7 @@ public class RoundEndState implements GameState {
                     this.game.totalPushes++;
                     player.addBalance(bet);
                     System.out.println("player pushes and his current balance is " + player.getBalance());
-                    game.getPlayer().setLastResult(0);
+                    this.game.getPlayer().setLastResult(0);
                     continue;
 
                 }
@@ -89,14 +89,14 @@ public class RoundEndState implements GameState {
                     this.game.totalPlayerWins++;
                     player.addBalance(bet * 3);
                     System.out.println("player wins and his current balance is " + player.getBalance());
-                    game.getPlayer().setLastResult(1);
+                    this.game.getPlayer().setLastResult(1);
                     continue;
 
                 }
             }else if(dealerBlackjack){
                 //If player doesn't have blackjack and dealer does, player loses
                 System.out.println("player loses and his current balance is " + player.getBalance());
-                game.getPlayer().setLastResult(-1);
+                this.game.getPlayer().setLastResult(-1);
                 continue;
             }
 
@@ -145,6 +145,7 @@ public class RoundEndState implements GameState {
         //If limit number of shuffles been met and mode is simulation mode, end game
         if(shuffleCount == game.getParameters()[3] && game.getParameters()[3] != -1){
             System.out.println("Game ended");
+            this.game.statistics();
             System.exit(0);
         }
         game.setGameState(game.getPlayerTurnState());
