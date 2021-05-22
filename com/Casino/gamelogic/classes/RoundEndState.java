@@ -133,11 +133,16 @@ public class RoundEndState implements GameState {
 
         //Shuffles if the card limit has been reached
         if(this.game.getDiscardPile().size() >= nCardsShuffle) {
+            //Move cards back to shoe
             this.game.getShoe().moveAllToShoe(this.game.getDiscardPile());
             this.game.getShoe().shuffle();
+            //Increment number of times shuffled
             this.shuffleCount++;
+            //Reset running count
+            this.game.updateRunningCount();
             System.out.println("Shuffling shoe...");
         }
+        //If limit number of shuffles been met and mode is simulation mode, end game
         if(shuffleCount == game.getParameters()[3] && game.getParameters()[3] != -1){
             System.out.println("Game ended");
             System.exit(0);

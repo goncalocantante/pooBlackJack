@@ -74,6 +74,12 @@ public class PlayerTurnState implements GameState {
                 case '$':
                     System.out.println("Current balance: " + game.getPlayer().getBalance() + "$");
                     break;
+                case 'a':
+                    if(inputString.charAt(1) == 'd')
+                        this.game.advice(0);
+                    else
+                        System.out.println("Illegal command");
+                    break;
                 case 's':
                     if (inputString.length() == 2 && inputString.charAt(1) == 't' ){
                         game.statistics();
@@ -116,25 +122,28 @@ public class PlayerTurnState implements GameState {
                         this.game.getPlayer().stand(nHand);
                         break;
                     case "$":
-                        System.out.println("Current balance: " + game.getPlayer().getBalance() + "$");
+                        System.out.println("Current balance: " + this.game.getPlayer().getBalance() + "$");
                         break;
                     case "i":
-                        game.getPlayer().insure();
+                        this.game.getPlayer().insure();
                         break;
                     case "u":
-                        game.getPlayer().surrender(nHand);
+                        this.game.getPlayer().surrender(nHand);
                         break;
                     case "p":
-                        game.getPlayer().split(nHand);
+                        this.game.getPlayer().split(nHand);
                         break;
                     case "f":
-                        game.getPlayer().forcedSplit(nHand);
+                        this.game.getPlayer().forcedSplit(nHand);
                         break;
                     case "2":
-                        game.getPlayer().doubleBet(nHand);
+                        this.game.getPlayer().doubleBet(nHand);
                         break;
                     case "st":
-                        game.statistics();
+                        this.game.statistics();
+                        break;
+                    case "ad":
+                        this.game.advice(nHand);
                         break;
                     default:
                         System.out.println("Illegal command");

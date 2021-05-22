@@ -13,9 +13,13 @@ public class Game {
 
     private ShoeClass shoe;
     private Player player;
+    //Dealer's hand
     private Hand dealer;
+    //Discard pile where cards will go at the end of the round
     private ArrayList<Card> discardPile;
+    //Parameters specified by player
     private int minBet, maxBet, shuffle, nShuffle;
+    //Running count according to HiLo strategy
     private int runningCount = 0;
     private int previousBet = 0;
 
@@ -238,6 +242,12 @@ public class Game {
     public void updateRunningCount() {
         int count = 0;
 
+        //If there are no cards in the discard pile or in the player's hands, reset the counter
+        if(this.discardPile.isEmpty() && this.player.getHand(0).isEmpty()) {
+            this.runningCount = 0;
+            return;
+        }
+
         //Count the cards in discard pile
         for(int i=0; i< this.discardPile.size(); i++){
             switch(this.discardPile.get(i).getRank()){
@@ -246,13 +256,15 @@ public class Game {
                 case FOUR:
                 case FIVE:
                 case SIX:
-                    runningCount++;
+                    count++;
+                    break;
                 case TEN:
                 case JACK:
                 case KING:
                 case QUEEN:
                 case ACE:
-                    runningCount--;
+                    count--;
+                    break;
             }
         }
 
@@ -266,14 +278,16 @@ public class Game {
                     case FIVE:
                     case SIX:
                         if(this.dealer.getCard(i).isCardFaceUp())
-                            runningCount++;
+                        count++;
+                        break;
                     case TEN:
                     case JACK:
                     case KING:
                     case QUEEN:
                     case ACE:
                         if(this.dealer.getCard(i).isCardFaceUp())
-                            runningCount--;
+                        count--;
+                        break;
                 }
             }
         }
@@ -281,20 +295,22 @@ public class Game {
         //Count the cards in the player's hands if they're not empty
         for(Hand hand : this.player.getHands()) {
             if (!hand.isEmpty()) {
-                for (int i = 0; i < this.dealer.getHandSize(); i++) {
-                    switch (this.dealer.getCard(i).getRank()) {
+                for (int i = 0; i < hand.getHandSize(); i++) {
+                    switch (hand.getCard(i).getRank()) {
                         case TWO:
                         case THREE:
                         case FOUR:
                         case FIVE:
                         case SIX:
-                            runningCount++;
+                            count++;
+                            break;
                         case TEN:
                         case JACK:
                         case KING:
                         case QUEEN:
                         case ACE:
-                            runningCount--;
+                            count--;
+                            break;
                     }
                 }
             }
@@ -328,43 +344,37 @@ public class Game {
         int playerValue = this.player.getHand(nHand).handValue();
         int dealerValue = this.dealer.getCard(0).cardValue();
 
-        //Bug resolvido
-        //meio um pouco rafeiro. basicamente se a carta é um ás vai retornar o valor 1. Eu faço este if em que digo simplesmente que o valor é 11
-        //funciona, mas vejam se querem resolver de outra maneira mais presentável
-        if (dealerValue == 1){
-            dealerValue = 11;
-        }
-
+        //If player's hand is a pair acess pair table
         if (card1.getRank().equals(card2.getRank()) && this.player.getHand(nHand).getHandSize() == 2){
             action = String.valueOf(table.getAction (1, playerValue, dealerValue));
-        }
+        }//If player's hand is hard, acess hard table
         else if (!this.player.getHand(nHand).isSoft()){
             action = String.valueOf(table.getAction (2, playerValue, dealerValue));
-        }
+        }//If player's is soft acess soft table
         else if (this.player.getHand(nHand).isSoft()){
             action = String.valueOf(table.getAction (3, playerValue, dealerValue));
-        }
+        }//If action is double if possible or hit, double if possible or hit
         if (action.equals("D")){
             if (this.player.canDouble(nHand)){
                 action = "2";
             } else {
                 action = "h";
             }
-        }
+        }//If action is double if possible or stand, double if possible or stand
         else if (action.equals("d")){
             if (this.player.canDouble(nHand)){
                 action = "2";
             } else {
                 action = "s";
             }
-        }
+        }//If action is surrender if possible or hit, surrender if possible or hit
         else if (action.equals("R")){
             if (this.player.canSurrender(nHand)){
                 action = "u";
             } else {
                 action = "h";
             }
-        }
+        }//If action is split, split if possible or forced split (split even if balance is insufficient or if already has split 3 times)
         else if(action.equals("p")) {
             if (this.player.canSplit(nHand)){
                 action = "p";
@@ -382,7 +392,6 @@ public class Game {
         int counter = 0;
         int aceFive = 0;
         int toBet;
-
 
         for (counter = 0; counter < this.discardPile.size(); counter++){
             if (this.discardPile.get(counter).equals(Rank.FIVE)) {
@@ -559,18 +568,67 @@ public class Game {
 
     public void advice(int nHand) {
         String action;
-        Scanner scanner = new Scanner(action);
 
-        if(this.player.getHand(0).isEmpty()){
+        //If cards haven't been dealt(if dealer's hand is empty), print bet advice
+        if(this.player.getHand(0).isEmpty()) {
             action = this.aceFiveBet();
-            if(scanner.hasNextInt())
+            Scanner scanner = new Scanner(action);
+            //skip b character
+            scanner.next();
+            //Print "bet betAmount"
+            if (scanner.hasNextInt()){
                 System.out.println("bet " + scanner.nextInt());
-        }
+            }
+            scanner.close();
+        }//If cards have already been dealt
         else{
+            //Get HiLo advice and print it
+            action = this.HiLo(nHand, this.getShoe().getShoeSize());
+            //If HiLo advice is basic strategy, print advice according to basic strategy
+            if(action.equals("basic")){
+                action = this.basicStrategy(nHand);
+                switch(action.charAt(0)){
+                    case 'h':
+                        action = "hit";
+                        break;
+                    case 's':
+                        action = "stand";
+                        break;
+                    case '2':
+                        action = "double";
+                        break;
+                    case 'u':
+                        action = "surrender";
+                        break;
+                    case 'p':
+                    case 'f':
+                        action = "split";
+                        break;
+                }
+            }
+            System.out.println("Hilo: " + action);
 
-            //HiLo
-            action = this.HiLo(this.shoe);
-
+            //Get basic strategy advice and print it
+            action = this.basicStrategy(nHand);
+            switch(action.charAt(0)){
+                case 'h':
+                    action = "hit";
+                    break;
+                case 's':
+                    action = "stand";
+                    break;
+                case '2':
+                    action = "double";
+                    break;
+                case 'u':
+                    action = "surrender";
+                    break;
+                case 'p':
+                case 'f':
+                    action = "split";
+                    break;
+            }
+            System.out.println("Basic Strategy: " + action);
         }
     }
 }

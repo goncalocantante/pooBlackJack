@@ -72,7 +72,6 @@ public class InteractiveMode implements Mode {
         // Create and shuffles shoe
         this.game.setShoe(new ShoeClass(shoe));
         this.game.getShoe().shuffle();
-        System.out.println("shuffling the shoe...");
     }
 
     @Override
