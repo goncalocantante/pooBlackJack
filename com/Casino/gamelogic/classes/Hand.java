@@ -68,7 +68,6 @@ public class Hand {
      *
      * @return buff: cards emptied from the hand / public ArrayList<Card>
      */
-    // A emptyHand
     public void emptyHand(ArrayList<Card> discardPile) {
 
         //Set all cards face up
@@ -200,14 +199,6 @@ public class Hand {
         this.betAmount = bet;
     }
 
-    public String toString() {
-        String cardListOutput = "";
-        for (Card aCard : this.cards) {
-            cardListOutput += aCard.toString() + " ";
-        }
-        return cardListOutput;
-    }
-
     /**
      * Indicates whether or not hand is empty
      *
@@ -216,4 +207,14 @@ public class Hand {
     public boolean isEmpty() {
         return this.cards.isEmpty();
     }
+
+    public String toString() {
+        String cardListOutput = "";
+        for (Card aCard : this.cards) {
+            cardListOutput += aCard.toString() + " ";
+        }
+        return cardListOutput;
+    }
+
+
 }

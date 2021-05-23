@@ -3,7 +3,6 @@ package com.Casino.gamelogic.classes;
 
 public class Tables {
 
-
     public char [][] createHardTable() {
         char [][] hard = {
                 {'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'},
@@ -87,14 +86,4 @@ public class Tables {
         }
         return String.valueOf(action);
     }
-
-
-    public static void main (String[] args) {
-        Tables table = new Tables();
-
-
-        System.out.println((table.getAction(2, 9, 6)));
-
-    }
-
 }

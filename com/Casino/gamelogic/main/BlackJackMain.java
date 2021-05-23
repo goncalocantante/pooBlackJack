@@ -15,7 +15,6 @@ public class BlackJackMain {
         }
 
 
-
         switch (args[0]) {
             case "-i":
                 game = new Game(new InteractiveMode(args));

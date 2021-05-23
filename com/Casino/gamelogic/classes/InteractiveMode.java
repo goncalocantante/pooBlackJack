@@ -6,10 +6,11 @@ import java.util.Scanner;
 
 public class InteractiveMode implements Mode {
 
-    String[] args;
-    ShoeClass shoe;
-    Game game;
-    Scanner scanner;
+    //TODO verify
+    private String[] args;
+    private ShoeClass shoe;
+    private Game game;
+    private Scanner scanner;
 
     public InteractiveMode(String[] arguments) {
         args = arguments;

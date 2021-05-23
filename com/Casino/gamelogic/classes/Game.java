@@ -12,8 +12,8 @@ public class Game {
     private Player player;
     private Hand dealer;
     private ArrayList<Card> discardPile;
-    private int minBet, maxBet, shuffle;
 
+    private int minBet, maxBet, shuffle;
     public int totalPlayerHandsCount, totalDealerHandsCount, totalPlayerWins, playerBlackJackCount, dealerBlackJackCount, totalPushes;
 
     Mode gameMode;
@@ -23,14 +23,12 @@ public class Game {
     private GameState playerTurnState;
     private GameState dealerTurnState;
     private GameState roundEndState;
-    private GameState gameEndState;
 
     public Game(Mode gameMode) {
         this.gameStartState = new GameStartState(this);
         this.playerTurnState = new PlayerTurnState(this);
         this.dealerTurnState = new DealerTurnState(this);
         this.roundEndState = new RoundEndState(this);
-
 
         this.player = new Player(this);
         this.dealer = new Hand();
@@ -127,15 +125,6 @@ public class Game {
      */
     public GameState getRoundEndState() {
         return this.roundEndState;
-    }
-
-    /**
-     * Gets the game's end state
-     * 
-     * @return gameEndState: Game's end state
-     */
-    public GameState getGameEndState() {
-        return this.gameEndState;
     }
 
     /**

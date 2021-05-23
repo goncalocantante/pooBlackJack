@@ -10,14 +10,16 @@ public class Player {
 
     // Game being played
     private Game game;
-    // Player's balance
-    private int balance, initialBalance;
     // ArrayList of the player's hands
     private ArrayList<Hand> hands;
+    // Player's balance
+    private int balance, initialBalance;
     // True if player is insured
     private int insurance;
-    //-1 perdi, 0 empatei, 1 ganhei preciso de get e set
+    //-1 Loose, 0 Push, 1 Win
     private int lastResult = -5;
+
+
 
 
     /**
@@ -51,17 +53,18 @@ public class Player {
         this.balance += amount;
     }
 
-    public void setInitialBalance(int amount){this.initialBalance = amount;}
-
-    public int getInitialBalance(){return this.initialBalance;}
     /**
      * Subtracts a certain amount of money from player's balance
-     * 
+     *
      * @return money to subtract
      */
     public void rmBalance(int amount) {
         this.balance -= amount;
     }
+
+    public void setInitialBalance(int amount){this.initialBalance = amount;}
+
+    public int getInitialBalance(){return this.initialBalance;}
 
     /**
      * Returns the amount bet as insurance
