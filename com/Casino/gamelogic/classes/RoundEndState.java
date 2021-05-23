@@ -31,6 +31,9 @@ public class RoundEndState implements GameState {
         System.out.println("Round has ended!");
     }
 
+    /**
+     * Constructor to set the game of the state to the game being played
+     */
     @Override
     public void finishRound() {
 
@@ -42,7 +45,7 @@ public class RoundEndState implements GameState {
         //If dealer has a blackjack and player has insured, pay him
         if(dealerBlackjack && player.getInsurance() > 0) {
             player.addBalance(player.getInsurance());
-            System.out.println("Player receives " + player.getInsurance() + "$ due to insurance win");
+            System.out.println("player receives " + player.getInsurance() + "$ due to insurance win");
         }
 
         // Updates statistics
@@ -50,7 +53,6 @@ public class RoundEndState implements GameState {
         this.game.totalDealerHandsCount++;
         //Iterates over every hand
         for (int i = 0; i < player.getHands().size(); i++) {
-            System.out.println("Hand " + (i+1) + ":");
             //Prize is equal to 2 times the bet amount (unless player has blackjack)
             Hand hand = player.getHand(i);
             int bet = hand.getBetAmount();
@@ -126,7 +128,6 @@ public class RoundEndState implements GameState {
         double shufflePercentage = (double) this.game.getParameters()[2]/100;
         // Limit of cards drawn until there's a shuffle
         double nCardsShuffle = shoeSize * (shufflePercentage);
-
 
         //Shuffles if the card limit has been reached
         if(this.game.getDiscardPile().size() >= nCardsShuffle) {

@@ -1,54 +1,34 @@
 package com.Casino.gamelogic.interfaces;
 
 import com.Casino.gamelogic.classes.Card;
+import com.Casino.gamelogic.classes.Deck;
+import com.Casino.gamelogic.enumerations.Rank;
+import com.Casino.gamelogic.enumerations.Suit;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
 
 /**
  * Interface for the shoe that will be used to play
  */
 public interface Shoe {
 
-    /**
-     * Creates the shoe with the specified number of decks
-     * 
-     * @param ndecks: number of decks contained in the shoe
-     */
-    void createShoe(int ndecks);
+    public void createShoe(int ndecks);
 
-    /**
-     * Creates the shoe from the specified file
-     *
-     * @param fileName: file name string
-     */
-    void createShoeFromFile(String fileName);
+    public void createShoeFromFile(String fileName);
 
-    /**
-     * Shuffles the cards in the shoe
-     */
-    void shuffle();
+    public void shuffle();
 
-    /**
-     * Removes a card from the top of the shoe
-     */
-    void removeCard(int i);
+    public void removeCard(int i);
 
-    /**
-     * Gets the card from the shoe without removing it
-     *
-     * @param i: index of the card
-     */
-    Card getCard(int i);
+    public Card getCard(int i);
 
-    /**
-     * Gets the size of the shoe
-     *
-     */
-    int getShoeSize();
+    public void moveAllToShoe(ArrayList<Card> cardsToAdd);
 
-    /**
-     * ------------
-     */
-    void moveAllToShoe(ArrayList<Card> cardsToAdd);
+    public int getShoeSize();
 
+    public String toString();
 }

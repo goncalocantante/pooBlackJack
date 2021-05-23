@@ -86,21 +86,15 @@ public class DebugMode implements Mode {
     public String getCommand(int nHand) {
         String cmd = "";
         if(this.scanner.hasNext()){
-            /*
-            cmd = String.valueOf(this.scanner.next().charAt(0));
-            // If bet amount is specified
-            if((cmd.equals("b")) && this.scanner.hasNextInt()){
-                cmd += " " + String.valueOf(this.scanner.nextInt());
-            }
-             */
-
             cmd = String.valueOf(this.scanner.next());
             // If bet amount is specified
             if((cmd.equals("b")) && this.scanner.hasNextInt()){
-                cmd += " " + String.valueOf(this.scanner.nextInt());
-            }
-            if(cmd.equals("ad")){
-               return cmd;
+                int nextI = this.scanner.nextInt();
+                if(nextI == 2){
+                    // interpret as bet command followed by double command
+                }else {
+                    cmd += " " + String.valueOf(nextI);
+                }
             }
             return cmd;
         }else{

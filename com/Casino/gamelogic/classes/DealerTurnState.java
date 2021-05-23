@@ -24,9 +24,11 @@ public class DealerTurnState implements GameState {
     @Override
     public void playerTurn() {
         System.out.println("Not player turn, dealer is playing.");
-
     }
 
+    /**
+     * Displays dealer cards and
+     */
     @Override
     public void dealerTurn() {
         Hand dealer = game.getDealer();
