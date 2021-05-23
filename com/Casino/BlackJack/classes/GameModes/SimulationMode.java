@@ -38,13 +38,14 @@ public class SimulationMode implements Mode {
 
         // If there arent's 6 parameters
         if (args.length != 8) {
-            check = false;
-            System.out.println("andre");
+            System.out.println("Error: incorrect number of arguments");
+            System.exit(0);
         }
-        // If parameters aren't ints (except for the mode parameter)
+        // If parameters aren't ints (except for the mode and strategy parameters)
         for (int i = 0; i < args.length -2; i++) {
             if (!args[0].matches(".*\\D.*")) {
-                check = false;
+                System.out.println("Error: invalid parameters");
+                System.exit(0);
             }
         }
 
@@ -62,21 +63,21 @@ public class SimulationMode implements Mode {
 
         // Check if min-bet and max-bet parameters are correct
         if (minBet < 1 || maxBet < 10 * minBet || maxBet > 20 * maxBet || balance < 50 * minBet) {
-            check = false;
+            System.out.println("Error: invalid parameters");
+            System.exit(0);
         }
 
         // Check if shoe and shuffle parameters are correct
         if (shoe < 4 || shoe > 8 || shuffle < 10 || shuffle > 100) {
-            check = false;
-        }
-        if (!args[7].equals(Basic) && !args[7].equals(BasicAce) && !args[7].equals(HiLo) && !args[7].equals(HiLoAce)) {
-            check = false;
-        }
-        if (!check) {
-            scanner.close();
+            System.out.println("Error: invalid parameters");
             System.exit(0);
         }
-        // quit
+        //Check if strategy parameter is correct
+        if (!args[7].equals(Basic) && !args[7].equals(BasicAce) && !args[7].equals(HiLo) && !args[7].equals(HiLoAce)) {
+            System.out.println("Error: invalid parameters");
+            System.exit(0);
+        }
+
 
         // Sets parameters in game object
         this.game.setParameters(minBet, maxBet, balance, shuffle, nShuffle);
@@ -111,13 +112,11 @@ public class SimulationMode implements Mode {
         if (args[7].contains("HL")){
             action = this.game.hiLo(nHand, cardsInShoe);
             if (!action.equals("basic")){
-                System.out.println("Hilo action: " + action);
                 return action;
             }
         }
         if (args[7].contains("BS") || action.equals("basic")){
             action = this.game.basicStrategy((nHand));
-            System.out.println("Basic action: " + action);
             return action;
         }
 

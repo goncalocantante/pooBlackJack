@@ -54,7 +54,7 @@ public class RoundEndState implements GameState {
         //If dealer has a blackjack and player has insured, pay him
         if(dealerBlackjack && player.getInsurance() > 0) {
             player.addBalance(player.getInsurance());
-            System.out.println("Player receives " + player.getInsurance() + "$ due to insurance win");
+            System.out.println("Player win insurance ");
         }
 
         // Updates statistics
@@ -62,13 +62,12 @@ public class RoundEndState implements GameState {
         this.game.totalDealerHandsCount++;
         //Iterates over every hand
         for (int i = 0; i < player.getHands().size(); i++) {
-            System.out.println("Hand " + (i+1) + ":");
             //Prize is equal to 2 times the bet amount (unless player has blackjack)
             Hand hand = player.getHand(i);
             int bet = hand.getBetAmount();
             //If player has bust or surrendered on this hand there's no payout
             if(player.getHand(i).isBust() || player.getHand(i).getBetAmount() == 0){
-                System.out.println("player loses and his current balance is " + player.getBalance());
+                System.out.println("player loses [" + (i+1) + "] and his current balance is " + player.getBalance());
                 this.game.getPlayer().setLastResult(-1);
                 continue;
             }
@@ -77,7 +76,7 @@ public class RoundEndState implements GameState {
                 this.game.totalPlayerWins++;
                 int prize = player.getHand(i).getBetAmount() * 2;
                 player.addBalance(bet*2);
-                System.out.println("player wins and his current balance is " + player.getBalance());
+                System.out.println("player wins [" + (i+1) + "] and his current balance is " + player.getBalance());
                 this.game.getPlayer().setLastResult(1);
                 continue;
             }
@@ -89,7 +88,7 @@ public class RoundEndState implements GameState {
                     // there's a push and the player gets his bet amount back
                     this.game.totalPushes++;
                     player.addBalance(bet);
-                    System.out.println("player pushes and his current balance is " + player.getBalance());
+                    System.out.println("player pushes [" + (i+1) + "] and his current balance is " + player.getBalance());
                     this.game.getPlayer().setLastResult(0);
                     continue;
 
@@ -100,14 +99,14 @@ public class RoundEndState implements GameState {
                     this.game.playerBlackJackCount++;
                     this.game.totalPlayerWins++;
                     player.addBalance((int)(bet * 2.5));
-                    System.out.println("player wins and his current balance is " + player.getBalance());
+                    System.out.println("player wins [" + (i+1) + "] and his current balance is " + player.getBalance());
                     this.game.getPlayer().setLastResult(1);
                     continue;
 
                 }
             }else if(dealerBlackjack){
                 //If player doesn't have blackjack and dealer does, player loses
-                System.out.println("player loses and his current balance is " + player.getBalance());
+                System.out.println("player loses [" + (i+1) + "] and his current balance is " + player.getBalance());
                 this.game.getPlayer().setLastResult(-1);
                 continue;
             }
@@ -116,18 +115,18 @@ public class RoundEndState implements GameState {
             if (hand.handValue() > dealer.handValue()) {
                 this.game.totalPlayerWins++;
                 player.addBalance(bet * 2);
-                System.out.println("player wins and his current balance is " + player.getBalance());
+                System.out.println("player wins [" + (i+1) + "] and his current balance is " + player.getBalance());
                 game.getPlayer().setLastResult(1);
             } else if (hand.handValue() < dealer.handValue()) {
                 // if the opposite is true, player loses
-                System.out.println("player loses and his current balance is " + player.getBalance());
+                System.out.println("player loses [" + (i+1) + "] and his current balance is " + player.getBalance());
                 game.getPlayer().setLastResult(-1);
             } else {
                 //If player and dealer have the same hand value, push, returning the player's bet
                 this.game.totalPushes++;
                 player.addBalance(bet);
                 game.getPlayer().setLastResult(0);
-                System.out.println("player pushes and his current balance is " + player.getBalance());
+                System.out.println("player pushes [" + (i+1) + "] and his current balance is " + player.getBalance());
             }
 
         }

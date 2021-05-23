@@ -55,7 +55,6 @@ public class PlayerTurnState implements GameState {
                         // Scan the first integer in the string (bet amount)
                         betScan = new Scanner(inputString);
                         currentBet = betScan.useDelimiter("\\D+").nextInt();
-                        System.out.println("curr Bet " + currentBet);
                         // Bet the specified amount
                         if(game.getPlayer().bet(currentBet, 0)) {
                             this.game.setPreviousBet(currentBet);  // Set previous bet value
@@ -105,6 +104,7 @@ public class PlayerTurnState implements GameState {
                 default:
                     System.out.println("Illegal Command");
             }
+            System.out.println("");
         }
 
         this.game.getPlayer().clearLastResult();
@@ -120,11 +120,14 @@ public class PlayerTurnState implements GameState {
         for (int j = 0; j < this.game.getPlayer().getHands().size(); j++) {
             Hand hand = this.game.getPlayer().getHand(j);
 
+            if(this.game.getPlayer().getHands().size() > 1)
+                System.out.println("playing hand #" + (nHand+1));
             //If there was a split and this hand only hand one card, hit. Else print hand
-            if(hand.getHandSize() == 1)
+            if(hand.getHandSize() == 1) {
                 this.game.getPlayer().hit(nHand);
+            }
             else
-                System.out.println("player's hand " + hand + "(" + hand.handValue() + ")");
+                System.out.println("player's hand [" + (nHand+1) + "] " + hand + "(" + hand.handValue() + ")");
 
             System.out.println("");
 
@@ -172,7 +175,7 @@ public class PlayerTurnState implements GameState {
                 // If hand busts it closes, becoming not playable
                 if (hand.isBust()) {
                     hand.closeHand();
-                    System.out.println("player busts");
+                    System.out.println("player busts [" + (nHand+1) +  "]");
                 }
 
                 //If player gets blackjack on this hand close hand
@@ -180,6 +183,8 @@ public class PlayerTurnState implements GameState {
                     hand.closeHand();
                     System.out.println("Blackjack!");
                 }
+
+                System.out.println("");
             }
             // Next hand
             nHand++;

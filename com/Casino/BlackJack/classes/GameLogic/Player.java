@@ -150,8 +150,7 @@ public class Player {
 
         System.out.println("player hits");
         this.hands.get(nHand).drawCard(shoe);
-        System.out.println("player's hand: " + this.game.getPlayer().getHand(nHand) + "(" + this.game.getPlayer().getHand(nHand).handValue() + ")");
-        System.out.println("");
+        System.out.println("player's hand [" + (nHand+1) + "] " + this.game.getPlayer().getHand(nHand) + "(" + this.game.getPlayer().getHand(nHand).handValue() + ")");
         //Update running count
         this.game.updateRunningCount();
     }
@@ -175,7 +174,7 @@ public class Player {
         Hand originalHand = this.hands.get(nHand);
         // If the hand can be split
         if (this.canSplit(nHand)) {
-            System.out.println("player splits");
+            System.out.println("player is splitting");
             // Creates new hand
             this.hands.add(nHand+1, new Hand());
             newHand = this.hands.get(nHand+1);
@@ -186,39 +185,12 @@ public class Player {
             // Set the new hand's bet as the same as the original hand
             newHand.setBetAmount(originalHand.getBetAmount());
             // Both hands receive another card
+            if(nHand == 0)
+                System.out.println("playing hand #1");
             this.hit(nHand);
         }
         else { System.out.println("p: Illegal command"); }
     }
-
-    /**
-     * Splits even if player doesn't have enough balance and even if he has split 3 or more times
-     * @param nHand: hand to split
-     */
-    public void forcedSplit(int nHand) {
-        Hand newHand = null;
-        Hand originalHand = this.hands.get(nHand);
-
-        Card card1 = this.hands.get(nHand).getCard(0);
-        Card card2 = this.hands.get(nHand).getCard(1);
-
-        //If hand only has 2 cards of the same value
-        if (originalHand.getHandSize() == 2 && card1.cardValue() == card2.cardValue()) {
-            System.out.println("player splits");
-            // Creates new hand
-            this.hands.add(nHand+1, new Hand());
-            newHand = this.hands.get(nHand+1);
-
-            // Takes a card from originalHand and puts in newHand
-            newHand.addCard(originalHand.getCard(0));
-            originalHand.removeCard(0);
-            // Set the new hand's bet as the same as the original hand
-            newHand.setBetAmount(originalHand.getBetAmount());
-            // Both hands receive another card
-            this.hit(nHand);
-        }
-    }
-
 
     /**
      * Checks if the specified hand can be split
@@ -242,6 +214,37 @@ public class Player {
         if (hands.size() > 3)
             System.out.println("can only split 3 times");
         return (handSize == 2 && card1.cardValue() == card2.cardValue() && this.balance >= originalBet && hands.size() <= 4);
+    }
+
+    /**
+     * Splits even if player doesn't have enough balance and even if he has split 3 or more times
+     * @param nHand: hand to split
+     */
+    public void forcedSplit(int nHand) {
+        Hand newHand = null;
+        Hand originalHand = this.hands.get(nHand);
+
+        Card card1 = this.hands.get(nHand).getCard(0);
+        Card card2 = this.hands.get(nHand).getCard(1);
+
+        //If hand only has 2 cards of the same value
+        if (originalHand.getHandSize() == 2 && card1.cardValue() == card2.cardValue()) {
+            System.out.println("player is splitting");
+            // Creates new hand
+            this.hands.add(nHand+1, new Hand());
+            newHand = this.hands.get(nHand+1);
+
+            // Takes a card from originalHand and puts in newHand
+            newHand.addCard(originalHand.getCard(0));
+            originalHand.removeCard(0);
+            // Set the new hand's bet as the same as the original hand
+            newHand.setBetAmount(originalHand.getBetAmount());
+            // Both hands receive another card
+            System.out.println("Playing hand #" + (nHand+1));
+            if(nHand == 0)
+                System.out.println("playing hand #1");
+            this.hit(nHand);
+        }
     }
 
     /**

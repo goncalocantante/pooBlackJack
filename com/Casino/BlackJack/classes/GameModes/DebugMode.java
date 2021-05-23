@@ -38,7 +38,7 @@ public class DebugMode implements Mode {
 
         // incorrect number of arguments
         if (args.length != 6) {
-            System.out.println("Error: not enough arguments");
+            System.out.println("Error: incorrect number of arguments");
             System.exit(0);
         }
 
@@ -68,7 +68,7 @@ public class DebugMode implements Mode {
         }
 
         // Check if min-bet and max-bet parameters are correct
-        if (minBet < 1 || maxBet < 10 * minBet || maxBet > 20 * maxBet || balance < 50 * minBet){
+        if (minBet < 1 || maxBet < 10 * minBet || maxBet > 20 * maxBet || balance < 50 * minBet) {
             System.out.println("Error: invalid parameters");
             System.exit(0);
         }

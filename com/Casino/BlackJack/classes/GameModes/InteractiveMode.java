@@ -39,7 +39,7 @@ public class InteractiveMode implements Mode {
 
         // If there arent's 6 parameters exit
         if (args.length != 6){
-            System.out.println("Error: not enough arguments");
+            System.out.println("Error: incorrect number of arguments");
             System.exit(0);
         }
 
