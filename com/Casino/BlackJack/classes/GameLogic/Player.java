@@ -5,14 +5,17 @@ import com.Casino.BlackJack.interfaces.Shoe;
 
 import java.util.ArrayList;
 
+/**
+ * Player playing the game
+ */
 public class Player {
 
     // Game being played
     private Game game;
-    // Player's balance
-    private int balance, initialBalance;
     // ArrayList of the player's hands
     private ArrayList<Hand> hands;
+    // Player's balance
+    private int balance, initialBalance;
     // True if player is insured
     private int insurance;
     // Variable that contains the number of wins/pushes/losses of previous round
@@ -20,8 +23,10 @@ public class Player {
     private int lastResult;
 
 
+
     /**
-     * Contructor to initialize the player with 0 balance
+     * Constructor to initialize the player's attributes'
+     * @param game: game being played
      */
     public Player(Game game) {
         this.game = game;
@@ -37,7 +42,6 @@ public class Player {
 
     /**
      * Gets the player's balance
-     * 
      * @return balance: player's balance
      */
     public int getBalance() {
@@ -46,7 +50,7 @@ public class Player {
 
     /**
      * Adds a certain amount of money from player's balance
-     * @return money to add
+     * @param amount: amount to add
      */
     public void addBalance(int amount) {
         this.balance += amount;
@@ -65,8 +69,7 @@ public class Player {
     public int getInitialBalance(){return this.initialBalance;}
     /**
      * Subtracts a certain amount of money from player's balance
-     * 
-     * @return money to subtract
+     * @param amount: amount to subtract
      */
     public void rmBalance(int amount) {
         this.balance -= amount;
@@ -83,6 +86,7 @@ public class Player {
 
     /**
      * Gets the specified player's hand
+     * @param i: index of hand to get
      * @return hands: player's hands
      */
     public Hand getHand(int i) {
@@ -105,6 +109,8 @@ public class Player {
     /**
      * Bet the requested amount, subtracting it from the player's balance
      * @param amount: amount to be bet
+     * @param nHand: index of hand to bet
+     * @return bet: true if bet was made, false otherwise
      */
     public boolean bet(int amount, int nHand) {
 
@@ -123,7 +129,7 @@ public class Player {
     /**
      * Checks if the specified amount can be bet
      * @param amount: amount to be bet
-     * @return
+     * @return canBet: true if it is possible to bet
      */
     public boolean canBet(int amount){
         int minBet = this.game.getParameters()[0];
@@ -150,7 +156,6 @@ public class Player {
 
         System.out.println("player hits");
         this.hands.get(nHand).drawCard(shoe);
-        System.out.println("player's hand [" + (nHand+1) + "] " + this.game.getPlayer().getHand(nHand) + "(" + this.game.getPlayer().getHand(nHand).handValue() + ")");
         //Update running count
         this.game.updateRunningCount();
     }
@@ -162,7 +167,6 @@ public class Player {
     public void stand(int nHand) {
         System.out.println("player stands");
         this.hands.get(nHand).closeHand();
-        System.out.println("player's hand " +this.game.getPlayer().getHand(nHand));
     }
 
     /**
@@ -252,6 +256,7 @@ public class Player {
      */
     public void insure() {
         int originalBet = this.hands.get(0).getBetAmount();
+
         // If the player can insure
         if (this.canInsure()) {
             // Insure
@@ -272,19 +277,12 @@ public class Player {
 
         // Check if dealer's card is an ace, if player has enough money to insure,
         // if player has already insured and if he hassn't already hit
-        if(!dealerCardRank.equals(Rank.ACE))
-            System.out.println("dealer's face-up card is not ace, cannot insure");
-        if (this.balance < originalBet)
-            System.out.println("balance too low to insure");
-        if (this.insurance != 0)
-            System.out.println("cannot insure twice");
-        if (this.hands.get(0).getHandSize() > 2 || this.hands.size() > 1)
-            System.out.println("insurance must be first command");
         return (this.insurance == 0 && this.hands.get(0).getHandSize() == 2 && this.hands.size() == 1 && this.balance >= originalBet && dealerCardRank.equals(Rank.ACE));
     }
 
     /**
      * Surrender, reclaiming half the bet
+     * @param nHand: hand to surrender
      */
     public void surrender(int nHand) {
         if (canSurrender(nHand)) {
@@ -297,14 +295,14 @@ public class Player {
             // Close Hand
             this.hands.get(nHand).closeHand();
         } else
-            System.out.println("u: Illegal command (cannot surrender after hitting)");
+            System.out.println("u: Illegal command");
 
     }
 
 
     /**
      * Checks if the player can surrender
-     * @param nHand: hand to check
+     * @param nHand: hand being played
      * @return canSurrender: true if the player can surrender
      */
     public boolean canSurrender (int nHand) {
@@ -336,17 +334,16 @@ public class Player {
         else { System.out.println("2: Illegal command"); }
     }
 
+    /**
+     * Chacks if the player can double
+     * @param nHand: hand being played
+     * @return canDouble: true if the player can double
+     */
     public boolean canDouble (int nHand){
         int originalBet = this.hands.get(nHand).getBetAmount();
 
         //Check if player has enough to double, if player hasn't already hit and if player's
         // hand value is between 9 and 11
-        if (this.balance < originalBet)
-            System.out.println("balance too low to double");
-        if (this.hands.get(nHand).getHandSize() > 2)
-            System.out.println("cannot double after hitting");
-        if (this.hands.get(nHand).handValue() < 9 || this.hands.get(nHand).handValue() > 11)
-            System.out.println("can only double on opening hand worth 9, 10 or 11");
         return (this.balance >= originalBet && this.hands.get(nHand).getHandSize() == 2 && this.hands.get(nHand).handValue() >= 9 && this.hands.get(nHand).handValue() <= 11);
     }
 

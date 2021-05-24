@@ -6,6 +6,10 @@ import com.Casino.BlackJack.classes.GameLogic.Game;
 import com.Casino.BlackJack.classes.GameLogic.Hand;
 import com.Casino.BlackJack.interfaces.GameState;
 
+/**
+ * Game state representing the player's turn state
+ * Player bets or quits nad then plays
+ */
 public class PlayerTurnState implements GameState {
 
     private Game game;
@@ -40,13 +44,17 @@ public class PlayerTurnState implements GameState {
         int nHand = 0;
         int currentBet = 0;
 
+        //If limit number of shuffles been met and mode is simulation mode, end game and print statistics
+        if(this.game.getShuffleCount() == game.getParameters()[3] && game.getParameters()[3] != -1){
+            System.out.println("Game ended");
+            this.game.statistics();
+            System.exit(0);
+        }
+
         //While card's haven't been dealt
         while (!deal) {
             //Get player's command
             inputString = this.game.getGameMode().getCommand(nHand);
-            for (int k = 0; k < 10000; k++){
-
-            }
             //Check which command player has made
             switch (inputString.charAt(0)) {
                 case ('b'):
@@ -65,18 +73,20 @@ public class PlayerTurnState implements GameState {
                         // bet value if there is no previous bet
                         if (this.game.getPreviousBet() == 0) {
                             //Bet minimum bet
-                            game.getPlayer().bet(this.game.getParameters()[0], 0);
+                            currentBet = this.game.getParameters()[0];
+                            game.getPlayer().bet(currentBet, 0);
                             this.game.setPreviousBet(this.game.getParameters()[0]);
                         } else {
                             //Bet previous bet
-                            game.getPlayer().bet(this.game.getPreviousBet(), 0);
+                            currentBet = this.game.getPreviousBet();
+                            game.getPlayer().bet(currentBet, 0);
                         }
                     }
                     break;
                 case 'd':
                     // If the player has already bet, deal. Else he must bet
-                    if (this.game.getPreviousBet() != 0)
-                        deal = true;
+                    if (currentBet != 0){
+                        deal = true;}
                     else
                         System.out.println("Please bet before cards are dealt");
                     break;
@@ -112,6 +122,7 @@ public class PlayerTurnState implements GameState {
         // Deal cards
         this.dealCards();
         System.out.println("dealer's hand " + game.getDealer());
+        System.out.println("player's hand " + this.game.getPlayer().getHand(0) + "(" + this.game.getPlayer().getHand(0).handValue() + ")");
 
         //Update running count after deal
         this.game.updateRunningCount();
@@ -126,13 +137,17 @@ public class PlayerTurnState implements GameState {
             if(hand.getHandSize() == 1) {
                 this.game.getPlayer().hit(nHand);
             }
-            else
-                System.out.println("player's hand [" + (nHand+1) + "] " + hand + "(" + hand.handValue() + ")");
 
             System.out.println("");
 
             //While hand isn't closed, player plays
             while (!hand.isHandClosed()) {
+
+                if(this.game.getPlayer().getHands().size() == 1)
+                    System.out.println("player's hand " + hand + "(" + hand.handValue() + ")");
+                else
+                    System.out.println("player's hand [" + (nHand+1) + "] " + hand + "(" + hand.handValue() + ")");
+                this.game.shuffleIfNeeded();
 
                 //Get the input
                 inputString = this.game.getGameMode().getCommand(nHand);
@@ -214,13 +229,20 @@ public class PlayerTurnState implements GameState {
      */
     public void dealCards() {
 
+        //Check if a shuffle is needed between cards dealt
+
+        this.game.shuffleIfNeeded();
         // Dealer is dealt one card faced up and one faced down
         game.getDealer().drawCard(game.getShoe());
+        this.game.shuffleIfNeeded();
         game.getDealer().drawCard(game.getShoe());
         game.getDealer().getCard(1).setCardFaceDown();
 
+        this.game.shuffleIfNeeded();
         // Player is dealt two face up cards
         game.getPlayer().getHand(0).drawCard(game.getShoe());
+        this.game.shuffleIfNeeded();
         game.getPlayer().getHand(0).drawCard(game.getShoe());
     }
+
 }

@@ -2,6 +2,9 @@ package com.Casino.BlackJack.classes.GameLogic;
 
 import com.Casino.BlackJack.enumerations.*;
 
+/**
+ * Standard card
+ */
 public class Card {
     private Suit suit;
     private Rank rank;
@@ -21,13 +24,17 @@ public class Card {
     }
 
     /**
-     * Returns the card's value (ace returns 1)
+     * Returns the card's value (ace returns 11)
      * @return cardValue: card's value
      */
     public int cardValue() {
         return this.rank.getVal();
     }
 
+    /**
+     * Prints the card
+     */
+    @Override
     public String toString() {
         String cardString = "";
         if (this.isCardUp == false) {

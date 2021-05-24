@@ -10,6 +10,9 @@ import java.io.File; // Import the File class
 import java.io.FileNotFoundException; // Import this class to handle errors
 import java.util.Scanner; // Import the Scanner class to read text files
 
+/**
+ * Shoes that can be created from a number of standard decks or read from a file
+ */
 public class ShoeClass implements Shoe {
 
     //List of cards in the shoe
@@ -97,6 +100,14 @@ public class ShoeClass implements Shoe {
     }
 
     /**
+     * Gets the size of the shoe
+     */
+    @Override
+    public int getShoeSize() {
+        return this.cards.size();
+    }
+
+    /**
      * Shuffles the cards in the shoe
      */
     @Override
@@ -123,20 +134,11 @@ public class ShoeClass implements Shoe {
 
     /**
      * Receives list of cards and adds them to shoe
-     * 
      * Useful when reshuffling
      */
     @Override
     public void moveAllToShoe(ArrayList<Card> cardsToAdd) {
         this.cards.addAll(cardsToAdd);
-    }
-
-    /**
-     * Gets the size of the shoe
-     */
-    @Override
-    public int getShoeSize() {
-        return this.cards.size();
     }
 
     /**

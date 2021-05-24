@@ -1,5 +1,8 @@
 package com.Casino.BlackJack.enumerations;
 
+/**
+ * Enumeration containing the ranks of the cards
+ */
 public enum Rank {
     TWO(2), THREE(3), FOUR(4),
     FIVE(5), SIX(6), SEVEN(7),
@@ -9,14 +12,27 @@ public enum Rank {
 
     private int val;
 
+    /**
+     * Constructor that initializes rank
+     * @param val
+     */
     Rank(int val) {
         this.val = val;
     }
 
+    /**
+     * Returns the value of the rank
+     * @return val: value of the rank
+     */
     public int getVal() {
         return val;
     }
 
+    /**
+     * Returns the rank according relative to the specified character
+     * @param rank: specified character
+     * @return rank: rank
+     */
     public Rank getRank(String rank) {
         switch (rank){
             case "2":

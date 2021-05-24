@@ -4,6 +4,9 @@ import com.Casino.BlackJack.enumerations.*;
 
 import java.util.ArrayList;
 
+/**
+ * Standard deck
+ */
 public class Deck {
 
     // ArrayList containing the cards of the deck

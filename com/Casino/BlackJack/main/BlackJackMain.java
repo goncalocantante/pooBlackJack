@@ -5,9 +5,16 @@ import com.Casino.BlackJack.classes.GameModes.DebugMode;
 import com.Casino.BlackJack.classes.GameModes.InteractiveMode;
 import com.Casino.BlackJack.classes.GameModes.SimulationMode;
 
-
+/**
+ * Main class
+ * Used for executing the game
+ */
 public class BlackJackMain {
 
+    /**
+     * Main method, executes the game
+     * @param args: input arguments
+     */
     public static void main(String[] args) {
 
         Game game = null;

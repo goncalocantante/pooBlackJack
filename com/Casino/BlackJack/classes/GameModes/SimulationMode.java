@@ -12,9 +12,12 @@ public class SimulationMode implements Mode {
 //    ShoeClass shoe;
     Game game;
     Scanner scanner;
-    int previousBet = 0;
     boolean betOrDeal = true;
 
+    /**
+     * Initializes Simulation mode
+     * @param arguments: input arguments
+     */
     public SimulationMode(String[] arguments) {
         args = arguments;
         scanner = new Scanner(System.in);
@@ -23,7 +26,6 @@ public class SimulationMode implements Mode {
     public void InitializeShoeAndParameters(Game game) {
         this.game = game;
         // Initialized as true and set to false if parameters aren't correct
-        boolean check = true;
         int minBet;
         int maxBet;
         int balance = 0;
@@ -90,7 +92,7 @@ public class SimulationMode implements Mode {
 
         String action = "";
 
-        int cardsInShoe = Integer.parseInt(args[5])*52;
+        int cardsInShoe = Integer.parseInt(args[4])*52;
         //if what we want is the bet string
         //check if the betting strategy is Ace Five or Standard Bet Strategy and return
         if (this.game.getPlayer().getHand(0).isEmpty() && betOrDeal){

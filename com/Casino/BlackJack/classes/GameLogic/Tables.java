@@ -1,9 +1,14 @@
 package com.Casino.BlackJack.classes.GameLogic;
 
-
+/**
+ * Contains the tables containing the actions of the basic strategy in blackjack
+ */
 public class Tables {
 
-
+    /**
+     * Creates hard table
+     * @return hard: hard table
+     */
     public char [][] createHardTable() {
         char [][] hard = {
                 {'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H', 'H'},
@@ -28,7 +33,10 @@ public class Tables {
 
     }
 
-
+    /**
+     * Creates soft table
+     * @return soft: soft table
+     */
     public char [][] createSoftTable() {
         char [][] soft = {
                 {'H', 'H', 'H', 'D', 'D', 'H', 'H', 'H', 'H', 'H'},
@@ -45,7 +53,10 @@ public class Tables {
 
     }
 
-
+    /**
+     * Creates pair
+     * @return pair: pair table
+     */
     public char [][] createPairTable() {
         char [][] pair = {
                 {'H', 'H', 'P', 'P', 'P', 'P', 'H', 'H', 'H', 'H'},
@@ -64,7 +75,13 @@ public class Tables {
     }
 
 
-    //table = 1 for pair, = 2 for hard and = 3 for soft
+    /**
+     * Gets the appropriate action from the appropriate table according to table dimensions
+     * @param tableType: type of table (1 for pair table, 2 for hard table and 3 for soft table)
+     * @param playerCards: player's hand value
+     * @param dealerCard: dealer's face up card value
+     * @return action: Command according to basic strategy
+     */
     public String getAction (int tableType, int playerCards, int dealerCard){
         int column;
         int line;
@@ -86,15 +103,6 @@ public class Tables {
             action = createSoftTable()[column][line];
         }
         return String.valueOf(action);
-    }
-
-
-    public static void main (String[] args) {
-        Tables table = new Tables();
-
-
-        System.out.println((table.getAction(2, 9, 6)));
-
     }
 
 }

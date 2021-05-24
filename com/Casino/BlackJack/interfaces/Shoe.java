@@ -30,24 +30,27 @@ public interface Shoe {
 
     /**
      * Removes a card from the top of the shoe
+     * @param i: index of card to remove
      */
     void removeCard(int i);
 
     /**
      * Gets the card from the shoe without removing it
-     *
-     * @param i: index of the card
+     * @param i: index of the card to get
+     * @return card: card to get
      */
     Card getCard(int i);
 
     /**
      * Gets the size of the shoe
-     *
+     * @return shoeSize: shoe size
      */
     int getShoeSize();
 
     /**
-     * ------------
+     * Receives list of cards and adds them to shoe
+     * Useful when reshuffling
+     * @param cardsToAdd: list of cards to add
      */
     void moveAllToShoe(ArrayList<Card> cardsToAdd);
 

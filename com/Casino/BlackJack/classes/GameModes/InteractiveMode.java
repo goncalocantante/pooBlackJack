@@ -9,7 +9,6 @@ import java.util.Scanner;
 public class InteractiveMode implements Mode {
 
     String[] args;
-    ShoeClass shoe;
     Game game;
     Scanner scanner;
 
@@ -24,8 +23,7 @@ public class InteractiveMode implements Mode {
 
     /**
      * Creates shoe and initializes parameters min-bet, max-bet, balance and shuffle
-     * 
-     * @param game
+     * @param game: game being played
      */
     @Override
     public void InitializeShoeAndParameters(Game game) {

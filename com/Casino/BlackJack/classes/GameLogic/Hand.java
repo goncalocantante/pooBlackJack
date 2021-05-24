@@ -62,7 +62,6 @@ public class Hand {
 
     /**
      * Clears hand and moves to discard pile
-     * @return buff: cards emptied from the hand / public ArrayList<Card>
      */
     // A emptyHand
     public void emptyHand(ArrayList<Card> discardPile) {
@@ -86,10 +85,12 @@ public class Hand {
 
         //Add card value for every card that's not an ace and counts the number of aces
         for (Card card : this.cards) {
-            if( card.getRank() == Rank.ACE){
-                nAces++;
-            }else{
-                value += card.cardValue();
+            if(card.isCardFaceUp()) {
+                if (card.getRank() == Rank.ACE) {
+                    nAces++;
+                } else {
+                    value += card.cardValue();
+                }
             }
         }
         //Add ace value according to the value of the hand
@@ -101,6 +102,72 @@ public class Hand {
             }
         }
         return value;
+    }
+
+    /**
+     * Indicates the number of cards in the hand
+     * @return ncards: number of cards in the hand
+     */
+    public int getHandSize() {
+        return this.cards.size();
+    }
+
+    /**
+     * Gets the player's bet amount
+     * @return betAmount:player's bet amount
+     */
+    public int getBetAmount() {
+        return this.betAmount;
+    }
+
+    /**
+     * Sets the bet amount for this hand
+     *
+     * @param bet: bet amount
+     */
+    public void setBetAmount(int bet) {
+        this.betAmount = bet;
+    }
+
+    /**
+     * Checks if the hand is closed
+     * @return handClosed: true if the hand is closed
+     */
+    public boolean isHandClosed() {
+        return handClosed;
+    }
+
+    /**
+     * Closes hand
+     */
+    public void closeHand() {
+        this.handClosed = true;
+    }
+
+    /**
+     * Opens hand
+     */
+    public void openHand() { this.handClosed = false;}
+
+    /**
+     * Indicates if the hand has bust
+     * @return isBustTrue: is true if the hand has busted
+     */
+
+    /**
+     * Indicates whether or not hand is empty
+     * @return isEmpty: true if hand is empty
+     */
+    public boolean isEmpty() {
+        return this.cards.isEmpty();
+    }
+
+    /**
+     * Indicates if the hand has bust
+     * @return isBust: true if hand has bust
+     */
+    public boolean isBust() {
+        return this.handValue() > 21;
     }
 
     /**
@@ -130,69 +197,6 @@ public class Hand {
         return false;
     }
 
-
-    /**
-     * Indicates the number of cards in the hand
-     * @return ncards: number of cards in the hand
-     */
-    public int getHandSize() {
-        return this.cards.size();
-    }
-
-    /**
-     * Checks if the hand is closed
-     * @return handClosed: true if the hand is closed
-     */
-    public boolean isHandClosed() {
-        return handClosed;
-    }
-
-    /**
-     * Closes hand
-     */
-    public void closeHand() {
-        this.handClosed = true;
-    }
-
-    /**
-     * Opens hand
-     */
-    public void openHand() { this.handClosed = false;}
-
-    /**
-     * Indicates if the hand has bust
-     * @return isBustTrue: is true if the hand has busted
-     */
-
-    public boolean isBust() {
-        return this.handValue() > 21;
-    }
-
-    /**
-     * Checks if the hand can be split
-     * @return canSplitTrue: true if the hand can be split
-     */
-    public boolean canSplit() {
-        return this.getHandSize() == 2 && this.getCard(0).getRank().equals(this.getCard(1).getRank());
-    }
-
-    /**
-     * Gets the player's bet amount
-     * @return betAmount:player's bet amount
-     */
-    public int getBetAmount() {
-        return this.betAmount;
-    }
-
-    /**
-     * Sets the bet amount for this hand
-     * 
-     * @param bet: bet amount
-     */
-    public void setBetAmount(int bet) {
-        this.betAmount = bet;
-    }
-
     /**
      * Overrides the toString() method to print hand
      */
@@ -203,19 +207,5 @@ public class Hand {
             cardListOutput += aCard.toString() + " ";
         }
         return cardListOutput;
-    }
-
-    /**
-     * Indicates whether or not hand is empty
-     *
-     * @return
-     */
-    public boolean isEmpty() {
-        return this.cards.isEmpty();
-    }
-
-    public static void main(String[] args) {
-        Hand hand = new Hand();
-
     }
 }

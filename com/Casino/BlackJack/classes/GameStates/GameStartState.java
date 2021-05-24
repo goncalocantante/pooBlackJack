@@ -3,6 +3,10 @@ package com.Casino.BlackJack.classes.GameStates;
 import com.Casino.BlackJack.classes.GameLogic.Game;
 import com.Casino.BlackJack.interfaces.GameState;
 
+/**
+ * Game state representing the start of the game
+ * Initializes the game before playing
+ */
 public class GameStartState implements GameState {
 
     private Game game;
@@ -22,7 +26,8 @@ public class GameStartState implements GameState {
     @Override
     public void initializeGame() {
         this.game.getGameMode().InitializeShoeAndParameters(this.game);
-        game.setGameState(game.getPlayerTurnState());
+        this.game.setInitialShoeSize(this.game.getShoe().getShoeSize());
+        this.game.setGameState(game.getPlayerTurnState());
 
     }
 

@@ -8,10 +8,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+
 public class DebugMode implements Mode {
     //Input arguments
     String[] args;
-    ShoeClass shoe;
     Game game;
     Scanner scanner;
 

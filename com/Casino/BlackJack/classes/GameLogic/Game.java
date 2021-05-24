@@ -13,9 +13,12 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
 
+/**
+ * Game being played
+ */
 public class Game {
 
-    private ShoeClass shoe;
+    private Shoe shoe;
     private Player player;
     //Dealer's hand
     private Hand dealer;
@@ -24,9 +27,13 @@ public class Game {
     //Parameters specified by player
     private int minBet, maxBet, shuffle, nShuffle;
     //Running count according to Hi-Lo strategy
-    private int runningCount = 0;
-    private int previousBet = 0;
+    private int runningCount;
+    private int previousBet;
+    private int initialShoeSize;
+    //Conter for the number of times the shoe was shuffled
+    private int shuffleCount;
 
+    //Variables to count the statistics
     public int totalPlayerHandsCount, totalDealerHandsCount, totalPlayerWins, playerBlackJackCount, dealerBlackJackCount, totalPushes;
 
     Mode gameMode;
@@ -63,7 +70,17 @@ public class Game {
         this.playerBlackJackCount = 0;
         this.dealerBlackJackCount = 0;
         this.totalPushes = 0;
+        this.runningCount = 0;
+        this.previousBet = 0;
+        this.initialShoeSize = 0;
+        this.shuffleCount = 0;
     }
+
+    /**
+     * Sets the initial shoe size
+     * @param size: initial shoe size to be set
+     */
+    public void setInitialShoeSize(int size) { this.initialShoeSize = size;}
 
     /**
      * Sets the current state to the specified state
@@ -152,7 +169,7 @@ public class Game {
      * Sets the game's shoe to the provided shoe
      * @param shoe: shoe to be set used in the game
      */
-    public void setShoe(ShoeClass shoe) {
+    public void setShoe(Shoe shoe) {
         if(this.shoe == null)
             this.shoe = shoe;
         else
@@ -205,6 +222,11 @@ public class Game {
 
     /**
      * Sets the game parameters: min bet, max bet, balance, shuffle percentage and number of shuffles (simulation mode)
+     * @param minBet: minimum bet
+     * @param maxBet: maximum bet
+     * @param balance: player's balance
+     * @param shuffle: shuffle percentage (percentage of cards played until shuffle)
+     * @param nShuffle: number of shuffles until game ends
      */
     public void setParameters(int minBet, int maxBet, int balance, int shuffle, int nShuffle){
         this.minBet = minBet;
@@ -231,6 +253,9 @@ public class Game {
      */
     public int getRunningCount() { return this.runningCount;}
 
+    /**
+     * Updates the running count or resets it
+     */
     public void updateRunningCount() {
         int count = 0;
 
@@ -309,6 +334,40 @@ public class Game {
         }
 
         this.runningCount = count;
+    }
+
+    /**
+     * Gets the shuffle count
+     * @return shuffleCount: shuffle count
+     */
+    public int getShuffleCount() { return this.shuffleCount;}
+
+    /**
+     * Shuffles if shuffle percentage has been met
+     */
+    public void shuffleIfNeeded() {
+        //Number of cards outside of shoe
+        int cardsInUse = this.discardPile.size() + this.dealer.getHandSize();
+
+        for(Hand hand: this.player.getHands())
+            cardsInUse += hand.getHandSize();
+
+        double shufflePercentage = (double) this.shuffle/100d;
+        // Limit of cards drawn until there's a shuffle
+        double nCardsShuffle = this.initialShoeSize * (shufflePercentage);
+
+        //Shuffles if the card limit has been reached
+        if(cardsInUse >= nCardsShuffle) {
+            //Move cards back to shoe
+            this.shoe.moveAllToShoe(this.discardPile);
+            //Empty discard pile
+            this.discardPile.clear();
+            this.shoe.shuffle();
+            //Increment number of times shuffled
+            this.shuffleCount++;
+            //Reset running count
+            this.updateRunningCount();
+        }
     }
 
     /**
@@ -473,15 +532,17 @@ public class Game {
         //Running count according to Hi-Lo strategy
         int runningCount = 0;
         int cardsDiscarded = 0;
-        int decksRemaining = 0;
-        int trueCount = 0;
+        double decksRemaining = 0;
+        double trueCount = 0;
         String toReturn;
+
+        cardsDiscarded = this.discardPile.size();
 
         runningCount = this.getRunningCount();
 
-        decksRemaining = (cardsInShoe - cardsDiscarded)/52;
+        decksRemaining = (cardsInShoe - cardsDiscarded)/52d;
+
         trueCount = runningCount/decksRemaining;
-        //Inteiro?
 
         toReturn = fab4(nHand, trueCount);
         if (!toReturn.equals("basic")){
@@ -498,7 +559,7 @@ public class Game {
      * @param trueCount: true count of the game
      * @return action: appropriate command
      */
-    public String illustrious18 (int nHand, int trueCount){
+    public String illustrious18 (int nHand, double trueCount){
         //Player's hand value
         int playerHand = this.getPlayer().getHand(nHand).handValue();
         //Dealer's face-up card value
@@ -553,7 +614,7 @@ public class Game {
      * @param indexNumber: index according to the respective Illustrious 18 rule
      * @return command: appropriate command
      */
-    public String standOrHit (int trueCount, int indexNumber) {
+    public String standOrHit (double trueCount, int indexNumber) {
 
         if (trueCount >= indexNumber){
             return "s";
@@ -569,7 +630,7 @@ public class Game {
      * @param indexNumber: index according to the respective Illustrious 18 rule
      * @return command: appropriate command
      */
-    public String splitOrStand (int trueCount, int indexNumber) {
+    public String splitOrStand (double trueCount, int indexNumber) {
 
         if (trueCount >= indexNumber){
             return "f";
@@ -585,7 +646,7 @@ public class Game {
      * @param indexNumber: index according to the respective Illustrious 18 rule
      * @return command: appropriate command
      */
-    public String doubleOrHit (int trueCount, int indexNumber) {
+    public String doubleOrHit (double trueCount, int indexNumber) {
 
         if (trueCount >= indexNumber){
             return "2";
@@ -602,7 +663,7 @@ public class Game {
      * @param trueCount: true count of the game
      * @return action: appropriate command
      */
-    public String fab4 (int nHand, int trueCount){
+    public String fab4 (int nHand, double trueCount){
         int playerHand = this.getPlayer().getHand(nHand).handValue();
         int dealerHand = this.getDealer().handValue();
 
@@ -634,7 +695,7 @@ public class Game {
      * @param nHand: index of hand being played
      * @return command: appropriate command
      */
-    public String surrenderOrBasic (int trueCount, int indexNumber, int nHand){
+    public String surrenderOrBasic (double trueCount, int indexNumber, int nHand){
 
         if (trueCount >= indexNumber && player.canSurrender(nHand)){
             return "u";
@@ -716,4 +777,5 @@ public class Game {
             System.out.println("Basic Strategy: " + action);
         }
     }
+
 }

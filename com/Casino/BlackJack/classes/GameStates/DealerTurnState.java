@@ -4,6 +4,10 @@ import com.Casino.BlackJack.classes.GameLogic.Hand;
 import com.Casino.BlackJack.interfaces.GameState;
 import com.Casino.BlackJack.classes.GameLogic.Game;
 
+/**
+ * State representing the player's turn
+ * Executes the actions uspposed to happen in the dealer's turn
+ */
 public class DealerTurnState implements GameState {
 
     private Game game;
@@ -47,6 +51,8 @@ public class DealerTurnState implements GameState {
         } else {
             // Dealer Hits at 16, Holds at 17
             while (dealer.handValue() < 17) {
+                //Shuffle if there are no cards left
+                this.game.shuffleIfNeeded();
 
                 System.out.println("dealer hits");
                 dealer.drawCard(game.getShoe());
