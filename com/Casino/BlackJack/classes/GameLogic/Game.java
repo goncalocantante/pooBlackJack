@@ -288,23 +288,25 @@ public class Game {
         //Count the face-up cards in the dealer's hand if it's not empty
         if(!this.dealer.isEmpty()){
             for(int i=0; i < this.dealer.getHandSize(); i++){
-                switch(this.dealer.getCard(i).getRank()){
-                    case TWO:
-                    case THREE:
-                    case FOUR:
-                    case FIVE:
-                    case SIX:
-                        if(this.dealer.getCard(i).isCardFaceUp())
-                        count++;
-                        break;
-                    case TEN:
-                    case JACK:
-                    case KING:
-                    case QUEEN:
-                    case ACE:
-                        if(this.dealer.getCard(i).isCardFaceUp())
-                        count--;
-                        break;
+                if(this.dealer.getCard(i).isCardFaceUp()) {
+                    switch (this.dealer.getCard(i).getRank()) {
+                        case TWO:
+                        case THREE:
+                        case FOUR:
+                        case FIVE:
+                        case SIX:
+                            if (this.dealer.getCard(i).isCardFaceUp())
+                                count++;
+                            break;
+                        case TEN:
+                        case JACK:
+                        case KING:
+                        case QUEEN:
+                        case ACE:
+                            if (this.dealer.getCard(i).isCardFaceUp())
+                                count--;
+                            break;
+                    }
                 }
             }
         }
